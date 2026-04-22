@@ -34,15 +34,18 @@ exports.handler = async (event) => {
             });
         }
 
-        // 5. Creamos la preferencia
+        // 5. Detectamos la URL base (sirve tanto para pruebas locales como para la web oficial en Netlify)
+        const baseUrl = process.env.URL || 'http://localhost:8888';
+
+        // 6. Creamos la preferencia
         const preference = new Preference(client);
         const result = await preference.create({
             body: {
                 items: items,
                 back_urls: {
-                    success: "https://tudominio.com.ar/index.html#success-view",
-                    failure: "https://tudominio.com.ar/index.html",
-                    pending: "https://tudominio.com.ar/index.html"
+                    success: `${baseUrl}/index.html`,
+                    failure: `${baseUrl}/index.html`,
+                    pending: `${baseUrl}/index.html`
                 },
                 auto_return: "approved",
             }
