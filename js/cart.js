@@ -217,53 +217,49 @@ async function handleCheckout(e) {
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
     if (payment === 'mp') {
-        // LÓGICA DE MERCADO PAGO
-        btn.innerHTML = 'Generando pago seguro... <i class="animate-spin w-4 h-4 rounded-full border-2 border-white border-t-transparent inline-block"></i>';
+        // Guardamos el link de WhatsApp en la memoria temporal del navegador
+        localStorage.setItem('whatsappUrl_pendiente', whatsappUrl);
 
         try {
+            // Redirigimos a la API enviando el carrito actual
             const response = await fetch('/.netlify/functions/checkout', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
+                body: JSON.stringify({ 
                     cart: cart,
-                    delivery: delivery
+                    delivery: delivery 
                 })
             });
-
             const data = await response.json();
 
-            if (data.init_point) {
-                // Abrimos el aviso de WhatsApp en otra pestaña
-                window.open(whatsappUrl, '_blank');
-
-                // Vaciamos el carrito
-                cart = [];
-                updateCartUI();
-
-                // Redirigimos a Mercado Pago
-                window.location.href = data.init_point;
-            } else {
-                throw new Error("No se generó el link");
-            }
-        } catch (error) {
-            alert('Hubo un error al conectar con Mercado Pago. Intentá de nuevo.');
-            btn.innerHTML = originalText;
-            btn.classList.remove('opacity-75', 'cursor-not-allowed');
-        }
-    } else {
-        // LÓGICA PARA OTROS MÉTODOS
-        btn.innerHTML = 'Enviando...';
-
-        setTimeout(() => {
-            window.open(whatsappUrl, '_blank');
+            // Vaciamos carrito DESPUÉS de haber leído los datos
             cart = [];
             updateCartUI();
-            closeModal();
-            showPage('success-view');
 
+            if (response.ok && data.init_point) {
+                // Redirigimos a Mercado Pago SIN ABRIR WHATSAPP
+                window.location.href = data.init_point;
+            } else {
+                console.error("Error de MP:", data);
+                btn.innerHTML = originalText;
+                btn.classList.remove('opacity-75', 'cursor-not-allowed');
+                alert("Hubo un problema al conectar con Mercado Pago: " + (data.error || "Asegúrate de que el token sea válido."));
+            }
+        } catch (error) {
+            console.error("Error al ejecutar fetch:", error);
             btn.innerHTML = originalText;
             btn.classList.remove('opacity-75', 'cursor-not-allowed');
-        }, 1000);
+            alert("Error de conexión con el servidor. Intenta nuevamente.");
+        }
+    } else {
+        // Si es efectivo (cash), abrimos WPP directo porque no hay pasarela de pago
+        window.open(whatsappUrl, '_blank');
+        cart = [];
+        updateCartUI();
+        closeModal();
+        showPage('success-view');
+
+        btn.innerHTML = originalText;
+        btn.classList.remove('opacity-75', 'cursor-not-allowed');
     }
 }
 

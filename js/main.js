@@ -3,7 +3,7 @@ const mainNav = document.getElementById('main-nav');
 function updateNavbar() {
     const currentView = document.querySelector('.view-section.block')?.id || 'home-view';
     const scrolled = window.scrollY > 50;
-    
+
     if (currentView !== 'home-view' || scrolled) {
         mainNav.classList.remove('text-white', 'bg-transparent');
         mainNav.classList.add('text-brand-text', 'bg-white/95', 'backdrop-blur-md', 'shadow-sm');
@@ -37,7 +37,7 @@ function toggleMenu() {
 
 mobileMenuBtn.addEventListener('click', toggleMenu);
 mobileLinks.forEach(link => {
-    link.addEventListener('click', () => { if(menuOpen) toggleMenu(); });
+    link.addEventListener('click', () => { if (menuOpen) toggleMenu(); });
 });
 
 const modal = document.getElementById('action-modal');
@@ -66,19 +66,19 @@ function closeModal() {
         modal.classList.remove('opacity-100', 'pointer-events-auto');
         modal.classList.add('opacity-0', 'pointer-events-none');
         document.body.style.overflow = 'auto';
-        
+
         const closeBtn = document.getElementById('modal-close-btn');
-        if(closeBtn) closeBtn.className = 'absolute top-4 right-4 text-gray-400 hover:text-brand-text transition p-2 rounded-full hover:bg-gray-100 z-10';
-        
+        if (closeBtn) closeBtn.className = 'absolute top-4 right-4 text-gray-400 hover:text-brand-text transition p-2 rounded-full hover:bg-gray-100 z-10';
+
         const subsMsg = document.getElementById('subs-msg');
         const subsBtn = document.getElementById('subs-btn');
-        if(subsMsg) subsMsg.classList.add('hidden');
-        if(subsBtn) {
+        if (subsMsg) subsMsg.classList.add('hidden');
+        if (subsBtn) {
             subsBtn.disabled = false;
             subsBtn.innerHTML = 'Suscribirse <i data-lucide="send" class="w-4 h-4"></i>';
             subsBtn.className = 'w-full bg-brand-text text-white py-3.5 rounded-xl font-medium hover:bg-opacity-90 transition shadow-lg flex items-center justify-center gap-2';
         }
-        
+
         lucide.createIcons();
     }, 200);
 }
@@ -96,23 +96,23 @@ function showPage(pageId) {
     if (currentView) {
         currentView.classList.remove('opacity-100');
         currentView.classList.add('opacity-0');
-        
+
         setTimeout(() => {
             currentView.classList.remove('block');
             currentView.classList.add('hidden');
-            
+
             targetView.classList.remove('hidden');
             targetView.classList.add('block');
-            
+
             void targetView.offsetWidth;
-            
+
             targetView.classList.remove('opacity-0');
             targetView.classList.add('opacity-100');
-            
+
             lucide.createIcons();
             updateNavbar();
             window.scrollTo({ top: 0, behavior: 'smooth' });
-        }, 300); 
+        }, 300);
     } else {
         targetView.classList.remove('hidden');
         targetView.classList.add('block');
@@ -123,7 +123,7 @@ function showPage(pageId) {
         updateNavbar();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-    
+
     if (menuOpen) toggleMenu();
 }
 
@@ -138,11 +138,11 @@ function rotateBook() {
 function openBookDetails() {
     const title = currentSide === 'front' ? 'Portada' : 'Contraportada';
     const content = currentSide === 'front' ? bookContent.cover : bookContent.back;
-    
+
     modalTitle.textContent = title;
     modalContent.innerHTML = content;
     modalIcon.innerHTML = '<i data-lucide="book-open" class="w-8 h-8"></i>';
-    
+
     modal.classList.remove('opacity-0', 'pointer-events-none');
     modal.classList.add('opacity-100', 'pointer-events-auto');
     setTimeout(() => { modalCard.classList.remove('scale-95'); modalCard.classList.add('scale-100'); }, 10);
@@ -151,3 +151,33 @@ function openBookDetails() {
 }
 
 lucide.createIcons();
+
+window.addEventListener('DOMContentLoaded', () => {
+    // Leemos los parámetros que Mercado Pago pone en la URL al volver
+    const urlParams = new URLSearchParams(window.location.search);
+
+    // Si el estado es aprobado...
+    if (urlParams.get('status') === 'approved') {
+        // 1. Mostramos la pantalla de éxito
+        showPage('success-view');
+
+        // 2. Buscamos si había un WhatsApp pendiente guardado
+        const savedWppUrl = localStorage.getItem('whatsappUrl_pendiente');
+
+        if (savedWppUrl) {
+            // Reemplazamos el texto de la cajita gris de la vista de éxito
+            const successBox = document.querySelector('#success-view .bg-gray-50');
+            if (successBox) {
+                successBox.innerHTML = `
+                    <p class="text-gray-800 font-medium mb-3 text-center">¡Tu pago se acreditó correctamente!</p>
+                    <p class="text-gray-600 mb-4 text-center text-sm">Para coordinar la entrega o el envío, necesitamos que nos mandes el detalle de tu compra haciendo clic abajo:</p>
+                    <button onclick="window.open('${savedWppUrl}', '_blank'); localStorage.removeItem('whatsappUrl_pendiente');" class="w-full bg-[#25D366] text-white py-3 rounded-xl font-bold hover:bg-opacity-90 transition shadow-lg flex items-center justify-center gap-2">
+                        <i data-lucide="message-circle" class="w-5 h-5"></i> Confirmar pedido por WhatsApp
+                    </button>
+                `;
+                // Refrescamos los iconos
+                lucide.createIcons();
+            }
+        }
+    }
+}); 
