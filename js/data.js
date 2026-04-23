@@ -119,6 +119,12 @@ const modalData = {
                 <button type="submit" class="w-full bg-brand-text text-white py-4 rounded-xl font-medium hover:bg-opacity-90 transition shadow-lg flex items-center justify-center gap-2">
                     Confirmar Pedido <i data-lucide="check" class="w-4 h-4"></i>
                 </button>
+
+                <div class="mt-4 text-center">
+                    <button type="button" onclick="closeModal()" class="text-gray-500 hover:text-brand-text text-sm font-medium transition flex items-center justify-center gap-1 mx-auto">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i> Volver a la tienda
+                    </button>
+                </div>
             </form>
         `
     },
@@ -129,7 +135,7 @@ const modalData = {
             <p class="mb-3 italic">"Todos nos comunicamos. Desde que nos despertamos hasta que nos dormimos, estamos en contacto con otros: hablamos, escribimos, respondemos, escuchamos, callamos."</p>
             <p class="mb-3">Sin embargo, muchas veces sentimos que no nos entienden, o que nosotros no entendemos a los demás. Que hablamos mucho, pero que conectamos poco o que no conectamos.</p>
             <p class="mb-3">Que el vínculo se desgasta, aunque las palabras sigan ahí...</p>
-            <button onclick="closeModal(); showPage('product-view');" class="mt-4 w-full bg-brand-lilac text-white py-3 rounded-xl font-medium hover:bg-opacity-90 transition shadow-sm">Ver detalles del libro para seguir leyendo</button>
+            <button onclick="closeModal(); openProductModal();" class="mt-4 w-full bg-brand-lilac text-white py-3 rounded-xl font-medium hover:bg-opacity-90 transition shadow-sm">Ver detalles del libro para seguir leyendo</button>
         `
     },
     success: {

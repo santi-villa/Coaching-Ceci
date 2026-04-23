@@ -55,10 +55,14 @@ function openModal(type) {
 
     if (type === 'checkout') {
         modalCard.classList.remove('max-w-lg');
-        modalCard.classList.add('max-w-2xl');
+        modalCard.classList.add('max-w-xl');
     } else {
         modalCard.classList.remove('max-w-2xl');
         modalCard.classList.add('max-w-lg');
+    }
+
+    if (window.location.hash !== `#${type}`) {
+        window.history.pushState(null, '', `#${type}`);
     }
 
     modal.classList.remove('opacity-0', 'pointer-events-none');
@@ -67,16 +71,35 @@ function openModal(type) {
     document.body.style.overflow = 'hidden';
 }
 
-function closeModal() {
+function closeModal(forceState = null) {
+    if (typeof forceState !== 'boolean' && forceState !== null) {
+        forceState = null;
+    }
+
+    if (forceState === true) {
+        _closeModal();
+    } else {
+        if (window.location.hash) {
+            window.history.back(); // Popstate hará el forceState = true
+        } else {
+            _closeModal();
+        }
+    }
+}
+
+function _closeModal() {
     modalCard.classList.remove('scale-100');
     modalCard.classList.add('scale-95');
     setTimeout(() => {
         modal.classList.remove('opacity-100', 'pointer-events-auto');
         modal.classList.add('opacity-0', 'pointer-events-none');
-        document.body.style.overflow = 'auto';
+        
+        if (typeof isCartOpen === 'undefined' || !isCartOpen) {
+            document.body.style.overflow = 'auto';
+        }
 
         const closeBtn = document.getElementById('modal-close-btn');
-        if (closeBtn) closeBtn.className = 'absolute top-4 right-4 text-gray-400 hover:text-brand-text transition p-2 rounded-full hover:bg-gray-100 z-10';
+        if (closeBtn) closeBtn.className = 'absolute -top-3 -right-3 md:top-4 md:right-4 bg-white/95 text-gray-600 hover:text-brand-text hover:bg-gray-100 border border-gray-200 transition p-2.5 rounded-full z-20 shadow-md';
 
         const subsMsg = document.getElementById('subs-msg');
         const subsBtn = document.getElementById('subs-btn');
@@ -94,6 +117,58 @@ function closeModal() {
 modal.addEventListener('click', (e) => {
     if (e.target === modal) closeModal();
 });
+
+let isProductModalOpen = false;
+
+function openProductModal() {
+    isProductModalOpen = true;
+    const view = document.getElementById('product-view');
+    const card = document.getElementById('product-modal-card');
+    
+    if (window.location.hash !== '#producto') {
+        window.history.pushState(null, '', '#producto');
+    }
+
+    view.classList.remove('opacity-0', 'pointer-events-none');
+    view.classList.add('opacity-100', 'pointer-events-auto');
+    setTimeout(() => { card.classList.remove('scale-95'); card.classList.add('scale-100'); }, 10);
+    document.body.style.overflow = 'hidden';
+}
+
+function closeProductModal(forceState = null) {
+    if (typeof forceState !== 'boolean' && forceState !== null) {
+        forceState = null;
+    }
+
+    if (forceState === true) {
+        _closeProductModal();
+    } else {
+        if (window.location.hash) {
+            window.history.back(); // Popstate hará el forceState = true
+        } else {
+            _closeProductModal();
+        }
+    }
+}
+
+function _closeProductModal() {
+    isProductModalOpen = false;
+    const view = document.getElementById('product-view');
+    const card = document.getElementById('product-modal-card');
+    
+    card.classList.remove('scale-100');
+    card.classList.add('scale-95');
+    setTimeout(() => {
+        view.classList.remove('opacity-100', 'pointer-events-auto');
+        view.classList.add('opacity-0', 'pointer-events-none');
+        
+        if (!document.getElementById('action-modal') || document.getElementById('action-modal').classList.contains('pointer-events-none')) {
+            if (typeof isCartOpen === 'undefined' || !isCartOpen) {
+                document.body.style.overflow = 'auto';
+            }
+        }
+    }, 300);
+}
 
 function showPage(pageId) {
     const currentView = document.querySelector('.view-section.block') || document.querySelector('.view-section:not(.hidden)');
@@ -161,8 +236,31 @@ window.addEventListener('DOMContentLoaded', () => {
         // Mostramos el pop-up de éxito que reemplaza el flujo de WPP.
         setTimeout(() => {
             openModal('success');
-            // Limpiamos la URL para evitar que el modal se abra cada vez que recargue
-            window.history.replaceState({}, document.title, window.location.pathname);
+            // Reemplazamos la url base sacando param pero manteniendo el hash modal
+            history.replaceState(null, '', window.location.pathname + '#success');
         }, 300);
+    }
+});
+
+// Listener global para el botón "Atrás" del celular/navegador y cierre cruzado
+window.addEventListener('popstate', () => {
+    const hash = window.location.hash;
+    
+    if (!hash || hash === '') {
+        // Cierra todo al volver al principio
+        if (!modal.classList.contains('pointer-events-none')) closeModal(true);
+        if (typeof isCartOpen !== 'undefined' && isCartOpen) toggleCart(false);
+        if (typeof isProductModalOpen !== 'undefined' && isProductModalOpen) closeProductModal(true);
+    } else if (hash === '#carrito') {
+        // Si retrocedemos desde el checkout al carrito, cerramos solo el checkout
+        if (!modal.classList.contains('pointer-events-none')) closeModal(true);
+        // Y por si no estaba abierto, lo forzamos abiertamente
+        if (typeof isCartOpen !== 'undefined' && !isCartOpen) toggleCart(true);
+        // Cerramos el de producto para que no quede abajo
+        if (typeof isProductModalOpen !== 'undefined' && isProductModalOpen) closeProductModal(true);
+    } else if (hash === '#producto') {
+        if (!modal.classList.contains('pointer-events-none')) closeModal(true);
+        if (typeof isCartOpen !== 'undefined' && isCartOpen) toggleCart(false);
+        if (typeof isProductModalOpen === 'undefined' || !isProductModalOpen) openProductModal();
     }
 });

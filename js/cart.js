@@ -10,23 +10,54 @@ const emptyCartMsg = document.getElementById('empty-cart-msg');
 const cartTotalEl = document.getElementById('cart-total');
 const checkoutBtn = document.getElementById('checkout-btn');
 
-function toggleCart() {
-    isCartOpen = !isCartOpen;
-    if (isCartOpen) {
-        cartOverlay.classList.remove('hidden');
-        setTimeout(() => {
-            cartOverlay.classList.remove('opacity-0');
-            cartOverlay.classList.add('opacity-100');
-            cartDrawer.classList.remove('translate-x-full');
-        }, 10);
-        document.body.style.overflow = 'hidden';
+function toggleCart(forceState = null) {
+    // Ignorar objetos de eventos
+    if (typeof forceState !== 'boolean' && forceState !== null) {
+        forceState = null;
+    }
+
+    if (forceState === true) {
+        if (!isCartOpen) _openCart();
+    } else if (forceState === false) {
+        if (isCartOpen) _closeCart();
     } else {
-        cartDrawer.classList.add('translate-x-full');
-        cartOverlay.classList.remove('opacity-100');
-        cartOverlay.classList.add('opacity-0');
-        setTimeout(() => {
-            cartOverlay.classList.add('hidden');
-        }, 300);
+        // Toggle manual
+        if (isCartOpen) {
+            if (window.location.hash === '#carrito') {
+                window.history.back(); // Disparador para popstate
+            } else {
+                _closeCart();
+            }
+        } else {
+            if (window.location.hash !== '#carrito') {
+                window.history.pushState(null, '', '#carrito');
+            }
+            _openCart();
+        }
+    }
+}
+
+function _openCart() {
+    isCartOpen = true;
+    cartOverlay.classList.remove('hidden');
+    setTimeout(() => {
+        cartOverlay.classList.remove('opacity-0');
+        cartOverlay.classList.add('opacity-100');
+        cartDrawer.classList.remove('translate-x-full');
+    }, 10);
+    document.body.style.overflow = 'hidden';
+}
+
+function _closeCart() {
+    isCartOpen = false;
+    cartDrawer.classList.add('translate-x-full');
+    cartOverlay.classList.remove('opacity-100');
+    cartOverlay.classList.add('opacity-0');
+    setTimeout(() => {
+        cartOverlay.classList.add('hidden');
+    }, 300);
+    // Solo devolvemos a auto si el modal tampoco lo está usando
+    if (!document.getElementById('action-modal') || document.getElementById('action-modal').classList.contains('pointer-events-none')) {
         document.body.style.overflow = 'auto';
     }
 }
@@ -146,7 +177,7 @@ function toggleShippingFields(show) {
         document.getElementById('city').required = true;
         document.getElementById('zip').required = true;
         document.getElementById('province').required = true;
-        
+
         // Si elige envío, desactivar y ocultar Efectivo como método de pago
         if (cashLabel) cashLabel.classList.add('hidden');
         if (cashInput && cashInput.checked) {
@@ -173,7 +204,7 @@ function toggleShippingFields(show) {
 function resetShippingQuote() {
     quotedShippingCost = 0;
     const display = document.getElementById('shipping-cost-display');
-    if(display) display.innerHTML = 'Por cotizar...';
+    if (display) display.innerHTML = 'Por cotizar...';
 }
 
 async function calculateShipping(e) {
@@ -186,7 +217,7 @@ async function calculateShipping(e) {
 
     const btn = document.getElementById('btn-calc-shipping');
     const display = document.getElementById('shipping-cost-display');
-    
+
     btn.innerHTML = '<i class="animate-spin w-4 h-4 rounded-full border-2 border-brand-lilac border-t-transparent inline-block"></i>';
     btn.disabled = true;
 
@@ -195,9 +226,9 @@ async function calculateShipping(e) {
             method: 'POST',
             body: JSON.stringify({ zip_dest: zipCode })
         });
-        
+
         let data = await response.json();
-        
+
         if (response.ok) {
             quotedShippingCost = data.cost || 0;
             display.innerHTML = `<span class="text-brand-lilac font-bold">$${quotedShippingCost.toLocaleString('es-AR')} ARS</span>`;
@@ -205,12 +236,12 @@ async function calculateShipping(e) {
         } else {
             throw new Error(data.error || 'Error cotizando');
         }
-    } catch(err) {
+    } catch (err) {
         alert("Error al cotizar código postal. Revisa que sea válido.");
         display.innerHTML = 'Por cotizar...';
         btn.innerHTML = 'Cotizar Envío';
     } finally {
-        setTimeout(() => { if(btn.innerHTML === 'Cotizado ✓') { btn.innerHTML = 'Recotizar'; btn.disabled = false; } }, 2000);
+        setTimeout(() => { if (btn.innerHTML === 'Cotizado ✓') { btn.innerHTML = 'Recotizar'; btn.disabled = false; } }, 2000);
     }
 }
 
@@ -309,7 +340,7 @@ async function handleCheckout(e) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ 
+                body: JSON.stringify({
                     cart: cart,
                     delivery: delivery,
                     shippingCost: quotedShippingCost,
@@ -334,11 +365,11 @@ async function handleCheckout(e) {
             if (response.ok && data.init_point) {
                 // Cerramos el modal de checkout para no confundir
                 closeModal();
-                
+
                 // Mostramos un mensaje temporal antes de que MP procese o que el usuario vuelva
                 const successBox = document.querySelector('#success-view .bg-gray-50');
                 if (successBox) {
-                     successBox.innerHTML = `
+                    successBox.innerHTML = `
                         <p class="text-gray-800 font-medium mb-3 text-center">Serás redirigido a Mercado Pago en una nueva pestaña.</p>
                         <p class="text-gray-600 mb-4 text-center text-sm">Si no se abrió automáticamente, haz clic abajo:</p>
                         <button onclick="window.open('${data.init_point}', '_blank');" class="w-full bg-[#009EE3] text-white py-3 rounded-xl font-bold hover:bg-opacity-90 transition shadow-lg flex items-center justify-center gap-2">
@@ -351,7 +382,7 @@ async function handleCheckout(e) {
                 // Abrimos Mercado Pago en pestaña nueva (puede ser bloqueado por algunos navegadores si no es sincronico,
                 // por eso el botón manual en la vista de éxito salva el día)
                 window.open(data.init_point, '_blank');
-                
+
             } else {
                 console.error("Error de MP:", data);
                 btn.innerHTML = originalText;
@@ -396,7 +427,7 @@ function togglePaymentMethod(method) {
 function handleSubscribeSubmit(e) {
     const emailInput = document.getElementById('EMAIL');
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    
+
     // Validación explícita
     if (!emailInput || !emailRegex.test(emailInput.value)) {
         e.preventDefault(); // Acá SÍ cancelamos el envío porque está mal
@@ -405,7 +436,7 @@ function handleSubscribeSubmit(e) {
     }
 
     // Si pasamos la validación, NO hacemos preventDefault() para que el form se envíe al iframe
-    
+
     const btn = document.getElementById('subs-btn');
     const msg = document.getElementById('subs-msg');
 
