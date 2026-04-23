@@ -367,14 +367,14 @@
         <div id="product-view" class="fixed inset-0 z-[60] bg-brand-text/60 backdrop-blur-md flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
             <div class="bg-white rounded-3xl w-full max-w-4xl relative shadow-2xl transform scale-95 transition-transform duration-300 max-h-[90vh] md:max-h-[85vh] overflow-y-auto overflow-x-hidden" id="product-modal-card">
                 
-                <!-- Botón X más grande y resaltado -->
-                <button onclick="closeProductModal()" class="absolute -top-3 -right-3 md:top-4 md:right-4 bg-white/95 text-gray-600 hover:text-brand-text hover:bg-gray-100 border border-gray-200 transition p-2.5 rounded-full z-20 shadow-md">
-                    <i data-lucide="x" class="w-7 h-7"></i>
+                <!-- Botón de volver unificado (PC y Mobile) -->
+                <button onclick="closeProductModal()" class="absolute top-4 left-4 bg-white/90 text-brand-text/80 hover:text-brand-text transition px-4 py-2 rounded-full z-20 shadow-md backdrop-blur-md flex items-center gap-2 text-sm font-bold border border-white/50 transform hover:scale-105 active:scale-95">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i> Volver a la tienda
                 </button>
-                
-                <!-- Botón de volver a la tienda explícito en mobile -->
-                <button onclick="closeProductModal()" class="md:hidden absolute top-4 left-4 bg-white/80 text-brand-text/70 hover:text-brand-text transition p-2 rounded-full z-20 shadow-sm backdrop-blur-md flex items-center gap-1 text-xs font-semibold pr-4">
-                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Volver
+
+                <!-- Botón X reincorporado (dentro de la caja para que no se corte) -->
+                <button onclick="closeProductModal()" class="absolute top-4 right-4 bg-white/95 text-gray-600 hover:text-brand-text hover:bg-gray-100 border border-gray-200 transition p-2 rounded-full z-20 shadow-md">
+                    <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
 
                 <div
@@ -443,12 +443,6 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- Botón Volver a la tienda desktop extra abajo -->
-                <div class="pb-6 pt-2 bg-white text-center w-full hidden md:block">
-                     <button onclick="closeProductModal()" class="text-brand-lilac hover:text-brand-text text-sm font-medium transition flex items-center justify-center gap-1 mx-auto underline">
-                        <i data-lucide="arrow-left" class="w-4 h-4"></i> Volver a la tienda
-                    </button>
                 </div>
             </div>
         </div>
