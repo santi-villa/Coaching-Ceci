@@ -1,5 +1,6 @@
 let cart = [];
 let isCartOpen = false;
+let quotedShippingCost = 0;
 
 const cartOverlay = document.getElementById('cart-overlay');
 const cartDrawer = document.getElementById('cart-drawer');
@@ -135,6 +136,9 @@ function openCheckoutModal() {
 
 function toggleShippingFields(show) {
     const fields = document.getElementById('shipping-fields');
+    const cashLabel = document.getElementById('label-cash');
+    const cashInput = document.querySelector('input[name="payment"][value="cash"]');
+    const mpInput = document.querySelector('input[name="payment"][value="mp"]');
 
     if (show) {
         fields.classList.remove('hidden');
@@ -142,21 +146,81 @@ function toggleShippingFields(show) {
         document.getElementById('city').required = true;
         document.getElementById('zip').required = true;
         document.getElementById('province').required = true;
+        
+        // Si elige envío, desactivar y ocultar Efectivo como método de pago
+        if (cashLabel) cashLabel.classList.add('hidden');
+        if (cashInput && cashInput.checked) {
+            cashInput.checked = false;
+            if (mpInput) {
+                mpInput.checked = true;
+                togglePaymentMethod('mp');
+            }
+        }
     } else {
         fields.classList.add('hidden');
         document.getElementById('address').required = false;
         document.getElementById('city').required = false;
         document.getElementById('zip').required = false;
         document.getElementById('province').required = false;
+
+        // Si elige retiro en persona, volver a habilitar Efectivo
+        // Lo dejamos seleccionado por defecto para mayor agilidad si prefieres,
+        // o simplemente lo mostramos.
+        if (cashLabel) cashLabel.classList.remove('hidden');
+    }
+}
+
+function resetShippingQuote() {
+    quotedShippingCost = 0;
+    const display = document.getElementById('shipping-cost-display');
+    if(display) display.innerHTML = 'Por cotizar...';
+}
+
+async function calculateShipping(e) {
+    e.preventDefault();
+    const zipCode = document.getElementById('zip').value;
+    if (!zipCode || zipCode.trim() === '') {
+        alert("Por favor, ingresá el Código Postal para cotizar el envío.");
+        return;
+    }
+
+    const btn = document.getElementById('btn-calc-shipping');
+    const display = document.getElementById('shipping-cost-display');
+    
+    btn.innerHTML = '<i class="animate-spin w-4 h-4 rounded-full border-2 border-brand-lilac border-t-transparent inline-block"></i>';
+    btn.disabled = true;
+
+    try {
+        const response = await fetch('/.netlify/functions/quote-shipping', {
+            method: 'POST',
+            body: JSON.stringify({ zip_dest: zipCode })
+        });
+        
+        let data = await response.json();
+        
+        if (response.ok) {
+            quotedShippingCost = data.cost || 0;
+            display.innerHTML = `<span class="text-brand-lilac font-bold">$${quotedShippingCost.toLocaleString('es-AR')} ARS</span>`;
+            btn.innerHTML = 'Cotizado ✓';
+        } else {
+            throw new Error(data.error || 'Error cotizando');
+        }
+    } catch(err) {
+        alert("Error al cotizar código postal. Revisa que sea válido.");
+        display.innerHTML = 'Por cotizar...';
+        btn.innerHTML = 'Cotizar Envío';
+    } finally {
+        setTimeout(() => { if(btn.innerHTML === 'Cotizado ✓') { btn.innerHTML = 'Recotizar'; btn.disabled = false; } }, 2000);
     }
 }
 
 async function handleCheckout(e) {
-    e.preventDefault(); // Esto va siempre primero para que la página no recargue
+    if (e) e.preventDefault();
 
-    // 1. PRIMERO capturamos los datos
-    const customerPhone = document.getElementById('customer-phone').value;
     const customerName = document.getElementById('customer-name').value;
+    const customerPhone = document.getElementById('customer-phone').value;
+    const customerEmail = document.getElementById('customer-email').value;
+    const customerDni = document.getElementById('customer-dni').value;
     const delivery = document.querySelector('input[name="delivery"]:checked').value;
     const payment = document.querySelector('input[name="payment"]:checked').value;
 
@@ -165,6 +229,19 @@ async function handleCheckout(e) {
     if (!phoneRegex.test(customerPhone.replace(/\s/g, ""))) {
         alert("Por favor, ingresa un número de teléfono válido (solo números, código de área sin 0 ni 15).");
         return; // Corta la ejecución si está mal
+    }
+
+    // 3. Validar check de políticas de privacidad
+    const privacyCheck = document.getElementById('privacy-policy');
+    if (privacyCheck && !privacyCheck.checked) {
+        alert("Debes aceptar las Políticas de Privacidad para continuar con tu compra.");
+        return;
+    }
+
+    // 4. Validar que si es envío, haya cotizado
+    if (delivery === 'shipping' && quotedShippingCost === 0) {
+        alert("Por favor, hacé clic en 'Cotizar Envío' antes de proceder al pago.");
+        return;
     }
 
     const btn = e.target.querySelector('button[type="submit"]');
@@ -221,12 +298,31 @@ async function handleCheckout(e) {
         localStorage.setItem('whatsappUrl_pendiente', whatsappUrl);
 
         try {
-            // Redirigimos a la API enviando el carrito actual
+            // Redirigimos a la API enviando el carrito actual y los datos del comprador
+            const address = document.getElementById('address') ? document.getElementById('address').value : '';
+            const city = document.getElementById('city') ? document.getElementById('city').value : '';
+            const zip = document.getElementById('zip') ? document.getElementById('zip').value : '';
+            const province = document.getElementById('province') ? document.getElementById('province').value : '';
+
             const response = await fetch('/.netlify/functions/checkout', {
                 method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify({ 
                     cart: cart,
-                    delivery: delivery 
+                    delivery: delivery,
+                    shippingCost: quotedShippingCost,
+                    customer: {
+                        name: customerName,
+                        phone: customerPhone,
+                        email: customerEmail,
+                        dni: customerDni,
+                        address: address,
+                        city: city,
+                        zip: zip,
+                        province: province
+                    }
                 })
             });
             const data = await response.json();
@@ -236,8 +332,26 @@ async function handleCheckout(e) {
             updateCartUI();
 
             if (response.ok && data.init_point) {
-                // Redirigimos a Mercado Pago SIN ABRIR WHATSAPP
-                window.location.href = data.init_point;
+                // Cerramos el modal de checkout para no confundir
+                closeModal();
+                
+                // Mostramos un mensaje temporal antes de que MP procese o que el usuario vuelva
+                const successBox = document.querySelector('#success-view .bg-gray-50');
+                if (successBox) {
+                     successBox.innerHTML = `
+                        <p class="text-gray-800 font-medium mb-3 text-center">Serás redirigido a Mercado Pago en una nueva pestaña.</p>
+                        <p class="text-gray-600 mb-4 text-center text-sm">Si no se abrió automáticamente, haz clic abajo:</p>
+                        <button onclick="window.open('${data.init_point}', '_blank');" class="w-full bg-[#009EE3] text-white py-3 rounded-xl font-bold hover:bg-opacity-90 transition shadow-lg flex items-center justify-center gap-2">
+                             Ir a pagar a Mercado Pago
+                        </button>
+                    `;
+                }
+                showPage('success-view');
+
+                // Abrimos Mercado Pago en pestaña nueva (puede ser bloqueado por algunos navegadores si no es sincronico,
+                // por eso el botón manual en la vista de éxito salva el día)
+                window.open(data.init_point, '_blank');
+                
             } else {
                 console.error("Error de MP:", data);
                 btn.innerHTML = originalText;
@@ -269,13 +383,10 @@ function togglePaymentMethod(method) {
     if (!detailsDiv || !instructions) return;
 
     if (method === 'cash') {
-        instructions.textContent = '💵 El pago se realizará en efectivo cuando retires el libro.';
+        instructions.textContent = '💵 El pago se realizará en efectivo cuando retires el libro. Luego de confirmar nos contactaremos.';
         detailsDiv.classList.remove('hidden');
     } else if (method === 'mp') {
-        instructions.innerHTML = '💳 Serás redirigido a Mercado Pago para abonar de forma segura.';
-        detailsDiv.classList.remove('hidden');
-    } else if (method === 'wpp') {
-        instructions.innerHTML = '💬 Serás redirigido a WhatsApp para coordinar el pago directamente con nosotros.';
+        instructions.innerHTML = '💳 Serás redirigido a Mercado Pago para abonar de forma segura en una nueva pestaña.';
         detailsDiv.classList.remove('hidden');
     } else {
         detailsDiv.classList.add('hidden');
@@ -283,7 +394,18 @@ function togglePaymentMethod(method) {
 }
 
 function handleSubscribeSubmit(e) {
-    e.preventDefault();
+    const emailInput = document.getElementById('EMAIL');
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+    // Validación explícita
+    if (!emailInput || !emailRegex.test(emailInput.value)) {
+        e.preventDefault(); // Acá SÍ cancelamos el envío porque está mal
+        alert("Por favor, ingresa un correo electrónico válido para suscribirte.");
+        return;
+    }
+
+    // Si pasamos la validación, NO hacemos preventDefault() para que el form se envíe al iframe
+    
     const btn = document.getElementById('subs-btn');
     const msg = document.getElementById('subs-msg');
 
@@ -291,8 +413,8 @@ function handleSubscribeSubmit(e) {
     btn.classList.add('opacity-75', 'cursor-not-allowed');
 
     setTimeout(() => {
-        btn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i> Enviado';
-        btn.className = 'w-full bg-gray-200 text-gray-500 py-3.5 rounded-xl font-medium cursor-not-allowed flex items-center justify-center gap-2';
+        btn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i> Listo';
+        btn.className = 'w-full bg-brand-green/20 text-brand-green py-3.5 rounded-xl font-bold cursor-not-allowed flex items-center justify-center gap-2 border border-brand-green/30';
         btn.disabled = true;
 
         msg.classList.remove('hidden');

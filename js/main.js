@@ -53,6 +53,14 @@ function openModal(type) {
     modalIcon.innerHTML = `<i data-lucide="${data.icon}" class="w-8 h-8"></i>`;
     lucide.createIcons({ root: modalIcon });
 
+    if (type === 'checkout') {
+        modalCard.classList.remove('max-w-lg');
+        modalCard.classList.add('max-w-2xl');
+    } else {
+        modalCard.classList.remove('max-w-2xl');
+        modalCard.classList.add('max-w-lg');
+    }
+
     modal.classList.remove('opacity-0', 'pointer-events-none');
     modal.classList.add('opacity-100', 'pointer-events-auto');
     setTimeout(() => { modalCard.classList.remove('scale-95'); modalCard.classList.add('scale-100'); }, 10);
@@ -127,17 +135,9 @@ function showPage(pageId) {
     if (menuOpen) toggleMenu();
 }
 
-let currentSide = 'front';
-
-function rotateBook() {
-    const wrapper = document.querySelector('.book-3d-wrapper');
-    currentSide = currentSide === 'front' ? 'back' : 'front';
-    wrapper.classList.toggle('is-rotated');
-}
-
 function openBookDetails() {
-    const title = currentSide === 'front' ? 'Portada' : 'Contraportada';
-    const content = currentSide === 'front' ? bookContent.cover : bookContent.back;
+    const title = 'Contraportada';
+    const content = bookContent.back;
 
     modalTitle.textContent = title;
     modalContent.innerHTML = content;
@@ -158,26 +158,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Si el estado es aprobado...
     if (urlParams.get('status') === 'approved') {
-        // 1. Mostramos la pantalla de éxito
-        showPage('success-view');
-
-        // 2. Buscamos si había un WhatsApp pendiente guardado
-        const savedWppUrl = localStorage.getItem('whatsappUrl_pendiente');
-
-        if (savedWppUrl) {
-            // Reemplazamos el texto de la cajita gris de la vista de éxito
-            const successBox = document.querySelector('#success-view .bg-gray-50');
-            if (successBox) {
-                successBox.innerHTML = `
-                    <p class="text-gray-800 font-medium mb-3 text-center">¡Tu pago se acreditó correctamente!</p>
-                    <p class="text-gray-600 mb-4 text-center text-sm">Para coordinar la entrega o el envío, necesitamos que nos mandes el detalle de tu compra haciendo clic abajo:</p>
-                    <button onclick="window.open('${savedWppUrl}', '_blank'); localStorage.removeItem('whatsappUrl_pendiente');" class="w-full bg-[#25D366] text-white py-3 rounded-xl font-bold hover:bg-opacity-90 transition shadow-lg flex items-center justify-center gap-2">
-                        <i data-lucide="message-circle" class="w-5 h-5"></i> Confirmar pedido por WhatsApp
-                    </button>
-                `;
-                // Refrescamos los iconos
-                lucide.createIcons();
-            }
-        }
+        // Mostramos el pop-up de éxito que reemplaza el flujo de WPP.
+        setTimeout(() => {
+            openModal('success');
+            // Limpiamos la URL para evitar que el modal se abra cada vez que recargue
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }, 300);
     }
-}); 
+});

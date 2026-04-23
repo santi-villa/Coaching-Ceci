@@ -28,63 +28,88 @@ const modalData = {
         icon: "shopping-cart",
         content: `
             <form id="checkout-form" onsubmit="handleCheckout(event)">
-                <div class="space-y-3 mb-4">
-                    <div>
-                        <label class="text-xs font-medium text-gray-500 uppercase tracking-wide block mb-1">Nombre completo</label>
-                        <input type="text" id="customer-name" placeholder="Tu nombre" required class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-brand-lilac text-sm">
-                    </div>
-                    <div>
-                        <label class="text-xs font-medium text-gray-500 uppercase tracking-wide block mb-1">Teléfono</label>
-                        <input type="tel" id="customer-phone" placeholder="Ej: 11 1234 5678" required class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-brand-lilac text-sm">
-                    </div>
-                </div>
-
-                <p class="font-medium text-brand-text mb-3 text-sm md:text-base">Selecciona tu método de entrega:</p>
                 
-                <div class="space-y-3 mb-6">
-                    <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-brand-light transition">
-                        <input type="radio" name="delivery" value="pickup" checked onchange="toggleShippingFields(false)" class="text-brand-lilac focus:ring-brand-lilac w-4 h-4">
-                        <span class="text-gray-700 font-medium text-sm md:text-base">Retiro en persona <span class="text-xs text-gray-500 font-normal block mt-1">Coordinar entrega (Zona Norte, GBA)</span></span>
-                    </label>
-                    <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-brand-light transition">
-                        <input type="radio" name="delivery" value="shipping" onchange="toggleShippingFields(true)" class="text-brand-lilac focus:ring-brand-lilac w-4 h-4">
+                <p class="font-medium text-brand-text mb-3 text-sm md:text-base border-b border-brand-lilac/20 pb-2">1. Selecciona cómo recibir tu pedido:</p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+                    <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-brand-light transition bg-white shadow-sm">
+                        <input type="radio" name="delivery" value="shipping" checked onchange="toggleShippingFields(true)" class="text-brand-lilac focus:ring-brand-lilac w-4 h-4">
                         <span class="text-gray-700 font-medium text-sm md:text-base">Envío a domicilio</span>
                     </label>
+                    <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-brand-light transition bg-white shadow-sm">
+                        <input type="radio" name="delivery" value="pickup" onchange="toggleShippingFields(false)" class="text-brand-lilac focus:ring-brand-lilac w-4 h-4">
+                        <span class="text-gray-700 font-medium text-sm md:text-base">Retiro en persona <span class="text-xs text-gray-500 font-normal block mt-1">Coordinar entrega (GBA Norte)</span></span>
+                    </label>
                 </div>
 
-                <div id="shipping-fields" class="hidden space-y-3 mb-6 bg-brand-light/50 p-4 rounded-xl border border-brand-lilac/30">
-                    <h4 class="font-medium text-sm text-brand-text mb-1">Datos de envío:</h4>
-                    <input type="text" id="address" placeholder="Dirección completa (Calle y altura)" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-brand-lilac text-sm">
-                    <div class="grid grid-cols-2 gap-3">
-                        <input type="text" id="city" placeholder="Ciudad" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-brand-lilac text-sm">
-                        <input type="text" id="zip" placeholder="C. Postal" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-brand-lilac text-sm">
+                <p class="font-medium text-brand-text mb-3 text-sm md:text-base border-b border-brand-lilac/20 pb-2">2. Completa tus datos:</p>
+                <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-6 shadow-sm">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-2">
+                        <div>
+                            <label class="text-xs font-medium text-gray-500 uppercase tracking-wide block mb-1">Nombre completo</label>
+                            <input type="text" id="customer-name" placeholder="Tu nombre" required class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm focus:outline-none focus:border-brand-lilac text-sm transition">
+                        </div>
+                        <div>
+                            <label class="text-xs font-medium text-gray-500 uppercase tracking-wide block mb-1">DNI</label>
+                            <input type="number" id="customer-dni" placeholder="Sin puntos" required class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm focus:outline-none focus:border-brand-lilac text-sm transition">
+                        </div>
+                        <div>
+                            <label class="text-xs font-medium text-gray-500 uppercase tracking-wide block mb-1">Teléfono</label>
+                            <input type="tel" id="customer-phone" placeholder="Ej: 11 1234 5678" required class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm focus:outline-none focus:border-brand-lilac text-sm transition">
+                        </div>
+                        <div>
+                            <label class="text-xs font-medium text-gray-500 uppercase tracking-wide block mb-1">Email</label>
+                            <input type="email" id="customer-email" placeholder="tu@correo.com" required class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm focus:outline-none focus:border-brand-lilac text-sm transition">
+                        </div>
                     </div>
-                    <input type="text" id="province" placeholder="Provincia" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-brand-lilac text-sm">
+
+                    <!-- Datos exclusivo si es por Envío -->
+                    <div id="shipping-fields" class="space-y-4 pt-4 mt-2 border-t border-gray-200">
+                        <h4 class="font-semibold text-xs text-brand-lilac uppercase tracking-wider mb-2">Dirección de entrega</h4>
+                        <input type="text" id="address" placeholder="Dirección completa (Calle, Altura, Piso y Depto)" class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm focus:outline-none focus:border-brand-lilac text-sm transition" required oninput="resetShippingQuote()">
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                            <input type="text" id="city" placeholder="Ciudad" class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm focus:outline-none focus:border-brand-lilac text-sm transition" required oninput="resetShippingQuote()">
+                            <input type="text" id="zip" placeholder="C. Postal" class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm focus:outline-none focus:border-brand-lilac text-sm transition" required oninput="resetShippingQuote()">
+                            <input type="text" id="province" placeholder="Provincia" class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm focus:outline-none focus:border-brand-lilac text-sm transition" required oninput="resetShippingQuote()">
+                        </div>
+
+                        <div class="mt-4 flex items-center justify-between border border-brand-lilac/30 rounded-xl p-3 bg-brand-pink/5 shadow-sm">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="truck" class="w-5 h-5 text-brand-lilac"></i>
+                                <span id="shipping-cost-display" class="text-sm font-medium text-gray-600">Por cotizar...</span>
+                            </div>
+                            <button type="button" onclick="calculateShipping(event)" id="btn-calc-shipping" class="bg-white border border-brand-lilac text-brand-lilac px-4 py-2 rounded-lg text-xs md:text-sm font-semibold hover:bg-brand-lilac hover:text-white transition shadow-sm">Cotizar Envío</button>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="mb-4 p-4 rounded-xl border border-gray-200 bg-gray-50">
-                    <p class="font-medium text-brand-text mb-3 text-sm">Medio de pago:</p>
+                    <p class="font-medium text-brand-text mb-3 text-sm">3. Medio de pago:</p>
                     
                     <div class="space-y-2">
-                        <label class="flex items-center space-x-3 p-3 rounded-xl border border-gray-200 cursor-pointer hover:bg-gray-100 transition bg-white">
-                            <input type="radio" name="payment" value="cash" checked class="text-brand-lilac focus:ring-brand-lilac w-4 h-4" onchange="togglePaymentMethod('cash')">
+                        <label id="label-cash" class="flex items-center space-x-3 p-3 rounded-xl border border-gray-200 cursor-pointer hover:bg-gray-100 transition bg-white">
+                            <input type="radio" name="payment" value="cash" checked class="text-brand-lilac focus:ring-brand-lilac w-4 h-4 accent-brand-lilac" onchange="togglePaymentMethod('cash')">
                             <span class="text-sm font-medium text-gray-700">Efectivo al retirar</span>
                         </label>
                         <label class="flex items-center space-x-3 p-3 rounded-xl border border-gray-200 cursor-pointer hover:bg-gray-100 transition bg-white">
-                            <input type="radio" name="payment" value="mp" class="text-brand-lilac focus:ring-brand-lilac w-4 h-4" onchange="togglePaymentMethod('mp')">
-                            <span class="text-sm font-medium text-[#009EE3] flex items-center gap-2">
-                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M14.42 10.14a4 4 0 0 1-4-4V4.5a1.5 1.5 0 0 0-3 0v1.64a4 4 0 0 1-4 4H1.5a1.5 1.5 0 0 0 0 3h1.92a4 4 0 0 1 4 4v1.64a1.5 1.5 0 0 0 3 0v-1.64a4 4 0 0 1 4-4h1.92a1.5 1.5 0 0 0 0-3h-1.92z"/></svg>
+                            <input type="radio" name="payment" value="mp" class="text-brand-lilac focus:ring-brand-lilac w-4 h-4 accent-brand-lilac" onchange="togglePaymentMethod('mp')">
+                            <span class="text-sm font-medium text-gray-700 flex items-center gap-2">
+                                <img src="https://cdn.simpleicons.org/mercadopago/009EE3" alt="Mercado Pago" class="h-4 w-auto">
                                 Mercado Pago
                             </span>
                         </label>
-                        <label class="flex items-center space-x-3 p-3 rounded-xl border border-gray-200 cursor-pointer hover:bg-gray-100 transition bg-white">
-                            <input type="radio" name="payment" value="wpp" class="text-brand-lilac focus:ring-brand-lilac w-4 h-4" onchange="togglePaymentMethod('wpp')">
-                            <span class="text-sm font-medium text-green-600 flex items-center gap-2">
-                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                                WhatsApp
-                            </span>
-                        </label>
                     </div>
+                </div>
+
+                <div class="mb-5 mt-2 bg-brand-light/30 p-3 rounded-xl border border-brand-lilac/30">
+                    <label class="flex items-start space-x-3 cursor-pointer">
+                        <div class="mt-0.5">
+                            <input type="checkbox" id="privacy-policy" required class="w-5 h-5 accent-brand-lilac cursor-pointer">
+                        </div>
+                        <span class="text-xs text-gray-600 leading-snug">
+                            He leído y acepto las <a href="#legales" onclick="closeModal(); showPage('legales-view');" class="text-brand-lilac font-bold hover:underline">Políticas de Privacidad</a> y autorizo el tratamiento de mis datos de envío.
+                        </span>
+                    </label>
                 </div>
 
                 <div id="payment-details" class="mb-4 p-3 rounded-xl bg-brand-lilac/10 border border-brand-lilac/20 text-sm text-gray-600 hidden">
@@ -107,6 +132,18 @@ const modalData = {
             <button onclick="closeModal(); showPage('product-view');" class="mt-4 w-full bg-brand-lilac text-white py-3 rounded-xl font-medium hover:bg-opacity-90 transition shadow-sm">Ver detalles del libro para seguir leyendo</button>
         `
     },
+    success: {
+        title: "¡Compra Exitosa!",
+        icon: "check-circle",
+        content: `
+            <div class="text-center py-4">
+                <i data-lucide="party-popper" class="w-16 h-16 text-brand-lilac mx-auto mb-4 animate-bounce"></i>
+                <p class="mb-4 text-gray-700 text-lg">Hemos recibido tu pago con éxito en Mercado Pago.</p>
+                <p class="mb-6 text-gray-500 text-sm">En contados minutos te llegará un correo electrónico oficial de Brevo confirmándote el detalle de tu compra y las instrucciones de envío o retiro.</p>
+                <button onclick="closeModal();" class="w-full bg-brand-text text-white py-4 rounded-xl font-medium hover:bg-opacity-90 transition shadow-lg">Entendido ✓</button>
+            </div>
+        `
+    },
     subscribe: {
         title: "Novedades",
         icon: "mail",
@@ -115,6 +152,10 @@ const modalData = {
             
             <form action="https://c4dbfde8.sibforms.com/serve/MUIFAFucGxlLSVVMIyWGX25m6RxpThHoNAjjAN4gTElQ2c-Dnp8MvJFxBORy6b3jC3bIEckj3y3YW0MWybSKcpROinDoqtvtG5ouMRk69_ar2o7VrH_IczOx-FpHkjniFVuzm8grGU-14n3LzBlZdF5XUvGJXkzFQJ5je-MBjDMxE2S7IF7xjHNWFPgslhlJRih4zqJBRiwk74SBAg==" method="POST" target="hidden_iframe" onsubmit="handleSubscribeSubmit(event)">
                 <p class="mb-5 text-gray-600 text-sm md:text-base">Déjanos tu email para enterarte cuando el próximo volumen esté disponible y recibir novedades exclusivas.</p>
+                <div class="bg-brand-pink/10 border border-brand-pink/30 p-3 rounded-lg flex items-start gap-3 mb-5">
+                    <i data-lucide="alert-circle" class="w-5 h-5 text-brand-pink flex-shrink-0 mt-0.5"></i>
+                    <p class="text-xs text-gray-700">Importante: Es muy probable que tu confirmación llegue a la <strong>bandeja de Spam o Correo no deseado</strong>. ¡No olvides revisarla!</p>
+                </div>
                 
                 <div class="space-y-4">
                     <input type="email" id="EMAIL" name="EMAIL" placeholder="Tu correo electrónico" required class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac transition">
