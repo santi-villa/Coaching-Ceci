@@ -47,30 +47,30 @@ const modalData = {
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-2">
                         <div>
                             <label class="text-xs font-medium text-gray-500 uppercase tracking-wide block mb-1">Nombre completo</label>
-                            <input type="text" id="customer-name" placeholder="Tu nombre" required class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm focus:outline-none focus:border-brand-lilac text-sm transition">
+                            <input type="text" id="customer-name" placeholder="Tu nombre" required class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac" oninput="validateInput(this)">
                         </div>
                         <div>
                             <label class="text-xs font-medium text-gray-500 uppercase tracking-wide block mb-1">DNI</label>
-                            <input type="number" id="customer-dni" placeholder="Sin puntos" required class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm focus:outline-none focus:border-brand-lilac text-sm transition">
+                            <input type="number" id="customer-dni" placeholder="Sin puntos" required class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac" oninput="validateInput(this)">
                         </div>
                         <div>
                             <label class="text-xs font-medium text-gray-500 uppercase tracking-wide block mb-1">Teléfono</label>
-                            <input type="tel" id="customer-phone" placeholder="Ej: 11 1234 5678" required class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm focus:outline-none focus:border-brand-lilac text-sm transition">
+                            <input type="tel" id="customer-phone" placeholder="Ej: 11 1234 5678" required class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac" oninput="validateInput(this)">
                         </div>
                         <div>
                             <label class="text-xs font-medium text-gray-500 uppercase tracking-wide block mb-1">Email</label>
-                            <input type="email" id="customer-email" placeholder="tu@correo.com" required class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm focus:outline-none focus:border-brand-lilac text-sm transition">
+                            <input type="email" id="customer-email" placeholder="tu@correo.com" required class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac" oninput="validateInput(this)">
                         </div>
                     </div>
 
                     <!-- Datos exclusivo si es por Envío -->
                     <div id="shipping-fields" class="space-y-4 pt-4 mt-2 border-t border-gray-200">
                         <h4 class="font-semibold text-xs text-brand-lilac uppercase tracking-wider mb-2">Dirección de entrega</h4>
-                        <input type="text" id="address" placeholder="Dirección completa (Calle, Altura, Piso y Depto)" class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm focus:outline-none focus:border-brand-lilac text-sm transition" required oninput="resetShippingQuote()">
+                        <input type="text" id="address" placeholder="Dirección completa (Calle, Altura, Piso y Depto)" class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac text-sm" required oninput="resetShippingQuote(); validateInput(this)">
                         <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                            <input type="text" id="city" placeholder="Ciudad" class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm focus:outline-none focus:border-brand-lilac text-sm transition" required oninput="resetShippingQuote()">
-                            <input type="text" id="zip" placeholder="C. Postal" class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm focus:outline-none focus:border-brand-lilac text-sm transition" required oninput="resetShippingQuote()">
-                            <input type="text" id="province" placeholder="Provincia" class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm focus:outline-none focus:border-brand-lilac text-sm transition" required oninput="resetShippingQuote()">
+                            <input type="text" id="city" placeholder="Ciudad" class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac text-sm" required oninput="resetShippingQuote(); validateInput(this)">
+                            <input type="text" id="zip" placeholder="C. Postal" class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac text-sm" required oninput="resetShippingQuote(); validateInput(this)">
+                            <input type="text" id="province" placeholder="Provincia" class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac text-sm" required oninput="resetShippingQuote(); validateInput(this)">
                         </div>
 
                         <div class="mt-4 flex items-center justify-between border border-brand-lilac/30 rounded-xl p-3 bg-brand-pink/5 shadow-sm">

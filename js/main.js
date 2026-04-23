@@ -40,6 +40,43 @@ mobileLinks.forEach(link => {
     link.addEventListener('click', () => { if (menuOpen) toggleMenu(); });
 });
 
+function showToast(message, type = 'success') {
+    let container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        container.className = 'fixed bottom-6 left-1/2 transform -translate-x-1/2 z-[100] flex flex-col gap-3 pointer-events-none w-[90%] max-w-sm';
+        document.body.appendChild(container);
+    }
+
+    const toast = document.createElement('div');
+    toast.className = 'transform transition-all duration-300 translate-y-full opacity-0 px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 font-medium text-sm backdrop-blur-md';
+    
+    if (type === 'success') {
+        toast.innerHTML = `<i data-lucide="check-circle" class="w-5 h-5 text-brand-green"></i> <span class="text-gray-800">${message}</span>`;
+        toast.classList.add('bg-white/95', 'border', 'border-gray-100');
+    } else {
+        toast.innerHTML = `<i data-lucide="info" class="w-5 h-5 text-brand-text"></i> <span class="text-brand-text">${message}</span>`;
+        toast.classList.add('bg-brand-pink/95', 'border', 'border-brand-lilac/30');
+    }
+
+    container.appendChild(toast);
+    if(typeof lucide !== 'undefined') lucide.createIcons({ root: toast });
+
+    requestAnimationFrame(() => {
+        setTimeout(() => {
+            toast.classList.remove('translate-y-full', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+        }, 10);
+    });
+
+    setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-full', 'opacity-0');
+        setTimeout(() => toast.remove(), 300);
+    }, 3500);
+}
+
 const modal = document.getElementById('action-modal');
 const modalCard = document.getElementById('modal-card');
 const modalTitle = document.getElementById('modal-title');
@@ -161,13 +198,12 @@ function _closeProductModal() {
     setTimeout(() => {
         view.classList.remove('opacity-100', 'pointer-events-auto');
         view.classList.add('opacity-0', 'pointer-events-none');
-        
         if (!document.getElementById('action-modal') || document.getElementById('action-modal').classList.contains('pointer-events-none')) {
             if (typeof isCartOpen === 'undefined' || !isCartOpen) {
                 document.body.style.overflow = 'auto';
             }
         }
-    }, 300);
+    }, 200);
 }
 
 function showPage(pageId) {
@@ -264,3 +300,16 @@ window.addEventListener('popstate', () => {
         if (typeof isProductModalOpen === 'undefined' || !isProductModalOpen) openProductModal();
     }
 });
+
+function toggleFaq(btn) {
+    const content = btn.nextElementSibling;
+    const icon = btn.querySelector('i');
+    
+    if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+        content.style.maxHeight = '0px';
+        icon.style.transform = 'rotate(0deg)';
+    } else {
+        content.style.maxHeight = content.scrollHeight + 'px';
+        icon.style.transform = 'rotate(180deg)';
+    }
+}

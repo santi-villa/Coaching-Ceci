@@ -65,6 +65,7 @@ exports.handler = async (event) => {
                             console.log("Acá iría la creación de remito en ZIPPIN");
                         } catch (err) {
                             console.error("Error conectando con ZIPPIN para crear envío:", err);
+                            throw new Error("No se pudo crear el envío en Zippin, forzando reintento de MP");
                         }
                     } else {
                         console.log("Aviso: Faltan credenciales ZIPPIN para crear remitos automáticos.");
@@ -107,11 +108,12 @@ exports.handler = async (event) => {
                         `
                     };
 
-                    await fetch("https://api.brevo.com/v3/smtp/email", {
+                    const resVendor = await fetch("https://api.brevo.com/v3/smtp/email", {
                         method: "POST",
                         headers: { "Accept": "application/json", "Content-Type": "application/json", "api-key": process.env.BREVO_API_KEY },
                         body: JSON.stringify(brevoPayloadVendedora)
                     });
+                    if (!resVendor.ok) throw new Error("Error en API de correos (Vendedor), forzando reintento.");
                     
                     // B) Correo automático PARA EL CLIENTE
                     if (metadata.customer_email && metadata.customer_email !== 'Vacio') {
@@ -137,11 +139,12 @@ exports.handler = async (event) => {
                             `
                         };
 
-                        await fetch("https://api.brevo.com/v3/smtp/email", {
+                        const resClient = await fetch("https://api.brevo.com/v3/smtp/email", {
                             method: "POST",
                             headers: { "Accept": "application/json", "Content-Type": "application/json", "api-key": process.env.BREVO_API_KEY },
                             body: JSON.stringify(brevoPayloadCliente)
                         });
+                        if (!resClient.ok) throw new Error("Error en API de correos (Cliente), forzando reintento.");
                         console.log("Ambos emails (vendedor y comprador) fueron enviados exitosamente.");
                     }
                 } else {

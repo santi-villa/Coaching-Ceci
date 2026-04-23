@@ -191,7 +191,7 @@
                             Una invitación a observar cómo nos comunicamos en la vida real. Descubre formas más claras y
                             humanas de decir, escuchar y convivir para tener "conversaciones posibles".
                         </p>
-                        <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
+                        <div class="hidden md:flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
                             <button onclick="openProductModal()"
                                 class="bg-brand-text text-white px-10 py-5 rounded-full text-lg font-medium hover:bg-opacity-90 hover:shadow-xl transform hover:-translate-y-1 transition duration-300 flex items-center justify-center gap-2">
                                 <i data-lucide="shopping-bag" class="w-6 h-6"></i> Comprar Libro
@@ -203,7 +203,7 @@
                         </div>
                     </div>
 
-                    <div class="md:w-1/2 flex justify-center perspective-1000 mt-12 md:mt-0">
+                    <div class="md:w-1/2 flex flex-col items-center perspective-1000 mt-12 md:mt-0">
                         <div class="relative w-80 md:w-[450px] lg:w-[500px] transform hover:-translate-y-4 transition duration-500 cursor-pointer group"
                             onclick="openProductModal()">
                             <img src="Libro.png" alt="Portada del libro Comunicar para vivir más livianos"
@@ -212,6 +212,18 @@
                             <div
                                 class="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/10 to-white/0 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none rounded-sm">
                             </div>
+                        </div>
+
+                        <!-- Botones solo para Mobile (debajo de la imagen) -->
+                        <div class="flex md:hidden flex-col gap-4 w-full mt-10">
+                            <button onclick="openProductModal()"
+                                class="bg-brand-text text-white px-10 py-5 rounded-xl text-lg font-bold hover:bg-opacity-90 shadow-xl flex items-center justify-center gap-2">
+                                <i data-lucide="shopping-bag" class="w-6 h-6"></i> Comprar Libro
+                            </button>
+                            <button onclick="openModal('read')"
+                                class="bg-white/40 text-white border border-white/60 px-6 py-4 rounded-xl text-base font-bold flex items-center justify-center gap-2">
+                                Leer un fragmento
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -362,10 +374,56 @@
                     </div>
                 </div>
             </section>
+            
+            <!-- FAQ Section -->
+            <section class="py-16 px-6 max-w-4xl mx-auto border-t border-brand-lilac/20 relative z-10 w-full bg-brand-light">
+                <div class="text-center mb-10">
+                    <h2 class="font-serif text-3xl font-bold text-brand-text mb-2">Preguntas Frecuentes</h2>
+                    <p class="text-gray-500">Todo lo que necesitas saber antes de tu compra.</p>
+                </div>
+                <div class="space-y-4">
+                    <div class="border border-brand-peach/30 rounded-2xl bg-white overflow-hidden shadow-sm transition hover:shadow-md">
+                        <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-5 text-left focus:outline-none">
+                            <span class="font-medium text-brand-text">¿En qué formato está el libro?</span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-brand-lilac transition-transform duration-300"></i>
+                        </button>
+                        <div class="max-h-0 overflow-hidden transition-all duration-300 px-5" style="max-height: 0px;">
+                            <p class="text-gray-600 text-sm pb-5 border-t border-gray-100 pt-3">
+                                Actualmente está disponible exclusivamente en <strong>formato Físico (Tapa blanda)</strong>. Muy pronto anunciaremos la versión E-Book Digital para todo el mundo.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="border border-brand-peach/30 rounded-2xl bg-white overflow-hidden shadow-sm transition hover:shadow-md">
+                        <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-5 text-left focus:outline-none">
+                            <span class="font-medium text-brand-text">¿Hacen envíos a todo el país?</span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-brand-lilac transition-transform duration-300"></i>
+                        </button>
+                        <div class="max-h-0 overflow-hidden transition-all duration-300 px-5" style="max-height: 0px;">
+                            <p class="text-gray-600 text-sm pb-5 border-t border-gray-100 pt-3">
+                                Sí, hacemos envíos a toda la República Argentina a través de empresas logísticas confiables. Puedes cotizar el envío directamente en el Carrito ingresando tu Código Postal.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="border border-brand-peach/30 rounded-2xl bg-white overflow-hidden shadow-sm transition hover:shadow-md">
+                        <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-5 text-left focus:outline-none">
+                            <span class="font-medium text-brand-text">¿Cuáles son los métodos de pago?</span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-brand-lilac transition-transform duration-300"></i>
+                        </button>
+                        <div class="max-h-0 overflow-hidden transition-all duration-300 px-5" style="max-height: 0px;">
+                            <p class="text-gray-600 text-sm pb-5 border-t border-gray-100 pt-3">
+                                Aceptamos todas las tarjetas de crédito, débito, y dinero en cuenta mediante <strong>Mercado Pago</strong> garantizando seguridad total. También ofrecemos pago en efectivo al momento de retirar físicamente si estás en Zona Norte.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
         </div>
 
         <div id="product-view" class="fixed inset-0 z-[60] bg-brand-text/60 backdrop-blur-md flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
-            <div class="bg-white rounded-3xl w-full max-w-4xl relative shadow-2xl transform scale-95 transition-transform duration-300 max-h-[90vh] md:max-h-[85vh] overflow-y-auto overflow-x-hidden" id="product-modal-card">
+            <div class="bg-white rounded-3xl w-full max-w-4xl relative shadow-2xl transform scale-95 transition-transform duration-300 max-h-[90vh] md:max-h-[85vh] overflow-y-auto overflow-x-hidden thin-scrollbar" id="product-modal-card">
                 
                 <!-- Botón de volver unificado (PC y Mobile) -->
                 <button onclick="closeProductModal()" class="absolute top-4 left-4 bg-white/90 text-brand-text/80 hover:text-brand-text transition px-4 py-2 rounded-full z-20 shadow-md backdrop-blur-md flex items-center gap-2 text-sm font-bold border border-white/50 transform hover:scale-105 active:scale-95">

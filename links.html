@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Links - Cecilia Karina Rosso</title>
+    
+    <meta name="description" content="Enlaces oficiales de Cecilia Karina Rosso. Libro, Contacto y más.">
+    <meta property="og:title" content="Enlaces Oficiales - Cecilia Karina Rosso">
+    <meta property="og:image" content="https://ceciliarosso.netlify.app/Libro.webp">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            lilac: '#b59ad6',
+                            text: '#4a4158',
+                            light: '#fcfafc',
+                            peach: '#ffd9cd',
+                            pink: '#ffd1dc'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .link-pattern {
+            background-color: #fcfafc;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M54.627 0l.83.83-5.5 5.5h-2.12v-2.12l5.5-5.5.83.83-5.5 5.5v2.12h2.12l5.5-5.5.83.83-5.5 5.5h-2.12v-2.12l5.5-5.5.83.83-5.5 5.5v2.12h2.12l5.5-5.5.83.83-5.5 5.5h-2.12v-2.12l5.5-5.5.83.83-5.5 5.5v2.12h2.12l5.5-5.5.83.83-5.5 5.5h-2.12v-2.12l5.5-5.5.83.83-5.5 5.5v2.12h2.12l5.5-5.5.83.83-5.5 5.5h-2.12v-2.12l5.5-5.5.83.83-5.5 5.5v2.12h2.12l5.5-5.5.83.83-5.5 5.5h-2.12v-2.12l5.5-5.5.83.83-5.5 5.5v2.12h2.12l5.5-5.5.83.83-5.5 5.5h-2.12v-2.12l5.5-5.5' fill='%23b59ad6' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+    </style>
+</head>
+<body class="bg-brand-light link-pattern min-h-screen flex flex-col items-center py-12 px-6 font-sans">
+
+    <!-- Profile Image / Logo -->
+    <div class="w-28 h-28 bg-white rounded-full p-2 shadow-lg mb-6 flex items-center justify-center border border-brand-lilac/30">
+        <h1 class="font-serif text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-lilac to-brand-peach">CR</h1>
+    </div>
+
+    <!-- Title -->
+    <h2 class="font-serif text-3xl font-bold text-brand-text mb-2 text-center">Cecilia K. Rosso</h2>
+    <p class="text-brand-text/70 text-sm mb-10 text-center uppercase tracking-widest font-medium">Autora & Coach</p>
+
+    <!-- Links Container -->
+    <div class="w-full max-w-sm flex flex-col gap-4">
+        
+        <!-- Primary Action -->
+        <a href="/index.html#producto" class="w-full bg-brand-text text-white p-4 rounded-2xl shadow-lg border border-transparent font-medium flex items-center justify-between hover:scale-[1.02] active:scale-[0.98] transition-transform group">
+            <div class="flex items-center gap-3">
+                <i data-lucide="shopping-bag" class="w-5 h-5 opacity-90"></i>
+                <span>Ver Libro Físico</span>
+            </div>
+            <span class="bg-white/20 text-xs px-2 py-1 rounded-md font-bold group-hover:bg-white group-hover:text-brand-text transition-colors">Vol 1.</span>
+        </a>
+
+        <!-- Secondary Links -->
+        <a href="/index.html" class="w-full bg-white text-brand-text p-4 rounded-2xl shadow-sm border border-brand-lilac/20 font-medium flex items-center justify-center gap-2 hover:border-brand-lilac transition-colors">
+            <i data-lucide="globe" class="w-5 h-5 text-brand-lilac"></i> Ir al Sitio Web Principal
+        </a>
+
+        <!-- Contact Options -->
+        <a href="https://wa.me/5491112345678" class="w-full bg-[#E8F5E9] text-[#2E7D32] p-4 rounded-2xl shadow-sm border border-[#C8E6C9] font-medium flex items-center justify-center gap-2 hover:bg-[#C8E6C9] transition-colors mt-4">
+            <i data-lucide="message-circle" class="w-5 h-5"></i> Contactar por WhatsApp
+        </a>
+
+        <a href="mailto:hola@ceciliarosso.com" class="w-full bg-transparent text-brand-text/70 p-4 rounded-2xl font-medium flex items-center justify-center gap-2 hover:text-brand-text transition-colors border border-transparent hover:bg-white/50">
+            <i data-lucide="mail" class="w-5 h-5"></i> Enviar un Email
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-16 text-center">
+        <p class="text-xs text-brand-text/50">© 2024 Cecilia Karina Rosso</p>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

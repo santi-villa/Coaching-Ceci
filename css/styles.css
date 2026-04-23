@@ -38,6 +38,26 @@ html {
     background: #9a7cc0;
 }
 
+/* Scrollbar Finito y Estético */
+.thin-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+.thin-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+.thin-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(181, 154, 214, 0.4);
+    border-radius: 20px;
+    border: none;
+}
+.thin-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(181, 154, 214, 0.8);
+}
+.thin-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(181, 154, 214, 0.4) transparent;
+}
+
 /* Animaciones de transición para vistas */
 .view-section {
     transition: opacity 0.3s ease-in-out;

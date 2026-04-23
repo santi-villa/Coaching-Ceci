@@ -55,7 +55,7 @@ function _closeCart() {
     cartOverlay.classList.add('opacity-0');
     setTimeout(() => {
         cartOverlay.classList.add('hidden');
-    }, 300);
+    }, 200);
     // Solo devolvemos a auto si el modal tampoco lo está usando
     if (!document.getElementById('action-modal') || document.getElementById('action-modal').classList.contains('pointer-events-none')) {
         document.body.style.overflow = 'auto';
@@ -71,7 +71,8 @@ function addToCart() {
     }
 
     updateCartUI();
-    toggleCart();
+    showToast("¡Libro agregado al carrito!");
+    toggleCart(true);
 }
 
 function addToCartWithQty() {
@@ -86,7 +87,23 @@ function addToCartWithQty() {
     }
 
     updateCartUI();
-    toggleCart();
+    if(qtyEl) qtyEl.textContent = '1'; // reset
+    showToast("¡Libro agregado al carrito!");
+    toggleCart(true);
+}
+
+// Validación visual en tiempo real
+function validateInput(el) {
+    if (el.value.trim() === '') {
+        el.classList.remove('border-green-400', 'bg-green-50/30', 'border-red-400', 'bg-red-50/30');
+        el.classList.add('border-white', 'bg-white');
+    } else if (el.checkValidity()) {
+        el.classList.remove('border-white', 'border-red-400', 'bg-red-50/30');
+        el.classList.add('border-green-400', 'bg-green-50/30');
+    } else {
+        el.classList.remove('border-white', 'border-green-400', 'bg-green-50/30');
+        el.classList.add('border-red-400', 'bg-red-50/30');
+    }
 }
 
 function removeFromCart(id) {
