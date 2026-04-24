@@ -183,39 +183,9 @@ function openCheckoutModal() {
 }
 
 function toggleShippingFields(show) {
+    // Ya no es necesario el toggle complejo ya que solo existe Envío
     const fields = document.getElementById('shipping-fields');
-    const cashLabel = document.getElementById('label-cash');
-    const cashInput = document.querySelector('input[name="payment"][value="cash"]');
-    const mpInput = document.querySelector('input[name="payment"][value="mp"]');
-
-    if (show) {
-        fields.classList.remove('hidden');
-        document.getElementById('address').required = true;
-        document.getElementById('city').required = true;
-        document.getElementById('zip').required = true;
-        document.getElementById('province').required = true;
-
-        // Si elige envío, desactivar y ocultar Efectivo como método de pago
-        if (cashLabel) cashLabel.classList.add('hidden');
-        if (cashInput && cashInput.checked) {
-            cashInput.checked = false;
-            if (mpInput) {
-                mpInput.checked = true;
-                togglePaymentMethod('mp');
-            }
-        }
-    } else {
-        fields.classList.add('hidden');
-        document.getElementById('address').required = false;
-        document.getElementById('city').required = false;
-        document.getElementById('zip').required = false;
-        document.getElementById('province').required = false;
-
-        // Si elige retiro en persona, volver a habilitar Efectivo
-        // Lo dejamos seleccionado por defecto para mayor agilidad si prefieres,
-        // o simplemente lo mostramos.
-        if (cashLabel) cashLabel.classList.remove('hidden');
-    }
+    if (fields) fields.classList.remove('hidden');
 }
 
 function resetShippingQuote() {
@@ -269,25 +239,24 @@ async function handleCheckout(e) {
     const customerPhone = document.getElementById('customer-phone').value;
     const customerEmail = document.getElementById('customer-email').value;
     const customerDni = document.getElementById('customer-dni').value;
-    const delivery = document.querySelector('input[name="delivery"]:checked').value;
-    const payment = document.querySelector('input[name="payment"]:checked').value;
+    
+    // Solo permitimos shipping y mp
+    const delivery = 'shipping';
+    const payment = 'mp';
 
-    // 2. DESPUÉS validamos el teléfono (ahora sí existe la variable)
     const phoneRegex = /^[0-9]{10,13}$/;
     if (!phoneRegex.test(customerPhone.replace(/\s/g, ""))) {
         alert("Por favor, ingresa un número de teléfono válido (solo números, código de área sin 0 ni 15).");
-        return; // Corta la ejecución si está mal
+        return;
     }
 
-    // 3. Validar check de políticas de privacidad
     const privacyCheck = document.getElementById('privacy-policy');
     if (privacyCheck && !privacyCheck.checked) {
         alert("Debes aceptar las Políticas de Privacidad para continuar con tu compra.");
         return;
     }
 
-    // 4. Validar que si es envío, haya cotizado
-    if (delivery === 'shipping' && quotedShippingCost === 0) {
+    if (quotedShippingCost === 0) {
         alert("Por favor, hacé clic en 'Cotizar Envío' antes de proceder al pago.");
         return;
     }
@@ -295,150 +264,56 @@ async function handleCheckout(e) {
     const btn = e.target.querySelector('button[type="submit"]');
     const originalText = btn.innerHTML;
 
-    let itemsList = '';
-    let totalPrice = 0;
-
-    cart.forEach(item => {
-        const itemTotal = item.price * item.quantity;
-        totalPrice += itemTotal;
-        itemsList += `• ${item.title} x${item.quantity}: $${itemTotal.toLocaleString('es-AR')}\n`;
-    });
-
-    let deliveryInfo = '';
-    if (delivery === 'pickup') {
-        deliveryInfo = '📍 Retiro en persona (Zona Norte, GBA)';
-    } else {
-        const address = document.getElementById('address').value;
-        const city = document.getElementById('city').value;
-        const zip = document.getElementById('zip').value;
-        const province = document.getElementById('province').value;
-        deliveryInfo = `📦 Envío a:\n${address}, ${city} (${zip}), ${province}`;
-    }
-
-    let paymentInfo = '';
-    if (payment === 'cash') {
-        paymentInfo = '💵 Efectivo al retirar';
-    } else if (payment === 'mp') {
-        paymentInfo = '💳 Mercado Pago';
-    } else if (payment === 'wpp') {
-        paymentInfo = '💬 WhatsApp';
-    }
-
-    const message = `🛒 *Nuevo Pedido - Libro "Comunicar para vivir más livianos"*\n\n` +
-        `👤 *Cliente:* ${customerName}\n` +
-        `📱 *Teléfono:* ${customerPhone}\n\n` +
-        `📚 *Productos:*\n${itemsList}\n` +
-        `💰 *Total:* $${totalPrice.toLocaleString('es-AR')} ARS\n\n` +
-        `🚚 *Entrega:*\n${deliveryInfo}\n\n` +
-        `💳 *Pago:* ${paymentInfo}\n\n` +
-        `¡Gracias por tu compra!`;
-
     // Efecto de carga en el botón
     btn.innerHTML = 'Procesando... <i class="animate-spin w-4 h-4 rounded-full border-2 border-white border-t-transparent inline-block"></i>';
     btn.classList.add('opacity-75', 'cursor-not-allowed');
 
-    // Definimos los datos de WhatsApp acá afuera para que estén disponibles
-    const whatsappNumber = '5491123189132';
-    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    try {
+        const address = document.getElementById('address').value;
+        const city = document.getElementById('city').value;
+        const zip = document.getElementById('zip').value;
+        const province = document.getElementById('province').value;
 
-    if (payment === 'mp') {
-        // Guardamos el link de WhatsApp en la memoria temporal del navegador
-        localStorage.setItem('whatsappUrl_pendiente', whatsappUrl);
+        const response = await fetch('/.netlify/functions/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                cart: cart,
+                delivery: delivery,
+                shippingCost: quotedShippingCost,
+                customer: {
+                    name: customerName,
+                    phone: customerPhone,
+                    email: customerEmail,
+                    dni: customerDni,
+                    address: address,
+                    city: city,
+                    zip: zip,
+                    province: province
+                }
+            })
+        });
+        const data = await response.json();
 
-        try {
-            // Redirigimos a la API enviando el carrito actual y los datos del comprador
-            const address = document.getElementById('address') ? document.getElementById('address').value : '';
-            const city = document.getElementById('city') ? document.getElementById('city').value : '';
-            const zip = document.getElementById('zip') ? document.getElementById('zip').value : '';
-            const province = document.getElementById('province') ? document.getElementById('province').value : '';
-
-            const response = await fetch('/.netlify/functions/checkout', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    cart: cart,
-                    delivery: delivery,
-                    shippingCost: quotedShippingCost,
-                    customer: {
-                        name: customerName,
-                        phone: customerPhone,
-                        email: customerEmail,
-                        dni: customerDni,
-                        address: address,
-                        city: city,
-                        zip: zip,
-                        province: province
-                    }
-                })
-            });
-            const data = await response.json();
-
-            // Vaciamos carrito DESPUÉS de haber leído los datos
+        if (response.ok && data.init_point) {
             cart = [];
             updateCartUI();
-
-            if (response.ok && data.init_point) {
-                // Cerramos el modal de checkout para no confundir
-                closeModal();
-
-                // Mostramos un mensaje temporal antes de que MP procese o que el usuario vuelva
-                const successBox = document.querySelector('#success-view .bg-gray-50');
-                if (successBox) {
-                    successBox.innerHTML = `
-                        <p class="text-gray-800 font-medium mb-3 text-center">Serás redirigido a Mercado Pago en una nueva pestaña.</p>
-                        <p class="text-gray-600 mb-4 text-center text-sm">Si no se abrió automáticamente, haz clic abajo:</p>
-                        <button onclick="window.open('${data.init_point}', '_blank');" class="w-full bg-[#009EE3] text-white py-3 rounded-xl font-bold hover:bg-opacity-90 transition shadow-lg flex items-center justify-center gap-2">
-                             Ir a pagar a Mercado Pago
-                        </button>
-                    `;
-                }
-                showPage('success-view');
-
-                // Abrimos Mercado Pago en pestaña nueva (puede ser bloqueado por algunos navegadores si no es sincronico,
-                // por eso el botón manual en la vista de éxito salva el día)
-                window.open(data.init_point, '_blank');
-
-            } else {
-                console.error("Error de MP:", data);
-                btn.innerHTML = originalText;
-                btn.classList.remove('opacity-75', 'cursor-not-allowed');
-                alert("Hubo un problema al conectar con Mercado Pago: " + (data.error || "Asegúrate de que el token sea válido."));
-            }
-        } catch (error) {
-            console.error("Error al ejecutar fetch:", error);
-            btn.innerHTML = originalText;
-            btn.classList.remove('opacity-75', 'cursor-not-allowed');
-            alert("Error de conexión con el servidor. Intenta nuevamente.");
+            closeModal();
+            window.open(data.init_point, '_blank');
+            showPage('success-view');
+        } else {
+            throw new Error(data.error || "Error en Mercado Pago");
         }
-    } else {
-        // Si es efectivo (cash), abrimos WPP directo porque no hay pasarela de pago
-        window.open(whatsappUrl, '_blank');
-        cart = [];
-        updateCartUI();
-        closeModal();
-        showPage('success-view');
-
+    } catch (error) {
+        console.error("Error al ejecutar fetch:", error);
         btn.innerHTML = originalText;
         btn.classList.remove('opacity-75', 'cursor-not-allowed');
+        alert("Hubo un problema al conectar con Mercado Pago. Revisa tu conexión e intenta nuevamente.");
     }
 }
 
 function togglePaymentMethod(method) {
-    const detailsDiv = document.getElementById('payment-details');
-    const instructions = document.getElementById('payment-instructions');
-    if (!detailsDiv || !instructions) return;
-
-    if (method === 'cash') {
-        instructions.textContent = '💵 El pago se realizará en efectivo cuando retires el libro. Luego de confirmar nos contactaremos.';
-        detailsDiv.classList.remove('hidden');
-    } else if (method === 'mp') {
-        instructions.innerHTML = '💳 Serás redirigido a Mercado Pago para abonar de forma segura en una nueva pestaña.';
-        detailsDiv.classList.remove('hidden');
-    } else {
-        detailsDiv.classList.add('hidden');
-    }
+    // Función mantenida por compatibilidad pero vacía
 }
 
 function handleSubscribeSubmit(e) {

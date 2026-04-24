@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comunicar para vivir más livianos - Cecilia Karina Rosso</title>
+    <link rel="icon" type="image/png" href="iconoweb.png">
+    <link rel="apple-touch-icon" href="iconoweb.png">
 
     <!-- Meta Tags / SEO para WhatsApp y Redes Sociales -->
     <meta name="description"
@@ -61,8 +63,9 @@
     <nav id="main-nav" class="fixed w-full z-30 px-6 py-4 text-white transition-all duration-300 bg-transparent">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <a href="#" onclick="showPage('home-view'); event.preventDefault();"
-                class="font-serif text-2xl font-bold tracking-wide drop-shadow-md cursor-pointer hover:opacity-80 transition">
-                Cecilia <span class="font-light italic">Rosso</span>
+                class="font-serif text-2xl font-bold tracking-wide drop-shadow-md cursor-pointer hover:opacity-80 transition flex items-center gap-3">
+                <img src="iconoweb.png" alt="CR Logo" class="w-10 h-10 rounded-xl object-contain bg-white/5 p-1">
+                <span>Cecilia <span class="font-light italic">Rosso</span></span>
             </a>
             <div class="hidden md:flex space-x-8 font-medium items-center">
                 <a href="#libro" onclick="showPage('home-view')" class="hover:opacity-80 transition">El Libro</a>
@@ -183,7 +186,8 @@
                             Lanzamiento</span>
                         <h1
                             class="font-serif text-5xl md:text-6xl lg:text-7xl font-normal text-white leading-tight drop-shadow-md">
-                            Comunicar <span class="text-white block mt-2 md:mt-3 text-[0.8em]">para vivir más livianos</span>
+                            Comunicar <span class="text-white block mt-2 md:mt-3 text-[0.8em]">para vivir más
+                                livianos</span>
                         </h1>
                         <p class="text-xl md:text-2xl lg:text-3xl font-serif text-white/90 italic">¡Vive más liviano,
                             comunica mejor!</p>
@@ -247,13 +251,14 @@
 
             <section id="libro" class="py-16 px-6 max-w-6xl mx-auto">
                 <div class="text-center mb-12">
-                    <h2 class="font-serif text-4xl font-bold text-brand-text mb-4">El arte de las conversaciones
+                     <h2 class="font-serif text-4xl font-bold text-brand-text mb-4"> El arte de las conversaciones
                         posibles</h2>
-                    <div class="w-24 h-1 bg-brand-pink mx-auto rounded-full mb-6"></div>
-                    <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-                        No es un manual técnico ni estadísticas complicadas. Es una invitación a aprender a hablar con
-                        honestidad y con la verdad de lo que nos pasa, con presencia y respeto.
+                    <p class="text-gray-600 text-lg max-w-2xl mx-auto mb-6 leading-relaxed">
+                        La comunicación es la herramienta más poderosa que tiene el ser humano para relacionarse. El lenguaje que utilizas —la forma en que elegís expresarte y escuchar— no solo conecta con otros, sino que también define el mundo que creas y en el que vivís. <br class="hidden md:block">
+                        Por eso, elegir cómo comunicarte es, en esencia, elegir el mundo que querés habitar.
                     </p>
+                    <div class="w-24 h-1 bg-brand-pink mx-auto rounded-full mb-6"></div>
+
                 </div>
 
                 <div class="grid md:grid-cols-3 gap-6">
@@ -367,71 +372,108 @@
                                     class="bg-brand-text/10 text-brand-text text-xs font-bold px-3 py-1 rounded-full absolute top-4 right-4 backdrop-blur-md">Próximamente</span>
                                 <i data-lucide="lock" class="w-10 h-10 text-white/70"></i>
                             </div>
-                            <h3 class="font-serif text-xl font-bold text-brand-text mb-2">El Propósito del Ser</h3>
-                            <p class="text-sm text-brand-text/70 mb-4">Vol. 2 - Reconexión Interior</p>
+                            <h3 class="font-serif text-xl font-bold text-brand-text text-gra mb-2">*Proximamente*
+                            </h3>
+                            <p class="text-sm text-brand-text/70 mb-4">*Proximamente*</p>
                             <span class="text-brand-text/50 text-sm italic">En desarrollo</span>
                         </div>
                     </div>
                 </div>
             </section>
-            
+
             <!-- FAQ Section -->
-            <section class="py-16 px-6 max-w-4xl mx-auto border-t border-brand-lilac/20 relative z-10 w-full bg-brand-light">
+            <section
+                class="py-16 px-6 max-w-4xl mx-auto border-t border-brand-lilac/20 relative z-10 w-full bg-brand-light">
                 <div class="text-center mb-10">
                     <h2 class="font-serif text-3xl font-bold text-brand-text mb-2">Preguntas Frecuentes</h2>
                     <p class="text-gray-500">Todo lo que necesitas saber antes de tu compra.</p>
                 </div>
                 <div class="space-y-4">
-                    <div class="border border-brand-peach/30 rounded-2xl bg-white overflow-hidden shadow-sm transition hover:shadow-md">
-                        <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-5 text-left focus:outline-none">
+                    <div
+                        class="border border-brand-peach/30 rounded-2xl bg-white overflow-hidden shadow-sm transition hover:shadow-md">
+                        <button onclick="toggleFaq(this)"
+                            class="w-full flex items-center justify-between p-5 text-left focus:outline-none">
                             <span class="font-medium text-brand-text">¿En qué formato está el libro?</span>
-                            <i data-lucide="chevron-down" class="w-5 h-5 text-brand-lilac transition-transform duration-300"></i>
+                            <i data-lucide="chevron-down"
+                                class="w-5 h-5 text-brand-lilac transition-transform duration-300"></i>
                         </button>
                         <div class="max-h-0 overflow-hidden transition-all duration-300 px-5" style="max-height: 0px;">
                             <p class="text-gray-600 text-sm pb-5 border-t border-gray-100 pt-3">
-                                Actualmente está disponible exclusivamente en <strong>formato Físico (Tapa blanda)</strong>. Muy pronto anunciaremos la versión E-Book Digital para todo el mundo.
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <div class="border border-brand-peach/30 rounded-2xl bg-white overflow-hidden shadow-sm transition hover:shadow-md">
-                        <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-5 text-left focus:outline-none">
-                            <span class="font-medium text-brand-text">¿Hacen envíos a todo el país?</span>
-                            <i data-lucide="chevron-down" class="w-5 h-5 text-brand-lilac transition-transform duration-300"></i>
-                        </button>
-                        <div class="max-h-0 overflow-hidden transition-all duration-300 px-5" style="max-height: 0px;">
-                            <p class="text-gray-600 text-sm pb-5 border-t border-gray-100 pt-3">
-                                Sí, hacemos envíos a toda la República Argentina a través de empresas logísticas confiables. Puedes cotizar el envío directamente en el Carrito ingresando tu Código Postal.
+                                Actualmente está disponible exclusivamente en <strong>formato Físico (Tapa
+                                    blanda)</strong>. Muy pronto anunciaremos la versión E-Book Digital para todo el
+                                mundo.
                             </p>
                         </div>
                     </div>
 
-                    <div class="border border-brand-peach/30 rounded-2xl bg-white overflow-hidden shadow-sm transition hover:shadow-md">
-                        <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-5 text-left focus:outline-none">
-                            <span class="font-medium text-brand-text">¿Cuáles son los métodos de pago?</span>
-                            <i data-lucide="chevron-down" class="w-5 h-5 text-brand-lilac transition-transform duration-300"></i>
+                    <div
+                        class="border border-brand-peach/30 rounded-2xl bg-white overflow-hidden shadow-sm transition hover:shadow-md">
+                        <button onclick="toggleFaq(this)"
+                            class="w-full flex items-center justify-between p-5 text-left focus:outline-none">
+                            <span class="font-medium text-brand-text">¿Hacen envíos a todo el país?</span>
+                            <i data-lucide="chevron-down"
+                                class="w-5 h-5 text-brand-lilac transition-transform duration-300"></i>
                         </button>
                         <div class="max-h-0 overflow-hidden transition-all duration-300 px-5" style="max-height: 0px;">
                             <p class="text-gray-600 text-sm pb-5 border-t border-gray-100 pt-3">
-                                Aceptamos todas las tarjetas de crédito, débito, y dinero en cuenta mediante <strong>Mercado Pago</strong> garantizando seguridad total. También ofrecemos pago en efectivo al momento de retirar físicamente si estás en Zona Norte.
+                                Sí, hacemos envíos a toda la República Argentina a través de empresas logísticas
+                                confiables. Puedes cotizar el envío directamente en el Carrito ingresando tu Código
+                                Postal.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div
+                        class="border border-brand-peach/30 rounded-2xl bg-white overflow-hidden shadow-sm transition hover:shadow-md">
+                        <button onclick="toggleFaq(this)"
+                            class="w-full flex items-center justify-between p-5 text-left focus:outline-none">
+                            <span class="font-medium text-brand-text">¿Cuáles son los métodos de pago?</span>
+                            <i data-lucide="chevron-down"
+                                class="w-5 h-5 text-brand-lilac transition-transform duration-300"></i>
+                        </button>
+                        <div class="max-h-0 overflow-hidden transition-all duration-300 px-5" style="max-height: 0px;">
+                            <p class="text-gray-600 text-sm pb-5 border-t border-gray-100 pt-3">
+                                Aceptamos todas las tarjetas de crédito, débito, y dinero en cuenta mediante
+                                <strong>Mercado Pago</strong> garantizando seguridad total. Realizamos envíos a
+                                domicilio en todo el país para que recibas tu ejemplar de la forma más cómoda.
+                            </p>
+                        </div>
+                    </div>
+                    <div
+                        class="border border-brand-peach/30 rounded-2xl bg-white overflow-hidden shadow-sm transition hover:shadow-md">
+                        <button onclick="toggleFaq(this)"
+                            class="w-full flex items-center justify-between p-5 text-left focus:outline-none">
+                            <span class="font-medium text-brand-text">¿Cómo sé si mi compra fue exitosa?</span>
+                            <i data-lucide="chevron-down"
+                                class="w-5 h-5 text-brand-lilac transition-transform duration-300"></i>
+                        </button>
+                        <div class="max-h-0 overflow-hidden transition-all duration-300 px-5" style="max-height: 0px;">
+                            <p class="text-gray-600 text-sm pb-5 border-t border-gray-100 pt-3">
+                                Una vez completado el pago, recibirás un correo electrónico automático con todos los
+                                detalles de tu orden. Si no lo ves en tu bandeja de entrada, por favor revisa la carpeta
+                                de Correo no deseado o Spam.
                             </p>
                         </div>
                     </div>
                 </div>
             </section>
-            
+
         </div>
 
-        <div id="product-view" class="fixed inset-0 z-[60] bg-brand-text/60 backdrop-blur-md flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
-            <div class="bg-white rounded-3xl w-full max-w-4xl relative shadow-2xl transform scale-95 transition-transform duration-300 max-h-[90vh] md:max-h-[85vh] overflow-y-auto overflow-x-hidden thin-scrollbar" id="product-modal-card">
-                
+        <div id="product-view"
+            class="fixed inset-0 z-[60] bg-brand-text/60 backdrop-blur-md flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+            <div class="bg-white rounded-3xl w-full max-w-4xl relative shadow-2xl transform scale-95 transition-transform duration-300 max-h-[90vh] md:max-h-[85vh] overflow-y-auto overflow-x-hidden thin-scrollbar"
+                id="product-modal-card">
+
                 <!-- Botón de volver unificado (PC y Mobile) -->
-                <button onclick="closeProductModal()" class="absolute top-4 left-4 bg-white/90 text-brand-text/80 hover:text-brand-text transition px-4 py-2 rounded-full z-20 shadow-md backdrop-blur-md flex items-center gap-2 text-sm font-bold border border-white/50 transform hover:scale-105 active:scale-95">
+                <button onclick="closeProductModal()"
+                    class="absolute top-4 left-4 bg-white/90 text-brand-text/80 hover:text-brand-text transition px-4 py-2 rounded-full z-20 shadow-md backdrop-blur-md flex items-center gap-2 text-sm font-bold border border-white/50 transform hover:scale-105 active:scale-95">
                     <i data-lucide="arrow-left" class="w-5 h-5"></i> Volver a la tienda
                 </button>
 
                 <!-- Botón X reincorporado (dentro de la caja para que no se corte) -->
-                <button onclick="closeProductModal()" class="absolute top-4 right-4 bg-white/95 text-gray-600 hover:text-brand-text hover:bg-gray-100 border border-gray-200 transition p-2 rounded-full z-20 shadow-md">
+                <button onclick="closeProductModal()"
+                    class="absolute top-4 right-4 bg-white/95 text-gray-600 hover:text-brand-text hover:bg-gray-100 border border-gray-200 transition p-2 rounded-full z-20 shadow-md">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
 
@@ -472,7 +514,8 @@
                             <p>Una invitación a observar cómo nos comunicamos en la vida real. Descubre formas más
                                 claras y humanas de decir, escuchar y convivir para tener "conversaciones posibles".</p>
                             <p class="text-sm text-gray-500 italic"><i data-lucide="info"
-                                    class="w-4 h-4 inline-block mr-1"></i> Formato: Tapa blanda, 100 páginas.</p>
+                                    class="w-4 h-4 inline-block mr-1"></i> Formato: Tapa blanda, 100 páginas (15x21x0.5
+                                cm).</p>
                         </div>
 
                         <div class="flex items-center gap-4 mb-8">
@@ -496,13 +539,11 @@
                         <div class="mt-6 flex flex-wrap items-center justify-center gap-6 text-sm text-gray-500">
                             <span class="flex items-center gap-1"><i data-lucide="truck"
                                     class="w-4 h-4 text-brand-lilac"></i> Envíos a todo el país</span>
-                            <span class="flex items-center gap-1"><i data-lucide="map-pin"
-                                    class="w-4 h-4 text-brand-lilac"></i> Retiro disponible</span>
                         </div>
                     </div>
                 </div>
-                </div>
             </div>
+        </div>
         </div>
 
         <div id="success-view"
@@ -521,10 +562,11 @@
                         <p class="text-xl text-brand-lilac font-medium mb-6">Tu pedido ha sido procesado con éxito.</p>
 
                         <div class="bg-gray-50 border border-gray-100 rounded-xl p-6 text-left mb-8 max-w-sm mx-auto">
-                            <p class="text-gray-600 mb-2">Nos pondremos en contacto contigo a la brevedad para coordinar
-                                la entrega de tu libro.</p>
-                            <p class="text-gray-500 text-sm italic">Si tienes alguna duda, puedes contactarnos por
-                                Instagram a <a href="https://instagram.com/ceciliarosso.coach" target="_blank"
+                            <p class="text-gray-600 mb-2 font-medium">Estamos procesando tu orden.</p>
+                            <p class="text-gray-500 text-sm">Recibirás un correo de confirmación en breve. Por favor,
+                                revisa tu bandeja de entrada y la carpeta de Spam.</p>
+                            <p class="text-gray-500 text-sm italic mt-3">Cualquier duda, contáctanos en Instagram: <a
+                                    href="https://instagram.com/ceciliarosso.coach" target="_blank"
                                     class="text-brand-lilac hover:underline">@ceciliarosso.coach</a></p>
                         </div>
 
@@ -627,19 +669,17 @@
                                         aviso ni obligatoriedad de sostener valores desactualizados.</strong></p>
                                 <p class="mt-2 font-medium text-brand-text">Métodos de pago aceptados:</p>
                                 <ul class="list-disc pl-5 space-y-1">
-                                    <li>Diferentes medios incluidos dentro de MercadoPago (Dinero en cuenta, Tarjeta de
-                                        Crédito, Débito).</li>
-                                    <li>Efectivo y/o Transferencia coordinada por circuito WhatsApp.</li>
+                                    <li>Plataforma de pago segura <strong>Mercado Pago</strong> (Dinero en cuenta,
+                                        Tarjeta de Crédito, Débito). No se aceptan pagos en efectivo al momento de la
+                                        entrega.</li>
                                 </ul>
 
                                 <h3 class="text-xl font-bold text-brand-text mb-2 mt-6">3. Entregas y Plazos</h3>
                                 <ul class="list-disc pl-5 space-y-1">
-                                    <li><strong>Retiro presencial:</strong> En Zona Norte, Gran Buenos Aires. Se
-                                        habilitará el diálogo por WhatsApp para pactar día y horario una vez
-                                        efectivizada la compra.</li>
-                                    <li><strong>Envío a domicilio:</strong> Se gestionará mediante mensajería y sus
-                                        tiempos dependerán del servicio utilizado, el cual será previamente acordado con
-                                        el comprador.</li>
+                                    <li><strong>Envío a domicilio:</strong> Se gestionará de forma automatizada mediante
+                                        servicios de mensajería privados a todo el país. Los tiempos de entrega
+                                        dependerán de la zona geográfica del comprador y el servicio logístico
+                                        seleccionado en el carrito.</li>
                                 </ul>
 
                                 <h3 class="text-xl font-bold text-brand-text mb-2 mt-6">4. Cambios y devoluciones</h3>
@@ -669,8 +709,9 @@
     <footer class="bg-brand-text text-white/80 py-12 border-t-8 border-brand-lilac">
         <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-4 gap-10 md:gap-8">
             <div class="col-span-2">
-                <div class="font-serif text-2xl font-bold text-white tracking-wide mb-4">
-                    Cecilia <span class="font-light italic text-brand-pink">Rosso</span>
+                <div class="font-serif text-2xl font-bold text-white tracking-wide mb-4 flex items-center gap-3">
+                    <img src="iconoweb.png" alt="CR Logo" class="w-10 h-10 rounded-xl object-contain bg-white/10 p-1">
+                    <span>Cecilia <span class="font-light italic text-brand-pink">Rosso</span></span>
                 </div>
                 <p class="max-w-xs text-sm mb-6">
                     Acompañando tu crecimiento personal a través de lecturas que nutren el alma y sanan los vínculos.

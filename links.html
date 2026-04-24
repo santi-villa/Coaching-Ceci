@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Links - Cecilia Karina Rosso</title>
+    <link rel="icon" type="image/png" href="iconoweb.png">
+    <link rel="apple-touch-icon" href="iconoweb.png">
     
     <meta name="description" content="Enlaces oficiales de Cecilia Karina Rosso. Libro, Contacto y más.">
     <meta property="og:title" content="Enlaces Oficiales - Cecilia Karina Rosso">
@@ -38,49 +40,68 @@
             background-color: #fcfafc;
             background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M54.627 0l.83.83-5.5 5.5h-2.12v-2.12l5.5-5.5.83.83-5.5 5.5v2.12h2.12l5.5-5.5.83.83-5.5 5.5h-2.12v-2.12l5.5-5.5.83.83-5.5 5.5v2.12h2.12l5.5-5.5.83.83-5.5 5.5h-2.12v-2.12l5.5-5.5.83.83-5.5 5.5v2.12h2.12l5.5-5.5.83.83-5.5 5.5h-2.12v-2.12l5.5-5.5.83.83-5.5 5.5v2.12h2.12l5.5-5.5.83.83-5.5 5.5h-2.12v-2.12l5.5-5.5.83.83-5.5 5.5v2.12h2.12l5.5-5.5.83.83-5.5 5.5h-2.12v-2.12l5.5-5.5.83.83-5.5 5.5v2.12h2.12l5.5-5.5.83.83-5.5 5.5h-2.12v-2.12l5.5-5.5' fill='%23b59ad6' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
         }
+        @keyframes slideUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes softGlow {
+            0%, 100% { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+            50% { box-shadow: 0 0 20px rgba(181, 154, 214, 0.6); }
+        }
+        .animate-slide-up { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+        .delay-400 { animation-delay: 400ms; }
+        .delay-500 { animation-delay: 500ms; }
+        
+        .pulse-glow { animation: softGlow 3s infinite ease-in-out; }
+        .primary-action-anim { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards, softGlow 3s infinite ease-in-out 0.6s; opacity: 0; }
     </style>
 </head>
 <body class="bg-brand-light link-pattern min-h-screen flex flex-col items-center py-12 px-6 font-sans">
 
     <!-- Profile Image / Logo -->
-    <div class="w-28 h-28 bg-white rounded-full p-2 shadow-lg mb-6 flex items-center justify-center border border-brand-lilac/30">
-        <h1 class="font-serif text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-lilac to-brand-peach">CR</h1>
+    <div class="w-28 h-28 bg-white rounded-full p-2 shadow-lg mb-6 flex items-center justify-center border border-brand-lilac/30 overflow-hidden animate-slide-up">
+        <img src="iconoweb.png" alt="Cecilia Rosso Logo" class="w-full h-full object-contain">
     </div>
 
     <!-- Title -->
-    <h2 class="font-serif text-3xl font-bold text-brand-text mb-2 text-center">Cecilia K. Rosso</h2>
-    <p class="text-brand-text/70 text-sm mb-10 text-center uppercase tracking-widest font-medium">Autora & Coach</p>
+    <div class="animate-slide-up delay-100 flex flex-col items-center">
+        <h2 class="font-serif text-3xl font-bold text-brand-text mb-2 text-center">Cecilia K. Rosso</h2>
+        <p class="text-brand-text/70 text-sm mb-10 text-center uppercase tracking-widest font-medium">Autora & Coach</p>
+    </div>
 
     <!-- Links Container -->
     <div class="w-full max-w-sm flex flex-col gap-4">
         
         <!-- Primary Action -->
-        <a href="/index.html#producto" class="w-full bg-brand-text text-white p-4 rounded-2xl shadow-lg border border-transparent font-medium flex items-center justify-between hover:scale-[1.02] active:scale-[0.98] transition-transform group">
+        <a href="/index.html#producto" class="w-full bg-brand-text text-white p-4 rounded-2xl border border-transparent font-medium flex items-center justify-between hover:scale-[1.02] active:scale-[0.98] transition-transform group primary-action-anim delay-200">
             <div class="flex items-center gap-3">
-                <i data-lucide="shopping-bag" class="w-5 h-5 opacity-90"></i>
-                <span>Ver Libro Físico</span>
+                <i data-lucide="book-heart" class="w-5 h-5 text-brand-peach"></i>
+                <span>Adquirir mi libro físico</span>
             </div>
             <span class="bg-white/20 text-xs px-2 py-1 rounded-md font-bold group-hover:bg-white group-hover:text-brand-text transition-colors">Vol 1.</span>
         </a>
 
         <!-- Secondary Links -->
-        <a href="/index.html" class="w-full bg-white text-brand-text p-4 rounded-2xl shadow-sm border border-brand-lilac/20 font-medium flex items-center justify-center gap-2 hover:border-brand-lilac transition-colors">
-            <i data-lucide="globe" class="w-5 h-5 text-brand-lilac"></i> Ir al Sitio Web Principal
+        <a href="https://ceciliarosso.netlify.app/" class="w-full bg-white text-brand-text p-4 rounded-2xl shadow-sm border border-brand-lilac/20 font-medium flex items-center justify-center gap-2 hover:border-brand-lilac transition-colors animate-slide-up delay-300">
+            <i data-lucide="globe" class="w-5 h-5 text-brand-lilac"></i> Explorá mi web oficial
         </a>
 
         <!-- Contact Options -->
-        <a href="https://wa.me/5491112345678" class="w-full bg-[#E8F5E9] text-[#2E7D32] p-4 rounded-2xl shadow-sm border border-[#C8E6C9] font-medium flex items-center justify-center gap-2 hover:bg-[#C8E6C9] transition-colors mt-4">
-            <i data-lucide="message-circle" class="w-5 h-5"></i> Contactar por WhatsApp
+        <a href="https://wa.me/5491123189132" class="w-full bg-white text-brand-text p-4 rounded-2xl shadow-sm border border-brand-lilac/20 font-medium flex items-center justify-center gap-2 hover:bg-[#E8F5E9] hover:border-[#C8E6C9] transition-colors mt-2 animate-slide-up delay-400">
+            <i data-lucide="message-circle" class="w-5 h-5 text-[#25D366]"></i> Hablemos por WhatsApp
         </a>
 
-        <a href="mailto:hola@ceciliarosso.com" class="w-full bg-transparent text-brand-text/70 p-4 rounded-2xl font-medium flex items-center justify-center gap-2 hover:text-brand-text transition-colors border border-transparent hover:bg-white/50">
-            <i data-lucide="mail" class="w-5 h-5"></i> Enviar un Email
+        <a href="mailto:rossoceci@gmail.com" class="w-full bg-transparent text-brand-text p-4 rounded-2xl font-medium flex items-center justify-center gap-2 hover:bg-white/50 border border-transparent transition-colors animate-slide-up delay-500">
+            <i data-lucide="mail" class="w-5 h-5 text-brand-lilac"></i> Escribime un correo
         </a>
     </div>
 
     <!-- Footer -->
-    <footer class="mt-16 text-center">
-        <p class="text-xs text-brand-text/50">© 2024 Cecilia Karina Rosso</p>
+    <footer class="mt-16 text-center animate-slide-up delay-500">
+        <p class="text-xs text-brand-text/50">© 2026 Cecilia Karina Rosso</p>
     </footer>
 
     <script>

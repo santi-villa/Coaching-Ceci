@@ -1,7 +1,7 @@
 const productInfo = {
     id: 'libro_vol1',
     title: 'Comunicar para vivir más livianos',
-    price: 1,
+    price: 10,
     image: 'Libro.png'
 };
 
@@ -14,8 +14,15 @@ const bookContent = {
     `,
     back: `
         <p class="text-lg leading-relaxed text-gray-700 mb-4">Sobre este libro:</p>
-        <p class="text-base leading-relaxed text-gray-600 mb-4">No es un manual técnico ni estadísticas complicadas. Es una invitación a aprender a hablar con honestidad y con la verdad de lo que nos pasa, con presencia y respeto.</p>
-        <p class="text-base leading-relaxed text-gray-600 mb-4">A través de ejemplos reales y preguntas que sirven para mirar los vínculos con otros ojos.</p>
+        <p class="text-base leading-relaxed text-gray-600 mb-4">Todos nos comunicamos. Desde que nos despertamos hasta que nos dormimos, estamos en contacto con otros: hablamos, escribimos, respondemos, escuchamos, callamos.
+</p>
+        <p class="text-base leading-relaxed text-gray-600 mb-4">Sin embargo, muchas veces sentimos que no nos entienden, o que nosotros no entendemos a los demás. Que hablamos mucho, pero que conectamos poco o que no conectamos. Que el vínculo se desgasta, aunque las palabras sigan ahí.</p>
+        <p class="text-base leading-relaxed text-gray-600 mb-4">Este libro no pretende ser un manual o una guía técnica. Es una invitación a observar cómo nos comunicamos en la vida real, con nuestra pareja, con nuestros hijos, con amigos, en el trabajo. En situaciones simples y complejas. Nos invita a reconocer los errores más comunes que todos, de una manera u otra, cometemos. Y a descubrir formas más claras y humanas de decir, escuchar y convivir.</p>
+        <p class="text-base leading-relaxed text-gray-600 mb-4">No vas a encontrar definiciones complicadas ni teorías largas. Tampoco estadísticas sacadas de investigaciones de las mejores universidades del mundo. Mucho menos, tecnicismos que estén fuera de nuestro entendimiento. El objetivo de este libro es que puedas lograr tener "conversaciones posibles"; es decir que, al final de una conversación, como mensajero, te hayas sentido escuchado y comprendido. Que puedas sentir que del otro lado hubo atención a tu mensaje.</p>
+        <p class="text-base leading-relaxed text-gray-600 mb-4">Que no fueron solo ruido y palabras sueltas. Y que, como receptor, pudiste escuchar y empatizar con la otra persona. En resumen, que se haya generado un feedback, es decir un ida y vuelta en una charla. Que sientas que pudiste estar presente y en los zapatos del otro, al menos un poquito más.</p>
+        <p class="text-base leading-relaxed text-gray-600 mb-4">Este libro pretende dar ejemplos reales. Preguntas que sirvan para mirar tus vínculos con otros ojos. Porque no se trata de hablar a la perfección, sino de aprender a hablar con honestidad y con la verdad de lo que nos pasa. Con presencia y respeto.</p>
+        <p class="text-base leading-relaxed text-gray-600 mb-4">Si alguna vez te pasó sentir que no te escuchan, que no sabes cómo decir algo sin lastimar, o que callas por miedo a perder un vínculo, este libro es para vos.
+</p>
         <div class="mt-6 pt-4 border-t border-gray-200">
             <p class="text-sm text-gray-500">Edición Servicop</p>
         </div>
@@ -29,20 +36,12 @@ const modalData = {
         content: `
             <form id="checkout-form" onsubmit="handleCheckout(event)">
                 
-                <p class="font-medium text-brand-text mb-3 text-sm md:text-base border-b border-brand-lilac/20 pb-2">1. Selecciona cómo recibir tu pedido:</p>
-                
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
-                    <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-brand-light transition bg-white shadow-sm">
-                        <input type="radio" name="delivery" value="shipping" checked onchange="toggleShippingFields(true)" class="text-brand-lilac focus:ring-brand-lilac w-4 h-4">
-                        <span class="text-gray-700 font-medium text-sm md:text-base">Envío a domicilio</span>
-                    </label>
-                    <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-brand-light transition bg-white shadow-sm">
-                        <input type="radio" name="delivery" value="pickup" onchange="toggleShippingFields(false)" class="text-brand-lilac focus:ring-brand-lilac w-4 h-4">
-                        <span class="text-gray-700 font-medium text-sm md:text-base">Retiro en persona <span class="text-xs text-gray-500 font-normal block mt-1">Coordinar entrega (GBA Norte)</span></span>
-                    </label>
+                <div class="bg-brand-lilac/10 p-3 rounded-xl border border-brand-lilac/30 mb-6 flex items-center gap-3">
+                    <i data-lucide="truck" class="w-5 h-5 text-brand-lilac"></i>
+                    <p class="text-xs text-gray-700 font-medium">Estás realizando una compra con <strong>envío a domicilio</strong> y pago vía <strong>Mercado Pago</strong>.</p>
                 </div>
 
-                <p class="font-medium text-brand-text mb-3 text-sm md:text-base border-b border-brand-lilac/20 pb-2">2. Completa tus datos:</p>
+                <p class="font-medium text-brand-text mb-3 text-sm md:text-base border-b border-brand-lilac/20 pb-2">Completa tus datos de envío:</p>
                 <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-6 shadow-sm">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-2">
                         <div>
@@ -50,7 +49,7 @@ const modalData = {
                             <input type="text" id="customer-name" placeholder="Tu nombre" required class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac" oninput="validateInput(this)">
                         </div>
                         <div>
-                            <label class="text-xs font-medium text-gray-500 uppercase tracking-wide block mb-1">DNI</label>
+                            <label class="text-xs font-medium text-gray-500 uppercase tracking-wide block mb-1">DNI (Para el correo)</label>
                             <input type="number" id="customer-dni" placeholder="Sin puntos" required class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac" oninput="validateInput(this)">
                         </div>
                         <div>
@@ -63,9 +62,7 @@ const modalData = {
                         </div>
                     </div>
 
-                    <!-- Datos exclusivo si es por Envío -->
                     <div id="shipping-fields" class="space-y-4 pt-4 mt-2 border-t border-gray-200">
-                        <h4 class="font-semibold text-xs text-brand-lilac uppercase tracking-wider mb-2">Dirección de entrega</h4>
                         <input type="text" id="address" placeholder="Dirección completa (Calle, Altura, Piso y Depto)" class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac text-sm" required oninput="resetShippingQuote(); validateInput(this)">
                         <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
                             <input type="text" id="city" placeholder="Ciudad" class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac text-sm" required oninput="resetShippingQuote(); validateInput(this)">
@@ -83,22 +80,9 @@ const modalData = {
                     </div>
                 </div>
 
-                <div class="mb-4 p-4 rounded-xl border border-gray-200 bg-gray-50">
-                    <p class="font-medium text-brand-text mb-3 text-sm">3. Medio de pago:</p>
-                    
-                    <div class="space-y-2">
-                        <label id="label-cash" class="flex items-center space-x-3 p-3 rounded-xl border border-gray-200 cursor-pointer hover:bg-gray-100 transition bg-white">
-                            <input type="radio" name="payment" value="cash" checked class="text-brand-lilac focus:ring-brand-lilac w-4 h-4 accent-brand-lilac" onchange="togglePaymentMethod('cash')">
-                            <span class="text-sm font-medium text-gray-700">Efectivo al retirar</span>
-                        </label>
-                        <label class="flex items-center space-x-3 p-3 rounded-xl border border-gray-200 cursor-pointer hover:bg-gray-100 transition bg-white">
-                            <input type="radio" name="payment" value="mp" class="text-brand-lilac focus:ring-brand-lilac w-4 h-4 accent-brand-lilac" onchange="togglePaymentMethod('mp')">
-                            <span class="text-sm font-medium text-gray-700 flex items-center gap-2">
-                                <img src="https://cdn.simpleicons.org/mercadopago/009EE3" alt="Mercado Pago" class="h-4 w-auto">
-                                Mercado Pago
-                            </span>
-                        </label>
-                    </div>
+                <div class="hidden">
+                    <input type="radio" name="delivery" value="shipping" checked>
+                    <input type="radio" name="payment" value="mp" checked>
                 </div>
 
                 <div class="mb-5 mt-2 bg-brand-light/30 p-3 rounded-xl border border-brand-lilac/30">
@@ -112,12 +96,8 @@ const modalData = {
                     </label>
                 </div>
 
-                <div id="payment-details" class="mb-4 p-3 rounded-xl bg-brand-lilac/10 border border-brand-lilac/20 text-sm text-gray-600 hidden">
-                    <p id="payment-instructions"></p>
-                </div>
-
                 <button type="submit" class="w-full bg-brand-text text-white py-4 rounded-xl font-medium hover:bg-opacity-90 transition shadow-lg flex items-center justify-center gap-2">
-                    Confirmar Pedido <i data-lucide="check" class="w-4 h-4"></i>
+                    Ir a pagar en Mercado Pago <i data-lucide="external-link" class="w-4 h-4"></i>
                 </button>
 
                 <div class="mt-4 text-center">
@@ -139,14 +119,28 @@ const modalData = {
         `
     },
     success: {
-        title: "¡Compra Exitosa!",
-        icon: "check-circle",
+        title: "¡Todo listo! 🤍",
+        icon: "heart",
         content: `
-            <div class="text-center py-4">
-                <i data-lucide="party-popper" class="w-16 h-16 text-brand-lilac mx-auto mb-4 animate-bounce"></i>
-                <p class="mb-4 text-gray-700 text-lg">Hemos recibido tu pago con éxito en Mercado Pago.</p>
-                <p class="mb-6 text-gray-500 text-sm">En contados minutos te llegará un correo electrónico oficial de Brevo confirmándote el detalle de tu compra y las instrucciones de envío o retiro.</p>
-                <button onclick="closeModal();" class="w-full bg-brand-text text-white py-4 rounded-xl font-medium hover:bg-opacity-90 transition shadow-lg">Entendido ✓</button>
+            <div class="text-center py-4 animate-success-pop">
+                <div class="mb-6 relative">
+                    <i data-lucide="party-popper" class="w-16 h-16 text-brand-lilac mx-auto animate-bounce"></i>
+                    <div class="absolute inset-0 bg-brand-lilac/20 blur-2xl rounded-full scale-150 -z-10"></div>
+                </div>
+                <h4 class="text-2xl font-serif font-bold text-brand-text mb-4">¡Felicidades!</h4>
+                <p class="mb-4 text-gray-700 text-lg leading-relaxed">Tu camino hacia una vida más liviana comienza hoy. Hemos recibido tu pago con éxito.</p>
+                
+                <div class="bg-brand-pink/10 border border-brand-pink/30 p-4 rounded-2xl mb-6">
+                    <p class="text-sm text-brand-text font-medium mb-2 flex items-center justify-center gap-2">
+                        <i data-lucide="mail" class="w-4 h-4 text-brand-pink"></i> Revisa tu correo
+                    </p>
+                    <p class="text-xs text-gray-600 leading-relaxed">Te enviamos un email oficial de <strong>Brevo</strong> con los detalles de tu compra.<br>
+                    <span class="text-brand-pink font-bold uppercase tracking-tight mt-1 block">⚠️ IMPORTANTE: Si no lo encuentras, revisa tu carpeta de SPAM.</span></p>
+                </div>
+
+                <button onclick="closeModal();" class="w-full bg-brand-text text-white py-4 rounded-xl font-medium hover:bg-opacity-90 transition shadow-lg flex items-center justify-center gap-2">
+                    Entendido, ¡gracias! <i data-lucide="sparkles" class="w-4 h-4"></i>
+                </button>
             </div>
         `
     },

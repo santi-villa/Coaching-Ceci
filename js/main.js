@@ -89,6 +89,7 @@ function openModal(type) {
     modalContent.innerHTML = data.content;
     modalIcon.innerHTML = `<i data-lucide="${data.icon}" class="w-8 h-8"></i>`;
     lucide.createIcons({ root: modalIcon });
+    lucide.createIcons({ root: modalContent });
 
     if (type === 'checkout') {
         modalCard.classList.remove('max-w-lg');
@@ -254,6 +255,10 @@ function openBookDetails() {
     modalContent.innerHTML = content;
     modalIcon.innerHTML = '<i data-lucide="book-open" class="w-8 h-8"></i>';
 
+    if (window.location.hash !== '#detalles') {
+        window.history.pushState(null, '', '#detalles');
+    }
+
     modal.classList.remove('opacity-0', 'pointer-events-none');
     modal.classList.add('opacity-100', 'pointer-events-auto');
     setTimeout(() => { modalCard.classList.remove('scale-95'); modalCard.classList.add('scale-100'); }, 10);
@@ -275,6 +280,17 @@ window.addEventListener('DOMContentLoaded', () => {
             // Reemplazamos la url base sacando param pero manteniendo el hash modal
             history.replaceState(null, '', window.location.pathname + '#success');
         }, 300);
+    } else {
+        const hash = window.location.hash;
+        if (hash === '#producto') {
+            setTimeout(() => {
+                openProductModal();
+            }, 100);
+        } else if (hash === '#carrito') {
+            setTimeout(() => {
+                if (typeof toggleCart !== 'undefined') toggleCart(true);
+            }, 100);
+        }
     }
 });
 

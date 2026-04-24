@@ -119,18 +119,50 @@ exports.handler = async (event) => {
                                 to: [{ email: metadata.customer_email, name: metadata.customer_name || 'Cliente' }],
                                 subject: `Recibimos tu pago 🤍 ¡Gracias por tu compra!`,
                                 htmlContent: `
-                                    <div style="font-family: sans-serif; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 10px; padding: 20px;">
-                                        <h1 style="color: #b59ad6; text-align: center;">¡Gracias por sumarte, ${(metadata.customer_name || 'estimado/a').split(' ')[0]}!</h1>
-                                        <p style="text-align: center; font-size: 16px;">Confirmamos que tu pago por "Comunicar para vivir más livianos" ingresó correctamente.</p>
-                                        
-                                        <div style="background-color: #fcfafc; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #b59ad6;">
-                                            <h3 style="margin-top: 0; color: #3a2640;">Próximos pasos</h3>
-                                            ${textEnvio}
+                                    <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 0; border-radius: 16px; overflow: hidden; border: 1px solid #f0f0f0; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                                        <!-- Header -->
+                                        <div style="background-color: #fcfafc; padding: 30px 20px; text-align: center; border-bottom: 2px solid #f0eaef;">
+                                            <div style="width: 60px; height: 60px; background-color: #ffffff; border-radius: 50%; margin: 0 auto 15px; line-height: 60px; font-size: 24px; font-weight: bold; color: #b59ad6; border: 1px solid #e8e2eb;">
+                                                CR
+                                            </div>
+                                            <h1 style="color: #3a2640; margin: 0; font-size: 24px; font-weight: 600; letter-spacing: -0.5px;">¡Tu ejemplar ya tiene dueño!</h1>
                                         </div>
-                                        <p style="text-align: center; margin-top: 20px; font-size: 14px; color: #888;">Cualquier duda, podés responder a este mismo correo o hablarnos en @ceciliarosso.coach</p>
+
+                                        <!-- Body -->
+                                        <div style="padding: 40px 30px;">
+                                            <p style="color: #555555; font-size: 16px; line-height: 1.6; margin-top: 0;">
+                                                ¡Hola <strong>${(metadata.customer_name || 'estimado/a').split(' ')[0]}</strong>! 🤍
+                                            </p>
+                                            <p style="color: #555555; font-size: 16px; line-height: 1.6;">
+                                                Qué alegría enorme confirmar que hemos recibido exitosamente el pago por tu libro <em>"Comunicar para vivir más livianos"</em>. 
+                                            </p>
+                                            
+                                            <!-- Status Box -->
+                                            <div style="background-color: #faf5fa; border: 1px solid #e8e2eb; border-radius: 12px; padding: 25px; margin: 30px 0;">
+                                                <h3 style="color: #3a2640; margin-top: 0; margin-bottom: 15px; font-size: 18px;">📦 Sobre tu envío</h3>
+                                                <p style="color: #666666; font-size: 15px; line-height: 1.5; margin: 0;">
+                                                    En este momento estamos preparándolo. Como elegiste <strong>envío a domicilio</strong>, una vez que el correo retire tu paquete, te llegará un nuevo email automático (a esta misma dirección) con el <strong>Código de Seguimiento</strong> oficial.
+                                                </p>
+                                            </div>
+
+                                            <p style="color: #777777; font-size: 14px; line-height: 1.5; text-align: center; margin-bottom: 0;">
+                                                <em>💡 Tip: Si pasan 48hs hábiles y no recibes el código, por favor revisa tu carpeta de Spam.</em>
+                                            </p>
+                                        </div>
+
+                                        <!-- Footer -->
+                                        <div style="background-color: #3a2640; padding: 30px; text-align: center;">
+                                            <p style="color: #ffffff; margin: 0 0 15px 0; font-size: 15px; opacity: 0.9;">
+                                                Cualquier consulta, estamos a un mensaje de distancia.
+                                            </p>
+                                            <a href="https://instagram.com/ceciliarosso.coach" style="display: inline-block; background-color: #b59ad6; color: #ffffff; text-decoration: none; padding: 12px 25px; border-radius: 50px; font-weight: bold; font-size: 14px; letter-spacing: 0.5px;">
+                                                Hablame por Instagram
+                                            </a>
+                                        </div>
                                     </div>
                                 `
                             };
+
 
                             const resClient = await fetch("https://api.brevo.com/v3/smtp/email", {
                                 method: "POST",
@@ -157,6 +189,29 @@ exports.handler = async (event) => {
                     }
                 } else {
                     console.log("⚠️ No se envía correo porque falta la variable BREVO_API_KEY o está vacía.");
+                }
+
+                // === 3. NOTIFICACIÓN POR WHATSAPP (CALLMEBOT) ===
+                // Servicio gratuito para enviarte mensajes a tu propio WhatsApp
+                const callMeBotPhone = (process.env.CALLMEBOT_PHONE || "").trim();
+                const callMeBotApiKey = (process.env.CALLMEBOT_API_KEY || "").trim();
+
+                if (callMeBotPhone && callMeBotApiKey) {
+                    try {
+                        const wppMessage = `🛒 ¡Nueva Venta de Libro!\n👤 Comprador: ${metadata.customer_name || 'Desconocido'}\n📞 Teléfono: ${metadata.customer_phone || '-'}\n📦 Tipo: ${metadata.delivery_type === 'pickup' ? 'Retiro' : 'Envio'}`;
+                        const url = `https://api.callmebot.com/whatsapp.php?phone=${callMeBotPhone}&text=${encodeURIComponent(wppMessage)}&apikey=${callMeBotApiKey}`;
+                        
+                        const resWpp = await fetch(url);
+                        if (resWpp.ok) {
+                            console.log("✅ Notificación automática por WhatsApp enviada.");
+                        } else {
+                            console.error("❌ Error enviando WhatsApp vía CallMeBot:", resWpp.status);
+                        }
+                    } catch (e) {
+                        console.error("❌ Excepción al enviar WhatsApp:", e);
+                    }
+                } else {
+                    console.log("ℹ️ Notificación WhatsApp omitida (faltan variables CALLMEBOT_PHONE y/o CALLMEBOT_API_KEY)");
                 }
             }
         }
