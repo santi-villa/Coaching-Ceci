@@ -257,6 +257,35 @@ exports.handler = async (event) => {
                 } else {
                     console.log("ℹ️ Notificación WhatsApp omitida (faltan variables CALLMEBOT_PHONE y/o CALLMEBOT_API_KEY)");
                 }
+
+                // === 4. ENVIAR AL PANEL DE GOOGLE SHEETS (APPS SCRIPT) ===
+                // ⚠️ ATENCION: El scriptUrl DEBE ser la URL de implentación de Apps Script (https://script.google.com/macros/...)
+                // y NO el ID de la planilla suelto. Si pones el ID de la planilla la llamada falla en el servidor.
+                const scriptUrl = "https://script.google.com/macros/s/REEMPLAZAR_ESTO/exec"; // Reemplazar con URL real
+                
+                if (scriptUrl && scriptUrl.includes("script.google.com")) {
+                    try {
+                        const addressCompleta = metadata.delivery_type === 'shipping'
+                            ? `${metadata.address || ''}, ${metadata.city || ''}, ${metadata.province || ''} (CP: ${metadata.zip || ''})`
+                            : 'Retira en persona';
+            
+                        await fetch(scriptUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                customer_name: metadata.customer_name,
+                                customer_dni: metadata.customer_dni,
+                                customer_email: metadata.customer_email,
+                                customer_phone: metadata.customer_phone,
+                                delivery_type: metadata.delivery_type,
+                                address: addressCompleta
+                            })
+                        });
+                        console.log("✅ Venta registrada en Google Sheets (Panel)");
+                    } catch (sheetError) {
+                        console.error("❌ Error enviando datos a Sheets:", sheetError);
+                    }
+                }
             }
         }
 

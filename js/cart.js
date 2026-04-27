@@ -205,7 +205,7 @@ async function calculateShipping(e) {
     const btn = document.getElementById('btn-calc-shipping');
     const display = document.getElementById('shipping-cost-display');
 
-    btn.innerHTML = '<i class="animate-spin w-4 h-4 rounded-full border-2 border-brand-lilac border-t-transparent inline-block"></i>';
+    btn.innerHTML = '<i class="animate-spin w-4 h-4 rounded-full border-2 border-current border-t-transparent inline-block align-middle mr-1"></i> Cotizando...';
     btn.disabled = true;
 
     try {
