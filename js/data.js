@@ -1,7 +1,7 @@
 const productInfo = {
     id: 'libro_vol1',
     title: 'Comunicar para vivir más livianos',
-    price: 10,
+    price: 25000,
     image: 'Libro.png'
 };
 
@@ -118,32 +118,7 @@ const modalData = {
             <button onclick="closeModal(true); setTimeout(() => { openProductModal(); setTimeout(openBookDetails, 300); }, 300);" class="mt-4 w-full bg-brand-lilac text-white py-3 rounded-xl font-medium hover:bg-opacity-90 transition shadow-sm flex items-center justify-center gap-2">Ver detalles del libro</button>
         `
     },
-    success: {
-        title: "¡Todo listo! 🤍",
-        icon: "heart",
-        content: `
-            <div class="text-center py-4 animate-success-pop">
-                <div class="mb-6 relative">
-                    <i data-lucide="party-popper" class="w-16 h-16 text-brand-lilac mx-auto animate-bounce"></i>
-                    <div class="absolute inset-0 bg-brand-lilac/20 blur-2xl rounded-full scale-150 -z-10"></div>
-                </div>
-                <h4 class="text-2xl font-serif font-bold text-brand-text mb-4">¡Felicidades!</h4>
-                <p class="mb-4 text-gray-700 text-lg leading-relaxed">Tu camino hacia una vida más liviana comienza hoy. Hemos recibido tu pago con éxito.</p>
-                
-                <div class="bg-brand-pink/10 border border-brand-pink/30 p-4 rounded-2xl mb-6">
-                    <p class="text-sm text-brand-text font-medium mb-2 flex items-center justify-center gap-2">
-                        <i data-lucide="mail" class="w-4 h-4 text-brand-pink"></i> Revisa tu correo
-                    </p>
-                    <p class="text-xs text-gray-600 leading-relaxed">Te enviamos un email oficial de <strong>Brevo</strong> con los detalles de tu compra.<br>
-                    <span class="text-brand-pink font-bold uppercase tracking-tight mt-1 block">⚠️ IMPORTANTE: Si no lo encuentras, revisa tu carpeta de SPAM.</span></p>
-                </div>
 
-                <button onclick="closeModal();" class="w-full bg-brand-text text-white py-4 rounded-xl font-medium hover:bg-opacity-90 transition shadow-lg flex items-center justify-center gap-2">
-                    Entendido, ¡gracias! <i data-lucide="sparkles" class="w-4 h-4"></i>
-                </button>
-            </div>
-        `
-    },
     subscribe: {
         title: "Novedades",
         icon: "mail",

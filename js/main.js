@@ -281,14 +281,13 @@ window.addEventListener('DOMContentLoaded', () => {
     // Leemos los parámetros que Mercado Pago pone en la URL al volver
     const urlParams = new URLSearchParams(window.location.search);
 
-    // Si el estado es aprobado...
     if (urlParams.get('status') === 'approved') {
-        // Mostramos el pop-up de éxito que reemplaza el flujo de WPP.
+        // Usamos la vista completa en lugar de modal para evitar scrolls y dobles barras
         setTimeout(() => {
-            openModal('success');
-            // Reemplazamos la url base sacando param pero manteniendo el hash modal
-            history.replaceState(null, '', window.location.pathname + '#success');
-        }, 300);
+            showPage('success-view');
+            // Reemplazamos la url base sacando param
+            history.replaceState(null, '', window.location.pathname);
+        }, 100);
     } else {
         const hash = window.location.hash;
         if (hash === '#producto') {
