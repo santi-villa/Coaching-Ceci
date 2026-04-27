@@ -31,11 +31,11 @@ exports.handler = async (event) => {
                     },
                     body: JSON.stringify({
                         account_id: 21020,
-                        declared_value: 30000, // Requerido por Zipnova v2
-                        origin: { zipcode: "1416" }, // Reemplazar con el CP de tu casa (origen)
-                        destination: { zipcode: zip_dest, city: "Ciudad", state: "Provincia" }, // Añadidas prop obligatorias
+                        declared_value: 24900,
+                        origin: { zipcode: "1414" },
+                        destination: { zipcode: zip_dest, city: "Ciudad", state: "Provincia" },
                         packages: [
-                            { length: 21, width: 15, height: 1, weight: 100, classification_id: 1 } // Medidas aproximadas libro empacado en mm o gramos seq Zippin
+                            { length: 21, width: 15, height: 1, weight: 100, classification_id: 1 } 
                         ]
                     })
                 });

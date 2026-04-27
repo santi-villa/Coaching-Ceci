@@ -47,8 +47,8 @@ exports.handler = async (event) => {
                             // El payload de creación de envío con todos los datos recolectados
                             const zippinPayload = {
                                 account_id: 21020,
-                                declared_value: 30000,
-                                origin: { zipcode: "1416" }, // *** IMPORTANTE: CAMBIAR ESTO AL CP REAL ORIGEN ***
+                                declared_value: payment.transaction_amount || 24900,
+                                origin: { zipcode: "1414" }, // CP de Villa Crespo extraído automáticamente de la cuenta de Zippin
                                 destination: {
                                     name: metadata.customer_name || "Comprador",
                                     document_type: "DNI",
@@ -59,10 +59,10 @@ exports.handler = async (event) => {
                                     city: metadata.city || "S/C",
                                     state: metadata.province || "S/P",
                                     zipcode: metadata.zip || "1000",
-                                    reference: `Orden Pago de ${metadata.customer_name}`
+                                    reference: `Orden de ${metadata.customer_name}`
                                 },
                                 packages: [
-                                    { length: 21, width: 15, height: 1, weight: 100, classification_id: 1 } // Medidas
+                                    { length: 21, width: 15, height: 1, weight: 100, classification_id: 1 } 
                                 ]
                             };
 
