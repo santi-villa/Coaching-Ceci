@@ -47,7 +47,7 @@ exports.handler = async (event) => {
                             // El payload de creación de envío con todos los datos recolectados
                             const zippinPayload = {
                                 account_id: 21020,
-                                declared_value: payment.transaction_amount || 24900,
+                                declared_value: paymentData.transaction_amount || 24900,
                                 origin: { zipcode: "1414" }, // CP de Villa Crespo extraído automáticamente de la cuenta de Zippin
                                 destination: {
                                     name: metadata.customer_name || "Comprador",
@@ -259,9 +259,7 @@ exports.handler = async (event) => {
                 }
 
                 // === 4. ENVIAR AL PANEL DE GOOGLE SHEETS (APPS SCRIPT) ===
-                // ⚠️ ATENCION: El scriptUrl DEBE ser la URL de implentación de Apps Script (https://script.google.com/macros/...)
-                // y NO el ID de la planilla suelto. Si pones el ID de la planilla la llamada falla en el servidor.
-                const scriptUrl = "https://script.google.com/macros/s/REEMPLAZAR_ESTO/exec"; // Reemplazar con URL real
+                const scriptUrl = process.env.GOOGLE_SHEETS_URL || "https://script.google.com/macros/s/AKfycbzl3Vwd3PSDa2LZ89PCycvIIHDx6dVN_SIEiJf05DgUrnLRaAoiM7VhRsVpv2-zmQDbjA/exec";
                 
                 if (scriptUrl && scriptUrl.includes("script.google.com")) {
                     try {
