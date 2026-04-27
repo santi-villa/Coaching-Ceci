@@ -218,7 +218,7 @@ async function calculateShipping(e) {
 
         if (response.ok) {
             quotedShippingCost = data.cost || 0;
-            display.innerHTML = `<span class="text-brand-lilac font-bold">$${quotedShippingCost.toLocaleString('es-AR')} ARS</span>`;
+            display.innerHTML = `<span class="text-sm text-gray-500 font-medium">Envío Estándar:</span> <span class="text-brand-lilac font-bold">$${quotedShippingCost.toLocaleString('es-AR')} ARS</span>`;
             btn.innerHTML = 'Cotizado ✓';
         } else {
             throw new Error(data.error || 'Error cotizando');

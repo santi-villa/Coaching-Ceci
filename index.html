@@ -62,10 +62,9 @@
 
     <nav id="main-nav" class="fixed w-full z-30 px-6 py-4 text-white transition-all duration-300 bg-transparent">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <a href="#" onclick="showPage('home-view'); event.preventDefault();"
+            <a href="#" id="nav-brand" onclick="showPage('home-view'); event.preventDefault();"
                 class="font-serif text-2xl font-bold tracking-wide drop-shadow-md cursor-pointer hover:opacity-80 transition flex items-center gap-3">
-                <img src="iconoweb.png" alt="CR Logo" class="w-10 h-10 rounded-xl object-contain bg-white/5 p-1">
-                <span>Cecilia <span class="font-light italic">Rosso</span></span>
+                <span>Cecilia <span id="brand-surname" class="font-light italic text-white">Rosso</span></span>
             </a>
             <div class="hidden md:flex space-x-8 font-medium items-center">
                 <a href="#libro" onclick="showPage('home-view')" class="hover:opacity-80 transition">El Libro</a>
@@ -180,35 +179,38 @@
                 </div>
 
                 <div
-                    class="relative max-w-7xl mx-auto px-6 py-20 flex flex-col md:flex-row items-center justify-between gap-12 z-10 w-full">
-                    <div class="md:w-1/2 text-center md:text-left space-y-6">
-                        <span class="uppercase tracking-widest text-sm font-semibold text-white/90 block">Nuevo
+                    class="relative max-w-7xl mx-auto px-6 py-10 md:py-16 lg:py-20 flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12 z-10 w-full">
+                    <div class="md:w-1/2 text-center md:text-left space-y-4 md:space-y-6">
+                        <span
+                            class="uppercase tracking-widest text-xs md:text-sm font-semibold text-white/90 block">Nuevo
                             Lanzamiento</span>
                         <h1
-                            class="font-serif text-5xl md:text-6xl lg:text-7xl font-normal text-white leading-tight drop-shadow-md">
-                            Comunicar <span class="text-white block mt-2 md:mt-3 text-[0.8em]">para vivir más
+                            class="font-serif text-4xl md:text-5xl lg:text-6xl font-normal text-white leading-tight drop-shadow-md">
+                            Comunicar <span class="text-white block mt-1 md:mt-2 text-[0.8em]">para vivir más
                                 livianos</span>
                         </h1>
-                        <p class="text-xl md:text-2xl lg:text-3xl font-serif text-white/90 italic">¡Vive más liviano,
+                        <p class="text-lg md:text-xl lg:text-2xl font-serif text-white/90 italic">¡Vive más liviano,
                             comunica mejor!</p>
-                        <p class="text-lg md:text-xl text-white/95 font-light max-w-lg mx-auto md:mx-0 leading-relaxed">
+                        <p
+                            class="text-base md:text-lg lg:text-xl text-white/95 font-light max-w-lg mx-auto md:mx-0 leading-snug md:leading-relaxed">
                             Una invitación a observar cómo nos comunicamos en la vida real. Descubre formas más claras y
                             humanas de decir, escuchar y convivir para tener "conversaciones posibles".
                         </p>
-                        <div class="hidden md:flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
+                        <div
+                            class="hidden md:flex flex-col sm:flex-row gap-3 lg:gap-4 justify-center md:justify-start pt-2 md:pt-4">
                             <button onclick="openProductModal()"
-                                class="bg-brand-text text-white px-10 py-5 rounded-full text-lg font-medium hover:bg-opacity-90 hover:shadow-xl transform hover:-translate-y-1 transition duration-300 flex items-center justify-center gap-2">
-                                <i data-lucide="shopping-bag" class="w-6 h-6"></i> Comprar Libro
+                                class="bg-brand-text text-white px-8 py-3.5 lg:px-10 lg:py-4 rounded-full text-base lg:text-lg font-medium hover:bg-opacity-90 hover:shadow-xl transform hover:-translate-y-1 transition duration-300 flex items-center justify-center gap-2">
+                                <i data-lucide="shopping-bag" class="w-5 h-5 lg:w-6 lg:h-6"></i> Comprar Libro
                             </button>
                             <button onclick="openModal('read')"
-                                class="bg-white/20 text-white border border-white/50 px-6 py-4 md:px-8 md:py-5 rounded-full text-base md:text-lg font-medium hover:bg-white hover:text-brand-text hover:shadow-xl transform hover:-translate-y-1 transition duration-300 flex items-center justify-center gap-2">
+                                class="bg-white/20 text-white border border-white/50 px-6 py-3.5 lg:px-8 lg:py-4 rounded-full text-base lg:text-lg font-medium hover:bg-white hover:text-brand-text hover:shadow-xl transform hover:-translate-y-1 transition duration-300 flex items-center justify-center gap-2">
                                 Leer un fragmento
                             </button>
                         </div>
                     </div>
 
-                    <div class="md:w-1/2 flex flex-col items-center perspective-1000 mt-12 md:mt-0">
-                        <div class="relative w-80 md:w-[450px] lg:w-[500px] transform hover:-translate-y-4 transition duration-500 cursor-pointer group"
+                    <div class="md:w-1/2 flex flex-col items-center perspective-1000 mt-8 md:mt-0">
+                        <div class="relative w-64 md:w-[350px] lg:w-[450px] transform hover:-translate-y-4 transition duration-500 cursor-pointer group"
                             onclick="openProductModal()">
                             <img src="Libro.png" alt="Portada del libro Comunicar para vivir más livianos"
                                 class="w-full h-auto drop-shadow-2xl rounded-sm object-contain"
@@ -219,13 +221,13 @@
                         </div>
 
                         <!-- Botones solo para Mobile (debajo de la imagen) -->
-                        <div class="flex md:hidden flex-col gap-4 w-full mt-10">
+                        <div class="flex md:hidden flex-col gap-3 w-full mt-6">
                             <button onclick="openProductModal()"
-                                class="bg-brand-text text-white px-10 py-5 rounded-xl text-lg font-bold hover:bg-opacity-90 shadow-xl flex items-center justify-center gap-2">
-                                <i data-lucide="shopping-bag" class="w-6 h-6"></i> Comprar Libro
+                                class="bg-brand-text text-white px-8 py-3.5 rounded-xl text-base font-bold hover:bg-opacity-90 shadow-xl flex items-center justify-center gap-2">
+                                <i data-lucide="shopping-bag" class="w-5 h-5"></i> Comprar Libro
                             </button>
                             <button onclick="openModal('read')"
-                                class="bg-white/40 text-white border border-white/60 px-6 py-4 rounded-xl text-base font-bold flex items-center justify-center gap-2">
+                                class="bg-white/40 text-white border border-white/60 px-6 py-3.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2">
                                 Leer un fragmento
                             </button>
                         </div>
@@ -251,10 +253,12 @@
 
             <section id="libro" class="py-16 px-6 max-w-6xl mx-auto">
                 <div class="text-center mb-12">
-                     <h2 class="font-serif text-4xl font-bold text-brand-text mb-4"> El arte de las conversaciones
+                    <h2 class="font-serif text-4xl font-bold text-brand-text mb-4"> El arte de las conversaciones
                         posibles</h2>
                     <p class="text-gray-600 text-lg max-w-2xl mx-auto mb-6 leading-relaxed">
-                        La comunicación es la herramienta más poderosa que tiene el ser humano para relacionarse. El lenguaje que utilizas —la forma en que elegís expresarte y escuchar— no solo conecta con otros, sino que también define el mundo que creas y en el que vivís. <br class="hidden md:block">
+                        La comunicación es la herramienta más poderosa que tiene el ser humano para relacionarse. El
+                        lenguaje que utilizas —la forma en que elegís expresarte y escuchar— no solo conecta con otros,
+                        sino que también define el mundo que creas y en el que vivís. <br class="hidden md:block">
                         Por eso, elegir cómo comunicarte es, en esencia, elegir el mundo que querés habitar.
                     </p>
                     <div class="w-24 h-1 bg-brand-pink mx-auto rounded-full mb-6"></div>
@@ -303,8 +307,9 @@
                         </div>
                         <img src="cecilia.png" alt="Autora"
                             class="relative rounded-t-full rounded-b-[4rem] border-8 border-white shadow-xl object-cover h-[450px] w-full">
-                        <div class="absolute -bottom-4 -right-4 bg-white p-4 rounded-full shadow-lg text-brand-pink"><i
-                                data-lucide="flower-2" class="w-8 h-8"></i></div>
+                        <div class="absolute -bottom-4 -right-4 bg-white p-2.5 rounded-full shadow-lg text-brand-pink">
+                            <img src="iconoweb.png" alt="Logo web" class="w-10 h-10 object-contain">
+                        </div>
                     </div>
 
                     <div class="md:w-1/2">
@@ -348,21 +353,36 @@
                     </div>
 
                     <div class="grid md:grid-cols-3 gap-6">
-                        <div class="glass-card rounded-2xl p-6 transform transition hover:-translate-y-2 cursor-pointer group"
-                            onclick="openProductModal()">
-                            <div
-                                class="h-56 rounded-xl mb-6 flex items-center justify-center relative overflow-hidden bg-brand-light/30 border border-brand-lilac/20">
+                        <div
+                            class="glass-card rounded-2xl p-6 transform transition hover:-translate-y-2 group flex flex-col h-full">
+                            <div class="h-48 md:h-56 rounded-xl mb-4 flex items-center justify-center relative overflow-hidden bg-brand-light/30 border border-brand-lilac/20 cursor-pointer"
+                                onclick="openProductModal()">
                                 <span
                                     class="bg-white/90 text-brand-text text-xs font-bold px-3 py-1 rounded-full absolute top-4 right-4 z-10 shadow-sm">Disponible</span>
                                 <img src="Libro.png" alt="Libro Comunicar"
-                                    class="h-60 w-auto object-contain drop-shadow-md group-hover:scale-105 transition duration-300"
+                                    class="h-44 md:h-52 w-auto object-contain drop-shadow-md group-hover:scale-105 transition duration-300"
                                     onerror="this.src='https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&auto=format&fit=crop'">
                             </div>
-                            <h3 class="font-serif text-xl font-bold text-brand-text mb-2">Comunicar para vivir más
+                            <h3 class="font-serif text-lg md:text-xl font-bold text-brand-text mb-1 cursor-pointer"
+                                onclick="openProductModal()">Comunicar para vivir más
                                 livianos</h3>
-                            <p class="text-sm text-brand-text/70 mb-4">Vol. 1 - Comunicación y Vínculos</p>
-                            <span class="text-brand-lilac font-semibold flex items-center gap-1 text-sm">Ver producto <i
-                                    data-lucide="arrow-right" class="w-4 h-4"></i></span>
+                            <p class="text-xs md:text-sm text-brand-text/70 mb-3">Vol. 1 - Comunicación y Vínculos</p>
+
+                            <div class="mb-4 flex items-end gap-1.5 mt-auto">
+                                <span class="text-2xl md:text-3xl font-bold text-brand-text">$25.000</span>
+                                <span class="text-xs font-medium text-gray-500 mb-0.5">ARS</span>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
+                                <button onclick="addToCart()"
+                                    class="w-full bg-brand-text text-white py-2 lg:py-2.5 rounded-xl font-medium hover:bg-opacity-90 transition shadow-md flex items-center justify-center gap-2 text-sm">
+                                    <i data-lucide="shopping-cart" class="w-4 h-4"></i> Agregar
+                                </button>
+                                <button onclick="openProductModal()"
+                                    class="w-full bg-white/60 border border-brand-lilac/30 text-brand-text py-2 lg:py-2.5 rounded-xl font-medium hover:bg-white transition shadow-sm flex items-center justify-center gap-2 text-sm">
+                                    <i data-lucide="info" class="w-4 h-4"></i> Detalles
+                                </button>
+                            </div>
                         </div>
 
                         <div class="glass-card rounded-2xl p-6 opacity-70 transform transition hover:-translate-y-2">
@@ -462,7 +482,7 @@
 
         <div id="product-view"
             class="fixed inset-0 z-[60] bg-brand-text/60 backdrop-blur-md flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
-            <div class="bg-white rounded-3xl w-full max-w-4xl relative shadow-2xl transform scale-95 transition-transform duration-300 max-h-[90vh] md:max-h-[85vh] overflow-y-auto overflow-x-hidden thin-scrollbar"
+            <div class="bg-white rounded-3xl w-full max-w-4xl relative shadow-2xl transform scale-95 transition-transform duration-300 max-h-[95vh] md:max-h-[85vh] overflow-y-auto overflow-x-hidden thin-scrollbar"
                 id="product-modal-card">
 
                 <!-- Botón de volver unificado (PC y Mobile) -->
@@ -480,65 +500,75 @@
                 <div
                     class="bg-white rounded-3xl shadow-xl border border-brand-lilac/20 overflow-hidden flex flex-col md:flex-row">
                     <div
-                        class="md:w-1/2 bg-brand-gradient flex flex-col items-center justify-center p-8 md:p-12 relative leaf-pattern min-h-[500px]">
+                        class="md:w-1/2 bg-brand-gradient flex flex-col items-center justify-center py-6 md:py-8 px-4 relative leaf-pattern">
                         <div class="absolute inset-0 bg-white/20 mix-blend-overlay"></div>
                         <div class="flex flex-col items-center z-10">
-                            <div class="book-container relative w-64 md:w-72 lg:w-80">
+                            <div class="book-container relative w-40 sm:w-56 md:w-48 lg:w-64">
                                 <div class="book-3d-wrapper" style="position: relative; width: 100%;">
                                     <img id="book-front-img" src="Libro.png" alt="Portada del libro"
                                         class="w-full h-auto drop-shadow-2xl rounded-sm object-contain">
                                 </div>
                             </div>
-                            <div class="flex gap-4 mt-6">
+                            <div class="flex gap-4 mt-4 md:mt-4">
                                 <button onclick="openBookDetails()"
-                                    class="bg-white/60 backdrop-blur-md border border-white text-brand-text px-5 py-2 rounded-full font-semibold hover:bg-white shadow-md transform hover:-translate-y-1 transition duration-300 flex items-center gap-2">
+                                    class="bg-white/60 backdrop-blur-md border border-white text-brand-text px-4 py-1.5 md:px-4 md:py-1.5 rounded-full font-semibold hover:bg-white shadow-md transform hover:-translate-y-1 transition duration-300 flex items-center gap-2 text-sm md:text-sm">
                                     <i data-lucide="file-text" class="w-4 h-4"></i> Ver detalles
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                    <div class="md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
-                        <span class="text-brand-pink font-bold tracking-wider uppercase text-xs mb-2 block">Libro Físico
+                    <div class="md:w-1/2 p-5 md:p-6 lg:p-8 flex flex-col justify-center">
+                        <span
+                            class="text-brand-pink font-bold tracking-wider uppercase text-xs mb-1 md:mb-1 block">Libro
+                            Físico
                             - Vol. 1</span>
-                        <h1 class="font-serif text-3xl md:text-4xl font-bold text-brand-text mb-2">Comunicar para vivir
+                        <h1
+                            class="font-serif text-2xl md:text-3xl lg:text-4xl font-bold text-brand-text mb-1 md:mb-1 leading-tight">
+                            Comunicar para vivir
                             más livianos</h1>
-                        <p class="text-brand-lilac font-medium mb-6">Por Cecilia Karina Rosso</p>
+                        <p class="text-brand-lilac font-medium mb-3 md:mb-4 text-sm md:text-sm">Por Cecilia Karina Rosso
+                        </p>
 
-                        <div class="mb-6 pb-6 border-b border-brand-lilac/20 flex items-end gap-2">
-                            <span class="text-3xl md:text-4xl font-bold text-brand-text">$25.000</span>
-                            <span class="text-sm text-gray-500 mb-1 font-medium">ARS</span>
+                        <div class="mb-3 md:mb-4 pb-3 md:pb-4 border-b border-brand-lilac/20 flex items-end gap-2">
+                            <span class="text-2xl md:text-3xl font-bold text-brand-text">$25.000</span>
+                            <span class="text-xs md:text-xs text-gray-500 mb-1 font-medium">ARS</span>
                         </div>
 
-                        <div class="text-gray-600 leading-relaxed mb-6 space-y-3">
-                            <p>Una invitación a observar cómo nos comunicamos en la vida real. Descubre formas más
+                        <div class="text-gray-600 leading-snug md:leading-snug mb-4 md:mb-4 space-y-1.5 md:space-y-2">
+                            <p class="text-xs md:text-sm hidden sm:block">Una invitación a observar cómo nos comunicamos
+                                en la vida real. Descubre formas más
                                 claras y humanas de decir, escuchar y convivir para tener "conversaciones posibles".</p>
-                            <p class="text-sm text-gray-500 italic"><i data-lucide="info"
-                                    class="w-4 h-4 inline-block mr-1"></i> Formato: Tapa blanda, 100 páginas (15x21x0.5
+                            <p class="text-xs md:text-xs text-gray-500 italic"><i data-lucide="info"
+                                    class="w-3.5 h-3.5 md:w-3.5 md:h-3.5 inline-block mr-1"></i> Formato: Tapa blanda,
+                                100 páginas (15x21x0.5
                                 cm).</p>
                         </div>
 
-                        <div class="flex items-center gap-4 mb-8">
-                            <span class="text-gray-600 font-medium">Cantidad:</span>
-                            <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-4 mb-4 md:mb-5">
+                            <span class="text-sm md:text-sm text-gray-600 font-medium">Cantidad:</span>
+                            <div class="flex items-center gap-2 md:gap-3">
                                 <button
                                     onclick="document.getElementById('product-qty').textContent = Math.max(1, parseInt(document.getElementById('product-qty').textContent) - 1)"
-                                    class="w-10 h-10 rounded-full bg-gray-100 text-gray-600 hover:bg-brand-lilac hover:text-white flex items-center justify-center transition text-xl font-bold">-</button>
-                                <span id="product-qty" class="w-10 text-center font-bold text-lg">1</span>
+                                    class="w-8 h-8 md:w-8 md:h-8 rounded-full bg-gray-100 text-gray-600 hover:bg-brand-lilac hover:text-white flex items-center justify-center transition text-lg md:text-lg font-bold">-</button>
+                                <span id="product-qty"
+                                    class="w-8 md:w-8 text-center font-bold text-base md:text-base">1</span>
                                 <button
                                     onclick="document.getElementById('product-qty').textContent = parseInt(document.getElementById('product-qty').textContent) + 1"
-                                    class="w-10 h-10 rounded-full bg-gray-100 text-gray-600 hover:bg-brand-lilac hover:text-white flex items-center justify-center transition text-xl font-bold">+</button>
+                                    class="w-8 h-8 md:w-8 md:h-8 rounded-full bg-gray-100 text-gray-600 hover:bg-brand-lilac hover:text-white flex items-center justify-center transition text-lg md:text-lg font-bold">+</button>
                             </div>
                         </div>
 
                         <button onclick="addToCartWithQty()"
-                            class="w-full bg-brand-text text-white py-4 rounded-xl font-medium hover:bg-opacity-90 transition shadow-lg flex items-center justify-center gap-2 text-lg transform hover:-translate-y-1 active:translate-y-0">
-                            <i data-lucide="shopping-cart" class="w-6 h-6"></i> Agregar al Carrito
+                            class="w-full bg-brand-text text-white py-3 md:py-3 rounded-xl font-medium hover:bg-opacity-90 transition shadow-lg flex items-center justify-center gap-2 text-base md:text-base transform hover:-translate-y-1 active:translate-y-0">
+                            <i data-lucide="shopping-cart" class="w-5 h-5 md:w-5 md:h-5"></i> Agregar al Carrito
                         </button>
 
-                        <div class="mt-6 flex flex-wrap items-center justify-center gap-6 text-sm text-gray-500">
+                        <div
+                            class="mt-3 md:mt-4 flex flex-wrap items-center justify-center gap-6 text-xs md:text-xs text-gray-500">
                             <span class="flex items-center gap-1"><i data-lucide="truck"
-                                    class="w-4 h-4 text-brand-lilac"></i> Envíos a todo el país</span>
+                                    class="w-3.5 h-3.5 md:w-3.5 md:h-3.5 text-brand-lilac"></i> Envíos a todo el
+                                país</span>
                         </div>
                     </div>
                 </div>

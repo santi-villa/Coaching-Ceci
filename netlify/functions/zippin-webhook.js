@@ -34,7 +34,7 @@ exports.handler = async (event) => {
                             <h3 style="margin-top: 0; color: #3a2640; font-size: 24px;">ESTADO: ${estadoGral.toUpperCase()}</h3>
                             <p style="font-size: 16px;"><strong>Tu código de seguimiento localizador:</strong> <br>${trackingCode}</p>
                             <br>
-                            <a href="https://api.zippin.com.ar/v1/shipments/${trackingCode}" style="padding: 10px 20px; background-color: #3a2640; color: white; text-decoration: none; border-radius: 5px;">Rastrear en la web oficial</a>
+                            <a href="https://www.zipnova.com/rastreo?tracking=${trackingCode}" style="padding: 10px 20px; background-color: #3a2640; color: white; text-decoration: none; border-radius: 5px;">Rastrear en la web oficial</a>
                         </div>
                         <p style="text-align: center; margin-top: 20px; font-size: 14px; color: #999;">Esta es una notificación inteligente autogenerada.</p>
                     </div>

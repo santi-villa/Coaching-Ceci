@@ -3,13 +3,22 @@ const mainNav = document.getElementById('main-nav');
 function updateNavbar() {
     const currentView = document.querySelector('.view-section.block')?.id || 'home-view';
     const scrolled = window.scrollY > 50;
+    const brandSurname = document.getElementById('brand-surname');
 
     if (currentView !== 'home-view' || scrolled) {
         mainNav.classList.remove('text-white', 'bg-transparent');
         mainNav.classList.add('text-brand-text', 'bg-white/95', 'backdrop-blur-md', 'shadow-sm');
+        if (brandSurname) {
+            brandSurname.classList.remove('text-white');
+            brandSurname.classList.add('text-brand-pink');
+        }
     } else {
         mainNav.classList.add('text-white', 'bg-transparent');
         mainNav.classList.remove('text-brand-text', 'bg-white/95', 'backdrop-blur-md', 'shadow-sm');
+        if (brandSurname) {
+            brandSurname.classList.remove('text-brand-pink');
+            brandSurname.classList.add('text-white');
+        }
     }
 }
 

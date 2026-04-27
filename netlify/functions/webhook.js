@@ -5,7 +5,7 @@ exports.handler = async (event) => {
     if (event.httpMethod !== 'POST') {
         return { statusCode: 405, body: 'Method Not Allowed' };
     }
-    
+
     try {
         const body = JSON.parse(event.body);
         console.log("🔥 Webhook MP Recibido:", JSON.stringify(body));
@@ -13,7 +13,7 @@ exports.handler = async (event) => {
         // Solo nos importan notificaciones de tipo "pago", acción de creación o update
         if (body.type === 'payment' && (body.action === 'payment.created' || body.action === 'payment.updated')) {
             const paymentId = body.data.id;
-            
+
             // 1. Inicialización de Mercado Pago
             const mpAccessToken = (process.env.MP_ACCESS_TOKEN || "").trim();
             if (!mpAccessToken) {
@@ -23,7 +23,7 @@ exports.handler = async (event) => {
 
             const client = new MercadoPagoConfig({ accessToken: mpAccessToken });
             const paymentClient = new Payment(client);
-            
+
             const paymentData = await paymentClient.get({ id: paymentId });
             console.log("Estado real del pago:", paymentData.status);
 
@@ -31,37 +31,81 @@ exports.handler = async (event) => {
             if (paymentData.status === 'approved') {
                 const metadata = paymentData.metadata || {};
                 console.log("Metadata recuperada:", JSON.stringify(metadata));
-                
+
                 let logisticaTrackingUrl = "Pronto recibirás el link oficial del correo.";
-                
-                // === 1. INTEGRACIÓN LOGÍSTICA (ZIPPIN) ===
-                // Mantenemos la lógica de Zippin igual pero con protección de metadata
+
+                // === 1. INTEGRACIÓN LOGÍSTICA (ZIPPIN / ZIPNOVA) ===
                 if (metadata.delivery_type === 'shipping') {
                     const zippinKey = (process.env.ZIPPIN_API_KEY || "").trim();
                     const zippinSecret = (process.env.ZIPPIN_API_SECRET || "").trim();
-                    
+
                     if (zippinKey && zippinSecret) {
                         try {
-                            console.log("Acá iría la creación de remito en ZIPPIN");
-                            // (Lógica de Zippin comentada según original)
+                            console.log("Creando remito en Zippin/Zipnova...");
+                            const authString = Buffer.from(zippinKey + ':' + zippinSecret).toString('base64');
+
+                            // El payload de creación de envío con todos los datos recolectados
+                            const zippinPayload = {
+                                account_id: 21020,
+                                declared_value: 30000,
+                                origin: { zipcode: "1416" }, // *** IMPORTANTE: CAMBIAR ESTO AL CP REAL ORIGEN ***
+                                destination: {
+                                    name: metadata.customer_name || "Comprador",
+                                    document_type: "DNI",
+                                    document_number: metadata.customer_dni || "0",
+                                    phone: metadata.customer_phone || "0",
+                                    email: metadata.customer_email || "nodata@example.com",
+                                    address: metadata.address || "S/D",
+                                    city: metadata.city || "S/C",
+                                    state: metadata.province || "S/P",
+                                    zipcode: metadata.zip || "1000",
+                                    reference: `Orden Pago de ${metadata.customer_name}`
+                                },
+                                packages: [
+                                    { length: 21, width: 15, height: 1, weight: 100, classification_id: 1 } // Medidas
+                                ]
+                            };
+
+                            const resZippin = await fetch("https://api.zipnova.com.ar/v2/shipments", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "Accept": "application/json",
+                                    "Authorization": `Basic ${authString}`
+                                },
+                                body: JSON.stringify(zippinPayload)
+                            });
+
+                            if (resZippin.ok) {
+                                const zippinData = await resZippin.json();
+                                console.log("✅ Remito CREADO en Zipnova:", zippinData);
+
+                                // Extraemos el código de seguimiento real si existe
+                                if (zippinData.tracking_code) {
+                                    logisticaTrackingUrl = `https://www.zipnova.com/rastreo?tracking=${zippinData.tracking_code}`;
+                                }
+                            } else {
+                                const errorText = await resZippin.text();
+                                console.error("❌ Error conectando con ZIPNOVA:", resZippin.status, errorText);
+                            }
                         } catch (err) {
-                            console.error("Error conectando con ZIPPIN:", err);
+                            console.error("Error catcheado creando remito:", err);
                         }
                     } else {
                         console.log("Aviso: Faltan credenciales ZIPPIN para crear remitos automáticos.");
                     }
                 }
-                
+
                 // === 2. ENVÍO DE CORREOS VÍA BREVO ===
                 const brevoKey = (process.env.BREVO_API_KEY || "").trim();
                 const sellerEmail = (process.env.SELLER_EMAIL || "rossoceci@gmail.com").trim();
-                
+
                 if (brevoKey) {
                     console.log(`Iniciando envío de correos. Remitente: ${sellerEmail}`);
-                    
+
                     // A) Correo interno para TI (la vendedora)
                     const brevoPayloadVendedora = {
-                        sender: { name: "Sistema Tienda", email: sellerEmail }, 
+                        sender: { name: "Sistema Tienda", email: sellerEmail },
                         to: [{ email: sellerEmail, name: "Cecilia Rosso" }],
                         subject: `✅ ¡Nueva Venta! Libro pagado y listo para despacho`,
                         htmlContent: `
@@ -84,7 +128,7 @@ exports.handler = async (event) => {
                                 </div>
                                 <hr style="border: none; border-top: 1px solid #eee;">
                                 <p style="text-align: center; margin-top: 20px;">
-                                    <a href="https://wa.me/549${(metadata.customer_phone || '').replace(/\D/g,'')}" style="display:inline-block; padding: 12px 25px; background-color: #25D366; color: white; text-decoration: none; border-radius: 50px; font-weight: bold;">Contactar por WhatsApp al cliente</a>
+                                    <a href="https://wa.me/549${(metadata.customer_phone || '').replace(/\D/g, '')}" style="display:inline-block; padding: 12px 25px; background-color: #25D366; color: white; text-decoration: none; border-radius: 50px; font-weight: bold;">Contactar por WhatsApp al cliente</a>
                                 </p>
                             </div>
                         `
@@ -93,10 +137,10 @@ exports.handler = async (event) => {
                     try {
                         const resVendor = await fetch("https://api.brevo.com/v3/smtp/email", {
                             method: "POST",
-                            headers: { 
-                                "Accept": "application/json", 
-                                "Content-Type": "application/json", 
-                                "api-key": brevoKey 
+                            headers: {
+                                "Accept": "application/json",
+                                "Content-Type": "application/json",
+                                "api-key": brevoKey
                             },
                             body: JSON.stringify(brevoPayloadVendedora)
                         });
@@ -110,12 +154,12 @@ exports.handler = async (event) => {
 
                         // B) Correo automático PARA EL CLIENTE
                         if (metadata.customer_email && metadata.customer_email !== 'Vacio') {
-                            const textEnvio = metadata.delivery_type === 'shipping' 
+                            const textEnvio = metadata.delivery_type === 'shipping'
                                 ? `<p>Estamos preparando tu libro de manera física. Una vez despachado en el correo, recibirás el código de seguimiento. Enlace general de seguimiento online (asignado): ${logisticaTrackingUrl}</p>`
                                 : `<p>Has seleccionado "Retiro en persona". Por favor, envíanos un mensajito para coordinar por dónde vas a pasar a buscarlo!</p>`;
-                                
+
                             const brevoPayloadCliente = {
-                                sender: { name: "Cecilia Karina Rosso", email: sellerEmail }, 
+                                sender: { name: "Cecilia Karina Rosso", email: sellerEmail },
                                 to: [{ email: metadata.customer_email, name: metadata.customer_name || 'Cliente' }],
                                 subject: `Recibimos tu pago 🤍 ¡Gracias por tu compra!`,
                                 htmlContent: `
@@ -166,10 +210,10 @@ exports.handler = async (event) => {
 
                             const resClient = await fetch("https://api.brevo.com/v3/smtp/email", {
                                 method: "POST",
-                                headers: { 
-                                    "Accept": "application/json", 
-                                    "Content-Type": "application/json", 
-                                    "api-key": brevoKey 
+                                headers: {
+                                    "Accept": "application/json",
+                                    "Content-Type": "application/json",
+                                    "api-key": brevoKey
                                 },
                                 body: JSON.stringify(brevoPayloadCliente)
                             });
@@ -200,7 +244,7 @@ exports.handler = async (event) => {
                     try {
                         const wppMessage = `🛒 ¡Nueva Venta de Libro!\n👤 Comprador: ${metadata.customer_name || 'Desconocido'}\n📞 Teléfono: ${metadata.customer_phone || '-'}\n📦 Tipo: ${metadata.delivery_type === 'pickup' ? 'Retiro' : 'Envio'}`;
                         const url = `https://api.callmebot.com/whatsapp.php?phone=${callMeBotPhone}&text=${encodeURIComponent(wppMessage)}&apikey=${callMeBotApiKey}`;
-                        
+
                         const resWpp = await fetch(url);
                         if (resWpp.ok) {
                             console.log("✅ Notificación automática por WhatsApp enviada.");

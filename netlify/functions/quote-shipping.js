@@ -19,9 +19,8 @@ exports.handler = async (event) => {
                 // Autenticación de Zippin: Basic base64(KEY:SECRET)
                 const authString = Buffer.from(process.env.ZIPPIN_API_KEY + ':' + process.env.ZIPPIN_API_SECRET).toString('base64');
 
-                // NOTA: Algunas cuentas viejas usan /v1/quotes Otras /v1/shipments?action=quote
-                // Dejamos lista la llamada oficial
-                const response = await fetch("https://api.zippin.com.ar/v1/quotes", {
+                // NOTA: Zippin cambió de nombre a Zipnova, actualizamos la URL oficial
+                const response = await fetch("https://api.zipnova.com.ar/v2/shipments/quote", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -29,27 +28,28 @@ exports.handler = async (event) => {
                         "Authorization": `Basic ${authString}`
                     },
                     body: JSON.stringify({
-                        origin: { zip_code: "1181" }, // Reemplazar con el CP de tu casa (origen)
-                        destination: { zip_code: zip_dest },
-                        parcels: [
-                            { length: 21, width: 15, height: 0.5, weight: 100 } // Medidas aproximadas libro empacado en mm o gramos seq Zippin
+                        account_id: 21020,
+                        declared_value: 30000, // Requerido por Zipnova v2
+                        origin: { zipcode: "1416" }, // Reemplazar con el CP de tu casa (origen)
+                        destination: { zipcode: zip_dest, city: "Ciudad", state: "Provincia" }, // Añadidas prop obligatorias
+                        packages: [
+                            { length: 21, width: 15, height: 1, weight: 100, classification_id: 1 } // Medidas aproximadas libro empacado en mm o gramos seq Zippin
                         ]
                     })
                 });
 
                 if (response.ok) {
                     const data = await response.json();
-                    // Zippin devuelve una lista de posibles correos (Andreani, Urbano, etc).
-                    // Tomamos el más barato
-                    if (data && data.length > 0) {
-                        shippingCost = data[0].price || shippingCost;
+                    if (data && data.all_results && data.all_results.length > 0) {
+                        // El v2 devuelve la lista en all_results y el precio dentro de amounts.price
+                        shippingCost = data.all_results[0].amounts.price || shippingCost;
                     }
                 } else {
-                    console.log("Error en API de Zippin (Cotizacion):", response.status);
+                    console.log("Error en API de Zipnova (Cotizacion):", response.status);
                     // Si falla por configuración en Zippin, caerá al default pacíficamente.
                 }
             } catch (e) {
-                console.error("Fallo la llamada a Zippin:", e);
+                console.error("Fallo la llamada a Zipnova:", e);
             }
         }
 
