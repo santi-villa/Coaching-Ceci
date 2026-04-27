@@ -259,7 +259,7 @@ exports.handler = async (event) => {
                 }
 
                 // === 4. ENVIAR AL PANEL DE GOOGLE SHEETS (APPS SCRIPT) ===
-                const scriptUrl = process.env.GOOGLE_SHEETS_URL || "https://script.google.com/macros/s/AKfycbzl3Vwd3PSDa2LZ89PCycvIIHDx6dVN_SIEiJf05DgUrnLRaAoiM7VhRsVpv2-zmQDbjA/exec";
+                const scriptUrl = process.env.GOOGLE_SHEETS_URL || "https://script.google.com/macros/s/AKfycbyXPXUuMBJnMNpKOeD6vuzEf_AkCKE5weYlVh6Qj4fmzyyV3Jl_mWBwgbMRz24ZLQcl1Q/exec";
                 
                 if (scriptUrl && scriptUrl.includes("script.google.com")) {
                     try {
