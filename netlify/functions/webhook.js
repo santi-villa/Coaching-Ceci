@@ -36,8 +36,8 @@ exports.handler = async (event) => {
 
                 // === 1. INTEGRACIÓN LOGÍSTICA (ZIPPIN / ZIPNOVA) ===
                 if (metadata.delivery_type === 'shipping') {
-                    const zippinKey = (process.env.ZIPPIN_API_KEY || "").trim();
-                    const zippinSecret = (process.env.ZIPPIN_API_SECRET || "").trim();
+                    const zippinKey = (process.env.ZIPPIN_API_KEY || "").replace(/["']/g, '').trim();
+                    const zippinSecret = (process.env.ZIPPIN_API_SECRET || "").replace(/["']/g, '').trim();
 
                     if (zippinKey && zippinSecret) {
                         try {

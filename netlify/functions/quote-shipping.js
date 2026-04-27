@@ -17,7 +17,9 @@ exports.handler = async (event) => {
         if (process.env.ZIPPIN_API_KEY && process.env.ZIPPIN_API_SECRET) {
             try {
                 // Autenticación de Zippin: Basic base64(KEY:SECRET)
-                const authString = Buffer.from(process.env.ZIPPIN_API_KEY + ':' + process.env.ZIPPIN_API_SECRET).toString('base64');
+                const apiKey = process.env.ZIPPIN_API_KEY.replace(/["']/g, '');
+                const apiSecret = process.env.ZIPPIN_API_SECRET.replace(/["']/g, '');
+                const authString = Buffer.from(apiKey + ':' + apiSecret).toString('base64');
 
                 // NOTA: Zippin cambió de nombre a Zipnova, actualizamos la URL oficial
                 const response = await fetch("https://api.zipnova.com.ar/v2/shipments/quote", {
