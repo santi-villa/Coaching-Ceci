@@ -300,7 +300,7 @@
             </section>
 
             <section id="autora" class="py-16 px-6 max-w-6xl mx-auto border-t border-brand-lilac/20">
-                <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="flex flex-col md:flex-row items-center md:items-start gap-12">
                     <div class="md:w-1/2 relative">
                         <div
                             class="absolute inset-0 bg-brand-gradient rounded-full transform -rotate-6 scale-105 opacity-50 blur-lg">
@@ -317,11 +317,44 @@
                             la autora</span>
                         <h2 class="font-serif text-4xl font-bold text-brand-text mb-2">Cecilia Karina Rosso</h2>
                         <h4 class="text-lg text-brand-lilac font-medium mb-6">Coach del Ser / Propósito de Vida</h4>
-                        <p class="text-gray-600 text-lg leading-relaxed mb-4">Todos nos comunicamos desde que nos
-                            despertamos hasta que nos dormimos. Sin embargo, a veces el vínculo se desgasta.</p>
-                        <p class="text-gray-600 text-lg leading-relaxed">A través de mis sesiones y libros, mi misión es
-                            darte ejemplos reales y preguntas que sirvan para mirar tus vínculos con otros ojos, para
-                            que vayas despacio, sin correr, porque a donde debes llegar es a ti mismo.</p>
+                        <div class="relative">
+                            <div class="text-gray-600 text-lg leading-relaxed space-y-4">
+                                <p>Mujer, mamá y esposa. El francés es mi segundo idioma, el que hipnotizó mis oídos con sus dulces sonidos.</p>
+                                <p>Cautivada y motivada por la escritura, la comunicación asertiva y el lenguaje en general, pero sobre todo por el lenguaje ontológico: el más empático, el del Ser.</p>
+                                <p>Atracción fatal desde muy joven por el género literario de la autoayuda y del autoconocimiento. ¿Sirven? Sí, y mucho! ¿Cuándo? Cuando el lector está dispuesto a encontrarse con ellos; de lo contrario, serán solo un libro más.</p>
+                                
+                                <!-- Degradado sutil para indicar que hay más contenido -->
+                                <div id="bio-gradient" class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-brand-light via-brand-light/80 to-transparent z-10 pointer-events-none"></div>
+
+                                <div id="author-bio-more" class="hidden space-y-4 pt-4">
+                                    <p>Mi primer libro de autoayuda leído “Usted puede sanar su vida” (1984) de la genial e inspiradora autora Louise Hay.</p>
+                                    <p>Coach ontológico (de vida y del Ser) y coach vocacional. Una carrera y profesión que cambió mi manera de mirar el mundo. Para mí, un viaje de ida.</p>
+                                    
+                                    <div class="pt-2">
+                                        <p class="font-bold text-brand-text">¿Qué no hago ni haría?</p>
+                                        <p>Ir corriendo a poner en práctica con otros lo que aprendí en un libro o en una clase. Particularmente necesito primero vivirlo y sentirlo en mí, ser mi primera alumna, mi propia aprendiz. Con mis aciertos y mis errores. Con la soledad y el dolor que muchas veces eso implica. Con mis experiencias de vida, que son mis grandes maestras sin importar el tiempo que eso lleve.</p>
+                                    </div>
+
+                                    <p>Y de esa manera también surgió mi primer libro, y así será con el próximo o con lo que decida hacer. Porque esa es mi esencia y así me gusta Ser y Hacer las cosas. Con paciencia, al ritmo natural de las cosas.</p>
+                                    
+                                    <div class="bg-brand-lilac/5 p-6 rounded-2xl border-l-4 border-brand-lilac italic">
+                                        <p>Ya lo decía Juan Ramón Jiménez en su obra “Eternidades”, en un maravilloso llamado a la introspección —y mi frase de cabecera—:</p>
+                                        <p class="mt-2 font-serif text-xl text-brand-text">“No corras, ve despacio que a donde primero tienes que llegar es a ti mismo.”</p>
+                                        <p class="mt-1">Y yo continuaría la frase: ....para luego llegar mejor a los demás.</p>
+                                    </div>
+
+                                    <p class="pt-4 font-medium text-brand-text">Gracias por elegir leerme y permitirme entrar en algún rinconcito de sus vidas.</p>
+                                    <p class="font-serif text-2xl text-brand-pink italic">Con cariño Ceci</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="relative z-20">
+                            <button id="toggle-bio-btn" onclick="toggleBio()" class="mt-4 inline-flex items-center gap-2 bg-white border-2 border-brand-lilac/30 text-brand-lilac px-8 py-3 rounded-full font-bold hover:bg-brand-lilac hover:text-white shadow-md hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 group">
+                                <span>Leer biografía completa</span>
+                                <i data-lucide="chevron-down" class="w-5 h-5 group-hover:translate-y-1 transition-transform"></i>
+                            </button>
+                        </div>
                         <div class="mt-8 flex gap-4">
                             <a href="https://instagram.com/ceciliarosso.coach" target="_blank"
                                 class="inline-flex items-center gap-3 bg-white border border-brand-lilac/30 text-brand-text px-8 py-4 rounded-full font-medium hover:bg-brand-lilac hover:text-white shadow-sm hover:shadow-lg transform hover:-translate-y-1 transition duration-300 group">

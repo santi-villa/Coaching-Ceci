@@ -334,6 +334,41 @@ function toggleFaq(btn) {
         icon.style.transform = 'rotate(0deg)';
     } else {
         content.style.maxHeight = content.scrollHeight + 'px';
-        icon.style.transform = 'rotate(180deg)';
+    }
+}
+
+function toggleBio() {
+    const moreText = document.getElementById('author-bio-more');
+    const btn = document.getElementById('toggle-bio-btn');
+    const gradient = document.getElementById('bio-gradient');
+
+    if (moreText.classList.contains('hidden')) {
+        moreText.classList.remove('hidden');
+        moreText.classList.add('block');
+        if (gradient) gradient.classList.add('hidden');
+        btn.classList.remove('mt-4');
+        btn.classList.add('mt-8');
+        btn.innerHTML = `
+            <span>Leer menos</span>
+            <i data-lucide="chevron-up" class="w-5 h-5 group-hover:-translate-y-1 transition-transform"></i>
+        `;
+    } else {
+        moreText.classList.add('hidden');
+        moreText.classList.remove('block');
+        if (gradient) gradient.classList.remove('hidden');
+        btn.classList.remove('mt-8');
+        btn.classList.add('mt-4');
+        btn.innerHTML = `
+            <span>Leer biografía completa</span>
+            <i data-lucide="chevron-down" class="w-5 h-5 group-hover:translate-y-1 transition-transform"></i>
+        `;
+        
+        // Scroll back to the top of the bio section if we are collapsing
+        document.getElementById('autora').scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    // Update icon manually if lucide is available
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons({ root: btn });
     }
 }
