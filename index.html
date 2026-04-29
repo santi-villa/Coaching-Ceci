@@ -198,14 +198,15 @@
                         </p>
                         <div
                             class="hidden md:flex flex-col sm:flex-row gap-3 lg:gap-4 justify-center md:justify-start pt-2 md:pt-4">
+                            <button onclick="openModal('read')"
+                                class="bg-white/20 text-white border border-white/50 px-6 py-3.5 lg:px-8 lg:py-4 rounded-full text-base lg:text-lg font-medium hover:bg-white hover:text-brand-text hover:shadow-xl transform hover:-translate-y-1 transition duration-300 flex items-center justify-center gap-2">
+                                <i data-lucide="file-text" class="w-4 h-4"></i>Acerca del libro
+                            </button>
                             <button onclick="openProductModal()"
                                 class="bg-brand-text text-white px-8 py-3.5 lg:px-10 lg:py-4 rounded-full text-base lg:text-lg font-medium hover:bg-opacity-90 hover:shadow-xl transform hover:-translate-y-1 transition duration-300 flex items-center justify-center gap-2">
                                 <i data-lucide="shopping-bag" class="w-5 h-5 lg:w-6 lg:h-6"></i> Comprar Libro
                             </button>
-                            <button onclick="openModal('read')"
-                                class="bg-white/20 text-white border border-white/50 px-6 py-3.5 lg:px-8 lg:py-4 rounded-full text-base lg:text-lg font-medium hover:bg-white hover:text-brand-text hover:shadow-xl transform hover:-translate-y-1 transition duration-300 flex items-center justify-center gap-2">
-                                Leer un fragmento
-                            </button>
+
                         </div>
                     </div>
 
@@ -228,7 +229,7 @@
                             </button>
                             <button onclick="openModal('read')"
                                 class="bg-white/40 text-white border border-white/60 px-6 py-3.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2">
-                                Leer un fragmento
+                                Acerca del libro
                             </button>
                         </div>
                     </div>
@@ -319,40 +320,62 @@
                         <h4 class="text-lg text-brand-lilac font-medium mb-6">Coach del Ser / Propósito de Vida</h4>
                         <div class="relative">
                             <div class="text-gray-600 text-lg leading-relaxed space-y-4">
-                                <p>Mujer, mamá y esposa. El francés es mi segundo idioma, el que hipnotizó mis oídos con sus dulces sonidos.</p>
-                                <p>Cautivada y motivada por la escritura, la comunicación asertiva y el lenguaje en general, pero sobre todo por el lenguaje ontológico: el más empático, el del Ser.</p>
-                                <p>Atracción fatal desde muy joven por el género literario de la autoayuda y del autoconocimiento. ¿Sirven? Sí, y mucho! ¿Cuándo? Cuando el lector está dispuesto a encontrarse con ellos; de lo contrario, serán solo un libro más.</p>
-                                
+                                <p>Mujer, mamá y esposa.</p>
+                                <p>El francés es mi segundo idioma, el que hipnotizó mis oídos con sus dulces sonidos.
+                                </p>
+                                <p>Cautivada y motivada por la escritura, la comunicación asertiva y el lenguaje en
+                                    general, pero sobre todo por el lenguaje ontológico: el más empático, el del Ser.
+                                </p>
+                                <p>Atracción fatal desde muy joven por el género literario de la autoayuda y del
+                                    autoconocimiento. ¿Sirven? Sí, y mucho! ¿Cuándo? Cuando el lector está dispuesto a
+                                    encontrarse con ellos; de lo contrario, solo será una lectura más.</p>
+
                                 <!-- Degradado sutil para indicar que hay más contenido -->
-                                <div id="bio-gradient" class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-brand-light via-brand-light/80 to-transparent z-10 pointer-events-none"></div>
+                                <div id="bio-gradient"
+                                    class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-brand-light via-brand-light/80 to-transparent z-10 pointer-events-none">
+                                </div>
 
                                 <div id="author-bio-more" class="hidden space-y-4 pt-4">
-                                    <p>Mi primer libro de autoayuda leído “Usted puede sanar su vida” (1984) de la genial e inspiradora autora Louise Hay.</p>
-                                    <p>Coach ontológico (de vida y del Ser) y coach vocacional. Una carrera y profesión que cambió mi manera de mirar el mundo. Para mí, un viaje de ida.</p>
-                                    
+                                    <p>Mi primer libro de autoayuda leído “Usted puede sanar su vida” (1984) de la
+                                        genial e inspiradora autora Louise Hay.</p>
+                                    <p>Coach ontológico (de vida y del Ser) y coach vocacional. Una carrera y profesión
+                                        que cambió mi manera de mirar el mundo. Para mí, un viaje de ida.</p>
+
                                     <div class="pt-2">
                                         <p class="font-bold text-brand-text">¿Qué no hago ni haría?</p>
-                                        <p>Ir corriendo a poner en práctica con otros lo que aprendí en un libro o en una clase. Particularmente necesito primero vivirlo y sentirlo en mí, ser mi primera alumna, mi propia aprendiz. Con mis aciertos y mis errores. Con la soledad y el dolor que muchas veces eso implica. Con mis experiencias de vida, que son mis grandes maestras sin importar el tiempo que eso lleve.</p>
+                                        <p>Ir corriendo a poner la práctica en otros, de lo aprendido de un libro o de
+                                            una clase. Particularmente necesito primero vivirlo y sentirlo en mí, ser mi
+                                            primera alumna, mi propia aprendiz. Con mis aciertos y mis errores. Con la
+                                            soledad y el dolor que muchas veces eso implica. Con mis experiencias de
+                                            vida, que son mis grandes maestras sin importar el tiempo que eso lleve.</p>
                                     </div>
 
-                                    <p>Y de esa manera también surgió mi primer libro, y así será con el próximo o con lo que decida hacer. Porque esa es mi esencia y así me gusta Ser y Hacer las cosas. Con paciencia, al ritmo natural de las cosas.</p>
-                                    
+                                    <p>Y de esa manera también surgió mi primer libro, y así será con el próximo o con
+                                        lo que decida hacer. Porque esa es mi esencia y así me gusta Ser y Hacer las
+                                        cosas. Con paciencia, al ritmo natural de las cosas.</p>
+
                                     <div class="bg-brand-lilac/5 p-6 rounded-2xl border-l-4 border-brand-lilac italic">
-                                        <p>Ya lo decía Juan Ramón Jiménez en su obra “Eternidades”, en un maravilloso llamado a la introspección —y mi frase de cabecera—:</p>
-                                        <p class="mt-2 font-serif text-xl text-brand-text">“No corras, ve despacio que a donde primero tienes que llegar es a ti mismo.”</p>
-                                        <p class="mt-1">Y yo continuaría la frase: ....para luego llegar mejor a los demás.</p>
+                                        <p>Ya lo decía Juan Ramón Jiménez en su obra “Eternidades”, en un maravilloso
+                                            llamado a la introspección —y mi frase de cabecera—:</p>
+                                        <p class="mt-2 font-serif text-xl text-brand-text">“No corras, ve despacio que a
+                                            donde primero tienes que llegar es a ti mismo.”</p>
+                                        <p class="mt-1">Y yo continuaría la frase: ....para luego llegar mejor a los
+                                            demás.</p>
                                     </div>
 
-                                    <p class="pt-4 font-medium text-brand-text">Gracias por elegir leerme y permitirme entrar en algún rinconcito de sus vidas.</p>
+                                    <p class="pt-4 font-medium text-brand-text">Gracias por elegir leerme y permitirme
+                                        entrar en algún rinconcito de sus vidas.</p>
                                     <p class="font-serif text-2xl text-brand-pink italic">Con cariño Ceci</p>
                                 </div>
                             </div>
                         </div>
 
                         <div class="relative z-20">
-                            <button id="toggle-bio-btn" onclick="toggleBio()" class="mt-4 inline-flex items-center gap-2 bg-white border-2 border-brand-lilac/30 text-brand-lilac px-8 py-3 rounded-full font-bold hover:bg-brand-lilac hover:text-white shadow-md hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 group">
+                            <button id="toggle-bio-btn" onclick="toggleBio()"
+                                class="mt-4 inline-flex items-center gap-2 bg-white border-2 border-brand-lilac/30 text-brand-lilac px-8 py-3 rounded-full font-bold hover:bg-brand-lilac hover:text-white shadow-md hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 group">
                                 <span>Leer biografía completa</span>
-                                <i data-lucide="chevron-down" class="w-5 h-5 group-hover:translate-y-1 transition-transform"></i>
+                                <i data-lucide="chevron-down"
+                                    class="w-5 h-5 group-hover:translate-y-1 transition-transform"></i>
                             </button>
                         </div>
                         <div class="mt-8 flex gap-4">
@@ -571,7 +594,8 @@
                         <div class="text-gray-600 leading-snug md:leading-snug mb-4 md:mb-4 space-y-1.5 md:space-y-2">
                             <p class="text-xs md:text-sm hidden sm:block">Una invitación a observar cómo nos comunicamos
                                 en la vida real. Descubre formas más
-                                claras y humanas de decir, escuchar y convivir para tener "conversaciones posibles".</p>
+                                claras y humanas de decir, escuchar y convivir para tener <span
+                                    class="font-bold italic">"conversaciones posibles"</span>.</p>
                             <p class="text-xs md:text-xs text-gray-500 italic"><i data-lucide="info"
                                     class="w-3.5 h-3.5 md:w-3.5 md:h-3.5 inline-block mr-1"></i> Formato: Tapa blanda,
                                 104 páginas (15x21x0.5
