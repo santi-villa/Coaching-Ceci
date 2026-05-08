@@ -49,6 +49,38 @@ mobileLinks.forEach(link => {
     link.addEventListener('click', () => { if (menuOpen) toggleMenu(); });
 });
 
+function escapeHtml(value) {
+    return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+function getMessageStyle(type = 'success') {
+    if (type === 'error') {
+        return {
+            icon: 'alert-circle',
+            iconClass: 'text-red-500',
+            classes: ['bg-red-50/95', 'border', 'border-red-200', 'text-red-900']
+        };
+    }
+    if (type === 'warning') {
+        return {
+            icon: 'info',
+            iconClass: 'text-brand-lilac',
+            classes: ['bg-brand-pink/95', 'border', 'border-brand-lilac/30', 'text-brand-text']
+        };
+    }
+
+    return {
+        icon: 'check-circle',
+        iconClass: 'text-brand-green',
+        classes: ['bg-white/95', 'border', 'border-gray-100', 'text-gray-800']
+    };
+}
+
 function showToast(message, type = 'success') {
     let container = document.getElementById('toast-container');
     if (!container) {
@@ -60,14 +92,9 @@ function showToast(message, type = 'success') {
 
     const toast = document.createElement('div');
     toast.className = 'transform transition-all duration-300 translate-y-full opacity-0 px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 font-medium text-sm backdrop-blur-md';
-    
-    if (type === 'success') {
-        toast.innerHTML = `<i data-lucide="check-circle" class="w-5 h-5 text-brand-green"></i> <span class="text-gray-800">${message}</span>`;
-        toast.classList.add('bg-white/95', 'border', 'border-gray-100');
-    } else {
-        toast.innerHTML = `<i data-lucide="info" class="w-5 h-5 text-brand-text"></i> <span class="text-brand-text">${message}</span>`;
-        toast.classList.add('bg-brand-pink/95', 'border', 'border-brand-lilac/30');
-    }
+    const style = getMessageStyle(type);
+    toast.innerHTML = `<i data-lucide="${style.icon}" class="w-5 h-5 ${style.iconClass} shrink-0"></i> <span>${escapeHtml(message)}</span>`;
+    toast.classList.add(...style.classes);
 
     container.appendChild(toast);
     if(typeof lucide !== 'undefined') lucide.createIcons({ root: toast });
@@ -84,6 +111,34 @@ function showToast(message, type = 'success') {
         toast.classList.add('translate-y-full', 'opacity-0');
         setTimeout(() => toast.remove(), 300);
     }, 3500);
+}
+
+function showUserMessage(message, type = 'error', options = {}) {
+    const target = options.target ? document.getElementById(options.target) : null;
+    if (!target) {
+        showToast(message, type);
+        return;
+    }
+
+    const style = getMessageStyle(type);
+    target.className = 'mb-4 rounded-xl px-4 py-3 text-sm leading-relaxed flex items-start gap-3 shadow-sm transition-all duration-200';
+    target.classList.add(...style.classes);
+    target.innerHTML = `
+        <i data-lucide="${style.icon}" class="w-5 h-5 ${style.iconClass} shrink-0 mt-0.5"></i>
+        <span>${escapeHtml(message)}</span>
+    `;
+    target.classList.remove('hidden');
+    if (typeof lucide !== 'undefined') lucide.createIcons({ root: target });
+    if (options.scroll !== false) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+}
+
+function hideUserMessage(targetId) {
+    const target = document.getElementById(targetId);
+    if (!target) return;
+    target.classList.add('hidden');
+    target.innerHTML = '';
 }
 
 const modal = document.getElementById('action-modal');

@@ -34,12 +34,14 @@ const modalData = {
         title: "Finalizar Compra",
         icon: "shopping-cart",
         content: `
-            <form id="checkout-form" onsubmit="handleCheckout(event)">
+            <form id="checkout-form" onsubmit="handleCheckout(event)" novalidate>
                 
                 <div class="bg-brand-lilac/10 p-3 rounded-xl border border-brand-lilac/30 mb-6 flex items-center gap-3">
                     <i data-lucide="truck" class="w-5 h-5 text-brand-lilac"></i>
                     <p class="text-xs text-gray-700 font-medium">Estás realizando una compra con <strong>envío a domicilio</strong> y pago vía <strong>Mercado Pago</strong>.</p>
                 </div>
+
+                <div id="checkout-message" class="hidden"></div>
 
                 <p class="font-medium text-brand-text mb-3 text-sm md:text-base border-b border-brand-lilac/20 pb-2">Completa tus datos de envío:</p>
                 <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-6 shadow-sm">
@@ -75,7 +77,7 @@ const modalData = {
                             <input type="text" id="apartment" placeholder="Piso/depto opcional" class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac text-sm" oninput="resetShippingQuote(); validateInput(this)">
                         </div>
 
-                        <div class="mt-4 border border-brand-lilac/30 rounded-xl p-4 bg-brand-pink/5 shadow-sm">
+                        <div id="shipping-quote-card" class="mt-4 border border-brand-lilac/30 rounded-xl p-4 bg-brand-pink/5 shadow-sm transition">
                             <div class="flex items-center justify-between gap-3">
                                 <div class="flex items-center gap-2">
                                     <i data-lucide="truck" class="w-5 h-5 text-brand-lilac"></i>
@@ -148,7 +150,7 @@ const modalData = {
         content: `
             <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
             
-            <form action="https://c4dbfde8.sibforms.com/serve/MUIFAFucGxlLSVVMIyWGX25m6RxpThHoNAjjAN4gTElQ2c-Dnp8MvJFxBORy6b3jC3bIEckj3y3YW0MWybSKcpROinDoqtvtG5ouMRk69_ar2o7VrH_IczOx-FpHkjniFVuzm8grGU-14n3LzBlZdF5XUvGJXkzFQJ5je-MBjDMxE2S7IF7xjHNWFPgslhlJRih4zqJBRiwk74SBAg==" method="POST" target="hidden_iframe" onsubmit="handleSubscribeSubmit(event)">
+            <form action="https://c4dbfde8.sibforms.com/serve/MUIFAFucGxlLSVVMIyWGX25m6RxpThHoNAjjAN4gTElQ2c-Dnp8MvJFxBORy6b3jC3bIEckj3y3YW0MWybSKcpROinDoqtvtG5ouMRk69_ar2o7VrH_IczOx-FpHkjniFVuzm8grGU-14n3LzBlZdF5XUvGJXkzFQJ5je-MBjDMxE2S7IF7xjHNWFPgslhlJRih4zqJBRiwk74SBAg==" method="POST" target="hidden_iframe" onsubmit="handleSubscribeSubmit(event)" novalidate>
                 <p class="mb-5 text-gray-600 text-sm md:text-base">Déjanos tu email para enterarte cuando el próximo volumen esté disponible y recibir novedades exclusivas.</p>
                 <div class="bg-brand-pink/10 border border-brand-pink/30 p-3 rounded-lg flex items-start gap-3 mb-5">
                     <i data-lucide="alert-circle" class="w-5 h-5 text-brand-pink flex-shrink-0 mt-0.5"></i>
@@ -156,7 +158,7 @@ const modalData = {
                 </div>
                 
                 <div class="space-y-4">
-                    <input type="email" id="EMAIL" name="EMAIL" placeholder="Tu correo electrónico" required class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac transition">
+                    <input type="email" id="EMAIL" name="EMAIL" placeholder="Tu correo electrónico" required class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac transition" oninput="clearFieldError(this)">
                     
                     <input type="text" name="email_address_check" value="" class="hidden">
                     <input type="hidden" name="locale" value="es">

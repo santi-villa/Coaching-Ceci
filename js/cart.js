@@ -99,6 +99,8 @@ function addToCartWithQty() {
 
 // Validación visual en tiempo real
 function validateInput(el) {
+    clearCheckoutMessage();
+    clearFieldError(el);
     if (el.value.trim() === '') {
         el.classList.remove('border-green-400', 'bg-green-50/30', 'border-red-400', 'bg-red-50/30');
         el.classList.add('border-white', 'bg-white');
@@ -127,6 +129,77 @@ function updateItemQuantity(id, change) {
         resetShippingQuote();
         updateCartUI();
     }
+}
+
+function showCheckoutMessage(message, type = 'error') {
+    if (typeof showUserMessage === 'function') {
+        showUserMessage(message, type, { target: 'checkout-message' });
+        return;
+    }
+    showToast(message, type);
+}
+
+function clearCheckoutMessage() {
+    if (typeof hideUserMessage === 'function') {
+        hideUserMessage('checkout-message');
+    }
+}
+
+function clearFieldError(field) {
+    if (!field) return;
+    field.classList.remove('border-red-400', 'bg-red-50/30', 'ring-2', 'ring-red-100');
+}
+
+function markFieldError(field) {
+    if (!field) return;
+    field.classList.remove('border-white', 'border-green-400', 'bg-green-50/30');
+    field.classList.add('border-red-400', 'bg-red-50/30', 'ring-2', 'ring-red-100');
+}
+
+function markMissingFields(fieldIds) {
+    let firstMissing = null;
+    fieldIds.forEach(id => {
+        const field = document.getElementById(id);
+        if (!field) return;
+        if (field.value.trim() === '') {
+            markFieldError(field);
+            if (!firstMissing) firstMissing = field;
+        } else {
+            clearFieldError(field);
+        }
+    });
+    if (firstMissing) firstMissing.focus({ preventScroll: true });
+}
+
+function highlightShippingCard() {
+    const card = document.getElementById('shipping-quote-card');
+    if (!card) return;
+    card.classList.add('ring-2', 'ring-brand-lilac/40', 'border-brand-lilac', 'bg-brand-pink/10');
+    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => {
+        card.classList.remove('ring-2', 'ring-brand-lilac/40');
+    }, 1800);
+}
+
+function getCheckoutRequiredFields() {
+    return [
+        { id: 'customer-name', label: 'nombre completo' },
+        { id: 'customer-dni', label: 'DNI' },
+        { id: 'customer-phone', label: 'telefono' },
+        { id: 'customer-email', label: 'email' },
+        { id: 'zip', label: 'codigo postal' },
+        { id: 'province', label: 'provincia' },
+        { id: 'city', label: 'localidad' },
+        { id: 'street', label: 'calle' },
+        { id: 'street-number', label: 'numero' }
+    ];
+}
+
+function getMissingRequiredFields(fields = getCheckoutRequiredFields()) {
+    return fields.filter(field => {
+        const element = document.getElementById(field.id);
+        return !element || element.value.trim() === '';
+    });
 }
 
 function getCartSubtotal() {
@@ -260,18 +333,29 @@ function resetShippingQuote() {
         btn.innerHTML = 'Calcular envío';
         btn.disabled = false;
     }
+    clearCheckoutMessage();
     updateCheckoutSummary();
 }
 
 async function calculateShipping(e) {
     e.preventDefault();
     const address = getShippingAddress();
-    if (!address.postalCode || !address.province || !address.city || !address.street || !address.number) {
-        alert("Por favor, completá código postal, provincia, localidad, calle y número para calcular el envío.");
+    const requiredShippingFields = [
+        { id: 'zip', label: 'codigo postal' },
+        { id: 'province', label: 'provincia' },
+        { id: 'city', label: 'localidad' },
+        { id: 'street', label: 'calle' },
+        { id: 'street-number', label: 'numero' }
+    ];
+    const missingShippingFields = getMissingRequiredFields(requiredShippingFields);
+    if (missingShippingFields.length) {
+        markMissingFields(missingShippingFields.map(field => field.id));
+        showCheckoutMessage(`Completá estos datos para calcular el envío: ${missingShippingFields.map(field => field.label).join(', ')}.`, 'warning');
+        highlightShippingCard();
         return;
     }
     if (cart.length === 0) {
-        alert("Agregá al menos un libro al carrito antes de calcular el envío.");
+        showCheckoutMessage('Agregá al menos un libro al carrito antes de calcular el envío.', 'warning');
         return;
     }
 
@@ -282,6 +366,7 @@ async function calculateShipping(e) {
     btn.disabled = true;
 
     try {
+        clearCheckoutMessage();
         const response = await fetch('/.netlify/functions/quote-shipping', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -318,7 +403,7 @@ async function calculateShipping(e) {
             throw new Error(data.error || 'Error cotizando');
         }
     } catch (err) {
-        alert(err.message || "No se pudo calcular el envío. Revisá los datos de dirección e intentá nuevamente.");
+        showCheckoutMessage(err.message || 'No se pudo calcular el envío. Revisá los datos de dirección e intentá nuevamente.', 'error');
         quotedShippingQuote = null;
         quotedShippingAddressKey = '';
         quotedShippingCartKey = '';
@@ -343,24 +428,41 @@ async function handleCheckout(e) {
     const delivery = 'shipping';
     const payment = 'mp';
 
+    const missingFields = getMissingRequiredFields();
+    if (missingFields.length) {
+        markMissingFields(missingFields.map(field => field.id));
+        showCheckoutMessage(`Nos falta completar: ${missingFields.map(field => field.label).join(', ')}.`, 'warning');
+        return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(customerEmail.trim())) {
+        markFieldError(document.getElementById('customer-email'));
+        showCheckoutMessage('Revisá el email: necesitamos una dirección válida para enviarte la confirmación.', 'warning');
+        return;
+    }
+
     const phoneRegex = /^[0-9]{10,13}$/;
     if (!phoneRegex.test(customerPhone.replace(/\s/g, ""))) {
-        alert("Por favor, ingresa un número de teléfono válido (solo números, código de área sin 0 ni 15).");
+        markFieldError(document.getElementById('customer-phone'));
+        showCheckoutMessage('Revisá el teléfono: usá solo números, con código de área, sin 0 ni 15.', 'warning');
         return;
     }
 
     const privacyCheck = document.getElementById('privacy-policy');
     if (privacyCheck && !privacyCheck.checked) {
-        alert("Debes aceptar las Políticas de Privacidad para continuar con tu compra.");
+        showCheckoutMessage('Para continuar necesitás aceptar las Políticas de Privacidad.', 'warning');
         return;
     }
 
     if (!quotedShippingQuote || quotedShippingCost <= 0) {
-        alert("Por favor, hacé clic en 'Calcular envío' antes de proceder al pago.");
+        showCheckoutMessage('Antes de pagar necesitamos calcular el envío a tu domicilio.', 'warning');
+        highlightShippingCard();
         return;
     }
     if (quotedShippingAddressKey !== buildAddressKey(address) || quotedShippingCartKey !== buildCartKey()) {
-        alert("La dirección o cantidad del carrito cambió después de calcular el envío. Por favor, recalculá antes de pagar.");
+        showCheckoutMessage('La dirección o la cantidad del carrito cambió después de calcular el envío. Recalculalo antes de pagar.', 'warning');
+        highlightShippingCard();
         return;
     }
 
@@ -373,6 +475,7 @@ async function handleCheckout(e) {
     btn.disabled = true;
 
     try {
+        clearCheckoutMessage();
         const response = await fetch('/.netlify/functions/checkout', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -412,7 +515,7 @@ async function handleCheckout(e) {
         btn.innerHTML = originalText;
         btn.classList.remove('opacity-75', 'cursor-not-allowed');
         btn.disabled = false;
-        alert(error.message || "Hubo un problema al conectar con Mercado Pago. Revisa tu conexión e intenta nuevamente.");
+        showCheckoutMessage(error.message || 'Hubo un problema al conectar con Mercado Pago. Revisá tu conexión e intentá nuevamente.', 'error');
     }
 }
 
@@ -427,7 +530,8 @@ function handleSubscribeSubmit(e) {
     // Validación explícita
     if (!emailInput || !emailRegex.test(emailInput.value)) {
         e.preventDefault(); // Acá SÍ cancelamos el envío porque está mal
-        alert("Por favor, ingresa un correo electrónico válido para suscribirte.");
+        if (emailInput) markFieldError(emailInput);
+        showToast('Ingresá un correo electrónico válido para suscribirte.', 'warning');
         return;
     }
 
