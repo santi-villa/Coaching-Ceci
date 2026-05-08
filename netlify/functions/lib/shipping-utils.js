@@ -9,7 +9,7 @@ const PRODUCT_CATALOG = {
     libro_vol1: {
         id: 'libro_vol1',
         title: 'Comunicar para vivir mas livianos',
-        price: 10
+        price: 25000
     }
 };
 
