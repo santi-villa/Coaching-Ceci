@@ -1,5 +1,42 @@
 const { MercadoPagoConfig, Payment } = require('mercadopago');
 
+function getPaymentId(body) {
+    if (body?.['data.id']) return body['data.id'];
+    if (body?.data?.id) return body.data.id;
+    if (body?.id) return body.id;
+    if (typeof body?.resource === 'string') {
+        const match = body.resource.match(/\/payments\/(\d+)/);
+        if (match) return match[1];
+    }
+    return null;
+}
+
+function isPaymentNotification(body) {
+    return body?.type === 'payment' ||
+        body?.topic === 'payment' ||
+        body?.action?.startsWith('payment.') ||
+        (typeof body?.resource === 'string' && body.resource.includes('/payments/'));
+}
+
+function splitStreet(address = '') {
+    const cleaned = String(address || '').trim();
+    const match = cleaned.match(/^(.+?)\s+(\d+)(.*)$/);
+
+    if (!match) {
+        return {
+            street: cleaned || 'S/D',
+            street_number: '0',
+            street_extras: null
+        };
+    }
+
+    return {
+        street: match[1].trim(),
+        street_number: match[2].trim(),
+        street_extras: match[3].trim() || null
+    };
+}
+
 exports.handler = async (event) => {
     // MP espera recibir un status 200 / 201 muy rápido.
     if (event.httpMethod !== 'POST') {
@@ -7,12 +44,25 @@ exports.handler = async (event) => {
     }
 
     try {
-        const body = JSON.parse(event.body);
+        let parsedBody = {};
+        if (event.body) {
+            try {
+                parsedBody = JSON.parse(event.body);
+            } catch (parseError) {
+                console.log("Webhook MP sin body JSON valido:", event.body);
+            }
+        }
+
+        const body = {
+            ...(event.queryStringParameters || {}),
+            ...parsedBody
+        };
+
         console.log("🔥 Webhook MP Recibido:", JSON.stringify(body));
 
-        // Solo nos importan notificaciones de tipo "pago", acción de creación o update
-        if (body.type === 'payment' && (body.action === 'payment.created' || body.action === 'payment.updated')) {
-            const paymentId = body.data.id;
+        // Mercado Pago puede enviar webhooks con type/action, topic/id o resource.
+        const paymentId = getPaymentId(body);
+        if (isPaymentNotification(body) && paymentId) {
 
             // 1. Inicialización de Mercado Pago
             const mpAccessToken = (process.env.MP_ACCESS_TOKEN || "").trim();
@@ -44,18 +94,23 @@ exports.handler = async (event) => {
                             console.log("Creando remito en Zippin/Zipnova...");
                             const authString = Buffer.from(zippinKey + ':' + zippinSecret).toString('base64');
 
-                            // El payload de creación de envío con todos los datos recolectados
+                            const destinationAddress = splitStreet(metadata.address);
+                            const externalId = `MP-${paymentId}`;
+
+                            // Payload v2 de Zipnova. Usamos street/street_number porque address plano puede fallar.
                             const zippinPayload = {
                                 account_id: 21020,
+                                external_id: externalId,
+                                logistic_type: "xd_dropoff",
+                                service_type: "standard_delivery",
                                 declared_value: paymentData.transaction_amount || 24900,
                                 origin: { zipcode: "1414" }, // CP de Villa Crespo extraído automáticamente de la cuenta de Zippin
                                 destination: {
                                     name: metadata.customer_name || "Comprador",
-                                    document_type: "DNI",
-                                    document_number: metadata.customer_dni || "0",
+                                    document: metadata.customer_dni || "0",
                                     phone: metadata.customer_phone || "0",
                                     email: metadata.customer_email || "nodata@example.com",
-                                    address: metadata.address || "S/D",
+                                    ...destinationAddress,
                                     city: metadata.city || "S/C",
                                     state: metadata.province || "S/P",
                                     zipcode: metadata.zip || "1000",
@@ -80,9 +135,11 @@ exports.handler = async (event) => {
                                 const zippinData = await resZippin.json();
                                 console.log("✅ Remito CREADO en Zipnova:", zippinData);
 
-                                // Extraemos el código de seguimiento real si existe
-                                if (zippinData.tracking_code) {
-                                    logisticaTrackingUrl = `https://www.zipnova.com/rastreo?tracking=${zippinData.tracking_code}`;
+                                // Zipnova v2 devuelve links de tracking, no siempre tracking_code.
+                                if (zippinData.tracking_external || zippinData.tracking) {
+                                    logisticaTrackingUrl = zippinData.tracking_external || zippinData.tracking;
+                                } else if (zippinData.carrier_tracking_id) {
+                                    logisticaTrackingUrl = `https://app.zipnova.com.ar/track/${zippinData.account_id || 21020}/${externalId}`;
                                 }
                             } else {
                                 const errorText = await resZippin.text();
@@ -227,9 +284,7 @@ exports.handler = async (event) => {
                         }
                     } catch (emailError) {
                         console.error("🔥 Fallo crítico en el envío de emails:", emailError.message);
-                        // No retornamos 500 aquí si queremos que MP deje de reintentar en errores permanentes,
-                        // pero por ahora lanzamos error para que quede el registro en logs.
-                        throw emailError;
+                        // No fallamos el webhook de MP por email: la venta y la logistica ya fueron procesadas.
                     }
                 } else {
                     console.log("⚠️ No se envía correo porque falta la variable BREVO_API_KEY o está vacía.");
