@@ -1,5 +1,6 @@
 const {
     calculatePackageDimensions,
+    isAllowedCarrierDropoffOption,
     isHomeDeliveryOption,
     normalizeAddress,
     numberOrZero
@@ -61,12 +62,13 @@ function selectCheapestHomeDelivery(results = []) {
     const homeDeliveryRates = results
         .filter(rate => rate?.selectable !== false)
         .filter(isHomeDeliveryOption)
+        .filter(isAllowedCarrierDropoffOption)
         .map(normalizeQuoteRate)
         .filter(rate => rate.shipping_cost > 0)
         .sort((a, b) => a.shipping_cost - b.shipping_cost);
 
     if (!homeDeliveryRates.length) {
-        throw new Error('Zipnova no devolvio opciones de envio a domicilio para esa direccion.');
+        throw new Error('No hay opciones de envio a domicilio con Correo Argentino, OCA o Andreani para esa direccion.');
     }
 
     return homeDeliveryRates[0];

@@ -3,6 +3,8 @@ const BOOK_WIDTH_CM = 15;
 const BOOK_HEIGHT_CM = 1;
 const BOOK_WEIGHT_KG = 0.1;
 const BOOK_CLASSIFICATION_ID = 1;
+const ALLOWED_CARRIER_NAMES = ['correo argentino', 'oca', 'andreani'];
+const REQUIRED_LOGISTIC_TYPE = 'carrier_dropoff';
 const PRODUCT_CATALOG = {
     libro_vol1: {
         id: 'libro_vol1',
@@ -129,6 +131,10 @@ function validateShippingOption(option) {
         throw new Error('La opcion seleccionada no es envio a domicilio.');
     }
 
+    if (!isAllowedCarrierDropoffOption(option)) {
+        throw new Error('La opcion seleccionada no usa Correo Argentino, OCA o Andreani con despacho directo en transporte.');
+    }
+
     return true;
 }
 
@@ -150,12 +156,40 @@ function isHomeDeliveryOption(option = {}) {
         serviceName.includes('domicilio');
 }
 
+function normalizeCarrierName(value = '') {
+    return String(value || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim();
+}
+
+function getCarrierName(option = {}) {
+    return option.carrier_name || option.carrier?.name || '';
+}
+
+function isAllowedCarrier(option = {}) {
+    const carrierName = normalizeCarrierName(getCarrierName(option));
+    return ALLOWED_CARRIER_NAMES.includes(carrierName);
+}
+
+function isCarrierDropoffOption(option = {}) {
+    return String(option.logistic_type || '').toLowerCase() === REQUIRED_LOGISTIC_TYPE;
+}
+
+function isAllowedCarrierDropoffOption(option = {}) {
+    return isAllowedCarrier(option) && isCarrierDropoffOption(option);
+}
+
 module.exports = {
     buildAddressKey,
     buildCartKey,
     calculatePackageDimensions,
     calculateSubtotal,
     getCartQuantity,
+    isAllowedCarrierDropoffOption,
+    isAllowedCarrier,
+    isCarrierDropoffOption,
     isHomeDeliveryOption,
     normalizeAddress,
     normalizeCartItems,
