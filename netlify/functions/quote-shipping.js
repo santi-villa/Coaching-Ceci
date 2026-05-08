@@ -1,70 +1,57 @@
+const shippingProviderService = require('./lib/shipping-provider-service');
+const {
+    buildAddressKey,
+    buildCartKey,
+    calculateSubtotal,
+    normalizeCartItems,
+    normalizeAddress
+} = require('./lib/shipping-utils');
+
 exports.handler = async (event) => {
     if (event.httpMethod !== 'POST') {
         return { statusCode: 405, body: 'Method Not Allowed' };
     }
 
     try {
-        const body = JSON.parse(event.body);
-        const { zip_dest } = body;
+        const body = JSON.parse(event.body || '{}');
+        const cartItems = normalizeCartItems(body.cart);
+        const address = normalizeAddress(body.address || {
+            postalCode: body.postalCode || body.zip_dest,
+            province: body.province,
+            city: body.city || body.locality,
+            street: body.street,
+            number: body.number,
+            apartment: body.apartment
+        });
+        const subtotal = calculateSubtotal(cartItems);
 
-        if (!zip_dest) {
-            return { statusCode: 400, body: JSON.stringify({ error: "Missing postal code" }) };
+        if (subtotal <= 0) {
+            return { statusCode: 400, body: JSON.stringify({ error: 'El carrito esta vacio.' }) };
         }
 
-        let shippingCost = 1500; // Costo por defecto fallback original
-
-        // === INTEGRACIÓN ZIPPIN ===
-        if (process.env.ZIPPIN_API_KEY && process.env.ZIPPIN_API_SECRET) {
-            try {
-                // Autenticación de Zippin: Basic base64(KEY:SECRET)
-                const apiKey = process.env.ZIPPIN_API_KEY.replace(/["']/g, '');
-                const apiSecret = process.env.ZIPPIN_API_SECRET.replace(/["']/g, '');
-                const authString = Buffer.from(apiKey + ':' + apiSecret).toString('base64');
-
-                // NOTA: Zippin cambió de nombre a Zipnova, actualizamos la URL oficial
-                const response = await fetch("https://api.zipnova.com.ar/v2/shipments/quote", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json",
-                        "Authorization": `Basic ${authString}`
-                    },
-                    body: JSON.stringify({
-                        account_id: 21020,
-                        declared_value: 24900,
-                        origin: { zipcode: "1414" },
-                        destination: { zipcode: zip_dest, city: "Ciudad", state: "Provincia" },
-                        packages: [
-                            { length: 21, width: 15, height: 1, weight: 100, classification_id: 1 } 
-                        ]
-                    })
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data && data.all_results && data.all_results.length > 0) {
-                        // El v2 devuelve la lista en all_results y el precio dentro de amounts.price
-                        shippingCost = data.all_results[0].amounts.price || shippingCost;
-                    }
-                } else {
-                    console.log("Error en API de Zipnova (Cotizacion):", response.status);
-                    // Si falla por configuración en Zippin, caerá al default pacíficamente.
-                }
-            } catch (e) {
-                console.error("Fallo la llamada a Zipnova:", e);
-            }
-        }
-
-        // Simulamos un delay de red de 600ms para que se sienta real en el front y el botón reaccione
-        await new Promise(resolve => setTimeout(resolve, 600));
+        const quoteResult = await shippingProviderService.quoteHomeDelivery({
+            cartItems,
+            address,
+            declaredValue: subtotal
+        });
 
         return {
             statusCode: 200,
-            body: JSON.stringify({ cost: shippingCost })
+            body: JSON.stringify({
+                cost: quoteResult.cost,
+                quote: quoteResult.quote,
+                package: quoteResult.package,
+                addressKey: buildAddressKey(address),
+                cartKey: buildCartKey(cartItems)
+            })
         };
-
     } catch (error) {
-        console.error("Error quoting shipping:", error);
-        return { statusCode: 500, body: JSON.stringify({ error: 'Error calculating constraints' }) };
+        console.error('Error quoting shipping:', error);
+        return {
+            statusCode: 502,
+            body: JSON.stringify({
+                error: error.message || 'No se pudo calcular el envio con Zipnova.'
+            })
+        };
     }
 };

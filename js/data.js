@@ -63,19 +63,42 @@ const modalData = {
                     </div>
 
                     <div id="shipping-fields" class="space-y-4 pt-4 mt-2 border-t border-gray-200">
-                        <input type="text" id="address" placeholder="Dirección completa (Calle, Altura, Piso y Depto)" class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac text-sm" required oninput="resetShippingQuote(); validateInput(this)">
-                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                            <input type="text" id="city" placeholder="Ciudad" class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac text-sm" required oninput="resetShippingQuote(); validateInput(this)">
-                            <input type="text" id="zip" placeholder="C. Postal" class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac text-sm" required oninput="resetShippingQuote(); validateInput(this)">
+                        <p class="text-sm font-semibold text-brand-text">Calculá tu envío</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <input type="text" id="zip" placeholder="Código postal" class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac text-sm" required oninput="resetShippingQuote(); validateInput(this)">
                             <input type="text" id="province" placeholder="Provincia" class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac text-sm" required oninput="resetShippingQuote(); validateInput(this)">
+                            <input type="text" id="city" placeholder="Localidad" class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac text-sm" required oninput="resetShippingQuote(); validateInput(this)">
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                            <input type="text" id="street" placeholder="Calle" class="sm:col-span-2 w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac text-sm" required oninput="resetShippingQuote(); validateInput(this)">
+                            <input type="text" id="street-number" placeholder="Número" class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac text-sm" required oninput="resetShippingQuote(); validateInput(this)">
+                            <input type="text" id="apartment" placeholder="Piso/depto opcional" class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac text-sm" oninput="resetShippingQuote(); validateInput(this)">
                         </div>
 
-                        <div class="mt-4 flex items-center justify-between border border-brand-lilac/30 rounded-xl p-3 bg-brand-pink/5 shadow-sm">
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="truck" class="w-5 h-5 text-brand-lilac"></i>
-                                <span id="shipping-cost-display" class="text-sm font-medium text-gray-600">Por cotizar...</span>
+                        <div class="mt-4 border border-brand-lilac/30 rounded-xl p-4 bg-brand-pink/5 shadow-sm">
+                            <div class="flex items-center justify-between gap-3">
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="truck" class="w-5 h-5 text-brand-lilac"></i>
+                                    <span class="text-sm font-semibold text-brand-text">Envío a domicilio</span>
+                                </div>
+                                <button type="button" onclick="calculateShipping(event)" id="btn-calc-shipping" class="bg-white border border-brand-lilac text-brand-lilac px-4 py-2 rounded-lg text-xs md:text-sm font-semibold hover:bg-brand-lilac hover:text-white transition shadow-sm">Calcular envío</button>
                             </div>
-                            <button type="button" onclick="calculateShipping(event)" id="btn-calc-shipping" class="bg-white border border-brand-lilac text-brand-lilac px-4 py-2 rounded-lg text-xs md:text-sm font-semibold hover:bg-brand-lilac hover:text-white transition shadow-sm">Cotizar Envío</button>
+                            <div id="shipping-cost-display" class="mt-3 text-sm text-gray-600">Completá la dirección para calcular el envío.</div>
+                        </div>
+
+                        <div class="bg-white border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
+                            <div class="flex items-center justify-between gap-3">
+                                <span class="text-gray-500">Subtotal libros</span>
+                                <span id="checkout-subtotal" class="font-semibold text-brand-text">$0</span>
+                            </div>
+                            <div class="flex items-center justify-between gap-3">
+                                <span class="text-gray-500">Envío</span>
+                                <span id="checkout-shipping" class="font-semibold text-brand-text">Por calcular</span>
+                            </div>
+                            <div class="flex items-center justify-between gap-3 border-t border-gray-100 pt-2">
+                                <span class="font-semibold text-brand-text">Total</span>
+                                <span id="checkout-total" class="font-bold text-brand-lilac">$0</span>
+                            </div>
                         </div>
                     </div>
                 </div>
