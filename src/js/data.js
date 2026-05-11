@@ -2,7 +2,7 @@ const productInfo = {
     id: 'libro_vol1',
     title: 'Comunicar para vivir más livianos',
     price: 25000,
-    image: 'Libro.png'
+    image: 'assets/images/libro.png'
 };
 
 const bookContent = {

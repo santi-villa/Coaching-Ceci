@@ -5,16 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comunicar para vivir más livianos - Cecilia Karina Rosso</title>
-    <link rel="icon" type="image/png" href="iconoweb.png">
-    <link rel="apple-touch-icon" href="iconoweb.png">
+    <link rel="icon" type="image/png" href="assets/images/iconoweb.png">
+    <link rel="apple-touch-icon" href="assets/images/iconoweb.png">
 
     <!-- Meta Tags / SEO para WhatsApp y Redes Sociales -->
     <meta name="description"
-        content="Una invitación a observar cómo nos comunicamos en la vida real. Descubre formas más claras y humanas de decir, escuchar y convivir.">
+        content="Una invitación a observar cómo nos comunicamos en la vida real. Descubrí formas más claras y humanas de decir, escuchar y convivir.">
     <meta property="og:title" content="Comunicar para vivir más livianos - Cecilia Karina Rosso">
     <meta property="og:description"
-        content="Una invitación a observar cómo nos comunicamos en la vida real. Descubre formas más claras y humanas de decir, escuchar y convivir para tener conversaciones posibles.">
-    <meta property="og:image" content="https://ceciliarosso.com/Libro.png">
+        content="Una invitación a observar cómo nos comunicamos en la vida real. Descubrí formas más claras y humanas de decir, escuchar y convivir para tener conversaciones posibles.">
+    <meta property="og:image" content="https://ceciliarosso.com/assets/images/libro.png">
     <meta property="og:url" content="https://ceciliarosso.com">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
@@ -37,7 +37,9 @@
                             peach: '#f4ceb6',
                             text: '#3a2640',
                             light: '#fcfafc',
-                            green: '#86d1a4'
+                            green: '#86d1a4',
+                            sky: '#72c9f2',
+                            ink: '#27314d'
                         }
                     },
                     fontFamily: {
@@ -45,7 +47,7 @@
                         serif: ['Playfair Display', 'serif'],
                     },
                     backgroundImage: {
-                        'brand-gradient': 'linear-gradient(135deg, #b59ad6 0%, #e8a9c0 50%, #f4ceb6 100%)',
+                        'brand-gradient': 'linear-gradient(135deg, #8fcfed 0%, #d7b5dc 46%, #f1b6c7 100%)',
                         'book-cover-gradient': 'linear-gradient(180deg, #6cb3e3 0%, #a8cfe8 40%, #bca6db 100%)',
                     }
                 }
@@ -55,15 +57,16 @@
 
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="src/css/styles.css?v=2">
 </head>
 
 <body class="font-sans text-brand-text bg-brand-light antialiased selection:bg-brand-pink selection:text-white">
 
-    <nav id="main-nav" class="fixed w-full z-30 px-6 py-4 text-white transition-all duration-300 bg-transparent">
+    <nav id="main-nav"
+        class="fixed w-full z-30 px-4 sm:px-6 py-4 text-white transition-all duration-300 bg-transparent">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <a href="#" id="nav-brand" onclick="showPage('home-view'); event.preventDefault();"
-                class="font-serif text-2xl font-bold tracking-wide drop-shadow-md cursor-pointer hover:opacity-80 transition flex items-center gap-3">
+                class="font-serif text-xl sm:text-2xl font-bold tracking-wide drop-shadow-md cursor-pointer hover:opacity-80 transition flex items-center gap-3 shrink-0">
                 <span>Cecilia <span id="brand-surname" class="font-light italic text-white">Rosso</span></span>
             </a>
             <div class="hidden md:flex space-x-8 font-medium items-center">
@@ -73,7 +76,7 @@
                     Lanzamientos</a>
             </div>
 
-            <div class="flex items-center gap-6">
+            <div id="nav-actions" class="flex items-center gap-3 sm:gap-6 shrink-0">
                 <button onclick="toggleCart()" class="hover:opacity-80 transition relative cursor-pointer group">
                     <i data-lucide="shopping-cart"
                         class="w-6 h-6 md:w-7 md:h-7 drop-shadow-md group-hover:scale-110 transition-transform"></i>
@@ -168,69 +171,75 @@
 
         <div id="home-view" class="view-section block transition-opacity duration-300 opacity-100">
             <header
-                class="relative bg-brand-gradient min-h-screen flex items-center justify-center overflow-hidden leaf-pattern">
+                class="hero-editorial relative bg-brand-gradient min-h-[92vh] flex items-center justify-center overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-                    <div
-                        class="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-white opacity-10 blur-3xl">
-                    </div>
-                    <div
-                        class="absolute bottom-[10%] -right-[10%] w-[40%] h-[40%] rounded-full bg-brand-lilac opacity-30 blur-3xl">
-                    </div>
+                    <div class="hero-glow hero-glow-sky"></div>
+                    <div class="hero-glow hero-glow-rose"></div>
                 </div>
 
                 <div
-                    class="relative max-w-7xl mx-auto px-6 pt-28 pb-10 md:pt-32 md:pb-16 lg:py-20 flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12 z-10 w-full mt-4 md:mt-0">
-                    <div class="md:w-1/2 text-center md:text-left space-y-4 md:space-y-6">
+                    class="hero-content relative max-w-7xl mx-auto px-5 sm:px-6 pt-28 pb-10 md:pt-32 md:pb-16 lg:py-20 flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12 z-10 w-full mt-4 md:mt-0">
+                    <div class="hero-copy w-full md:w-1/2 text-center md:text-left space-y-4 md:space-y-6 min-w-0">
                         <span
-                            class="uppercase tracking-widest text-xs md:text-sm font-semibold text-white/90 block">Nuevo
+                            class="uppercase tracking-[0.28em] text-[11px] md:text-sm font-extrabold text-white/90 block">Nuevo
                             Lanzamiento</span>
                         <h1
-                            class="font-serif text-4xl md:text-5xl lg:text-6xl font-normal text-white leading-tight drop-shadow-md">
-                            Comunicar <span class="text-white block mt-1 md:mt-2 text-[0.8em]">para vivir más
-                                livianos</span>
+                            class="hero-title font-serif text-[2.65rem] md:text-5xl lg:text-6xl text-white leading-[0.98] drop-shadow-md max-w-xl mx-auto md:mx-0">
+                            Comunicar <span class="text-white block mt-1 md:mt-2 text-[0.8em] whitespace-nowrap">para
+                                vivir más livianos</span>
                         </h1>
-                        <p class="text-lg md:text-xl lg:text-2xl font-serif text-white/90 italic">¡Vive más liviano,
+                        <p
+                            class="hero-kicker text-lg md:text-xl lg:text-2xl font-serif text-white/90 italic mx-auto md:mx-0">
+                            ¡Vive más liviano,
                             comunica mejor!</p>
                         <p
-                            class="text-base md:text-lg lg:text-xl text-white/95 font-light max-w-lg mx-auto md:mx-0 leading-snug md:leading-relaxed">
-                            Una invitación a observar cómo nos comunicamos en la vida real. Descubre formas más claras y
+                            class="hero-lede text-base md:text-lg lg:text-xl text-white/95 font-light max-w-lg mx-auto md:mx-0 leading-snug md:leading-relaxed">
+                            Una invitación a observar cómo nos comunicamos en la vida real. Descubrí formas más claras y
                             humanas de decir, escuchar y convivir para tener "conversaciones posibles".
                         </p>
                         <div
+                            class="hero-trust flex flex-wrap justify-center md:justify-start gap-x-4 gap-y-2 text-white/90 text-sm font-semibold">
+                            <span class="inline-flex items-center gap-1.5"><i data-lucide="truck" class="w-4 h-4"></i>
+                                Envíos a todo el país</span>
+                            <span class="inline-flex items-center gap-1.5"><i data-lucide="shield-check"
+                                    class="w-4 h-4"></i> Pago seguro</span>
+                            <span class="inline-flex items-center gap-1.5"><i data-lucide="book-open"
+                                    class="w-4 h-4"></i> Libro físico</span>
+                        </div>
+
+                        <div class="flex md:hidden flex-col gap-3 w-full max-w-xs pt-1">
+                            <button onclick="openProductModal()"
+                                class="bg-brand-text text-white px-8 py-3.5 rounded-2xl text-base font-bold hover:bg-opacity-90 shadow-xl flex items-center justify-center gap-2">
+                                <i data-lucide="shopping-bag" class="w-5 h-5"></i> Comprar Libro
+                            </button>
+                            <button onclick="openModal('read')"
+                                class="bg-white/35 text-white border border-white/60 px-6 py-3.5 rounded-2xl text-sm font-bold flex items-center justify-center gap-2">
+                                Acerca del libro
+                            </button>
+                        </div>
+                        <div
                             class="hidden md:flex flex-col sm:flex-row gap-3 lg:gap-4 justify-center md:justify-start pt-2 md:pt-4">
                             <button onclick="openModal('read')"
-                                class="bg-white/20 text-white border border-white/50 px-6 py-3.5 lg:px-8 lg:py-4 rounded-full text-base lg:text-lg font-medium hover:bg-white hover:text-brand-text hover:shadow-xl transform hover:-translate-y-1 transition duration-300 flex items-center justify-center gap-2">
+                                class="bg-white/20 text-white border border-white/50 px-6 py-3.5 lg:px-8 lg:py-4 rounded-2xl text-base lg:text-lg font-bold hover:bg-white hover:text-brand-text hover:shadow-xl transform hover:-translate-y-1 transition duration-300 flex items-center justify-center gap-2">
                                 <i data-lucide="file-text" class="w-4 h-4"></i>Acerca del libro
                             </button>
                             <button onclick="openProductModal()"
-                                class="bg-brand-text text-white px-8 py-3.5 lg:px-10 lg:py-4 rounded-full text-base lg:text-lg font-medium hover:bg-opacity-90 hover:shadow-xl transform hover:-translate-y-1 transition duration-300 flex items-center justify-center gap-2">
+                                class="bg-brand-text text-white px-8 py-3.5 lg:px-10 lg:py-4 rounded-2xl text-base lg:text-lg font-bold hover:bg-opacity-90 hover:shadow-xl transform hover:-translate-y-1 transition duration-300 flex items-center justify-center gap-2">
                                 <i data-lucide="shopping-bag" class="w-5 h-5 lg:w-6 lg:h-6"></i> Comprar Libro
                             </button>
 
                         </div>
                     </div>
 
-                    <div class="md:w-1/2 flex flex-col items-center perspective-1000 mt-8 md:mt-0">
-                        <div class="relative w-64 md:w-[350px] lg:w-[450px] transform hover:-translate-y-4 transition duration-500 cursor-pointer group"
+                    <div class="md:w-1/2 flex flex-col items-center perspective-1000 mt-8 md:mt-0 min-w-0">
+                        <div class="book-spotlight relative w-52 sm:w-64 md:w-[350px] lg:w-[430px] transform hover:-translate-y-4 transition duration-500 cursor-pointer group"
                             onclick="openProductModal()">
-                            <img src="Libro.png" alt="Portada del libro Comunicar para vivir más livianos"
-                                class="w-full h-auto drop-shadow-2xl rounded-sm object-contain"
+                            <img src="assets/images/libro.png" alt="Portada del libro Comunicar para vivir más livianos"
+                                class="relative z-10 w-full h-auto rounded-sm object-contain"
                                 onerror="this.src='https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=800&auto=format&fit=crop'">
                             <div
                                 class="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/10 to-white/0 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none rounded-sm">
                             </div>
-                        </div>
-
-                        <!-- Botones solo para Mobile (debajo de la imagen) -->
-                        <div class="flex md:hidden flex-col gap-3 w-full mt-6">
-                            <button onclick="openProductModal()"
-                                class="bg-brand-text text-white px-8 py-3.5 rounded-xl text-base font-bold hover:bg-opacity-90 shadow-xl flex items-center justify-center gap-2">
-                                <i data-lucide="shopping-bag" class="w-5 h-5"></i> Comprar Libro
-                            </button>
-                            <button onclick="openModal('read')"
-                                class="bg-white/40 text-white border border-white/60 px-6 py-3.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2">
-                                Acerca del libro
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -258,7 +267,7 @@
                         posibles</h2>
                     <p class="text-gray-600 text-lg max-w-2xl mx-auto mb-6 leading-relaxed">
                         La comunicación es la herramienta más poderosa que tiene el ser humano para relacionarse. El
-                        lenguaje que utilizas —la forma en que elegís expresarte y escuchar— no solo conecta con otros,
+                        lenguaje que usás —la forma en que elegís expresarte y escuchar— no solo conecta con otros,
                         sino que también define el mundo que creas y en el que vivís. <br class="hidden md:block">
                         Por eso, elegir cómo comunicarte es, en esencia, elegir el mundo que querés habitar.
                     </p>
@@ -268,53 +277,54 @@
 
                 <div class="grid md:grid-cols-3 gap-6">
                     <div
-                        class="bg-white p-8 rounded-3xl shadow-md hover:shadow-xl hover:-translate-y-1 transition duration-300 border border-brand-peach/30 text-center">
+                        class="bg-white p-8 rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition duration-300 border border-brand-sky/20 text-center">
                         <div
                             class="w-16 h-16 mx-auto bg-brand-lilac/20 rounded-full flex items-center justify-center mb-4 text-brand-lilac">
                             <i data-lucide="message-circle" class="w-8 h-8"></i>
                         </div>
-                        <h3 class="font-serif text-xl font-bold mb-2">Conecta de verdad</h3>
-                        <p class="text-gray-500 text-sm leading-relaxed">Observa cómo te comunicas en la vida real, en
-                            situaciones simples y complejas para dejar de sentir que no te entienden.</p>
+                        <h3 class="font-serif text-xl font-bold mb-2">Cuando no te entienden</h3>
+                        <p class="text-gray-500 text-sm leading-relaxed">Para esos momentos en los que hablás y sentís
+                            que del otro lado no llega lo que querías decir.</p>
                     </div>
                     <div
-                        class="bg-white p-8 rounded-3xl shadow-md hover:shadow-xl hover:-translate-y-1 transition duration-300 border border-brand-peach/30 text-center">
+                        class="bg-white p-8 rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition duration-300 border border-brand-pink/25 text-center">
                         <div
                             class="w-16 h-16 mx-auto bg-brand-pink/20 rounded-full flex items-center justify-center mb-4 text-brand-pink">
                             <i data-lucide="ear" class="w-8 h-8"></i>
                         </div>
-                        <h3 class="font-serif text-xl font-bold mb-2">Siente el Feedback</h3>
-                        <p class="text-gray-500 text-sm leading-relaxed">Logra un ida y vuelta real. Siente que te han
-                            escuchado, comprendido, y aprende a ponerte en los zapatos del otro.</p>
+                        <h3 class="font-serif text-xl font-bold mb-2">Cuando toca escuchar</h3>
+                        <p class="text-gray-500 text-sm leading-relaxed">Preguntas simples para bajar el ruido, estar
+                            presente y abrir un ida y vuelta más real.</p>
                     </div>
                     <div
-                        class="bg-white p-8 rounded-3xl shadow-md hover:shadow-xl hover:-translate-y-1 transition duration-300 border border-brand-peach/30 text-center">
+                        class="bg-white p-8 rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition duration-300 border border-brand-peach/40 text-center">
                         <div
                             class="w-16 h-16 mx-auto bg-brand-peach/30 rounded-full flex items-center justify-center mb-4 text-orange-400">
                             <i data-lucide="heart-handshake" class="w-8 h-8"></i>
                         </div>
-                        <h3 class="font-serif text-xl font-bold mb-2">Protege tus vínculos</h3>
-                        <p class="text-gray-500 text-sm leading-relaxed">Si alguna vez callaste por miedo a perder un
-                            vínculo o no supiste decir algo sin lastimar, este espacio es para vos.</p>
+                        <h3 class="font-serif text-xl font-bold mb-2">Cuando callás para cuidar</h3>
+                        <p class="text-gray-500 text-sm leading-relaxed">Una invitación a decir con honestidad y
+                            respeto, sin convertir el silencio en algo que pesa.</p>
                     </div>
                 </div>
             </section>
+
 
             <section id="autora" class="py-16 px-6 max-w-6xl mx-auto border-t border-brand-lilac/20">
                 <div class="flex flex-col md:flex-row items-center md:items-start gap-12">
                     <div class="md:w-1/2 relative">
                         <div
-                            class="absolute inset-0 bg-brand-gradient rounded-full transform -rotate-6 scale-105 opacity-50 blur-lg">
+                            class="absolute inset-0 bg-brand-gradient rounded-t-full rounded-b-[4rem] transform -rotate-2 scale-[1.02] opacity-25 blur-sm">
                         </div>
-                        <img src="cecilia.png" alt="Autora"
-                            class="relative rounded-t-full rounded-b-[4rem] border-8 border-white shadow-xl object-cover h-[450px] w-full">
-                        <div class="absolute -bottom-4 -right-4 bg-white p-2.5 rounded-full shadow-lg text-brand-pink">
-                            <img src="iconoweb.png" alt="Logo web" class="w-10 h-10 object-contain">
+                        <img src="assets/images/cecilia.png" alt="Autora"
+                            class="relative rounded-t-full rounded-b-[4rem] border-4 border-white/90 shadow-md object-cover h-[450px] w-full">
+                        <div class="absolute -bottom-4 -right-4 bg-white p-2.5 rounded-full shadow-md text-brand-pink">
+                            <img src="assets/images/iconoweb.png" alt="Logo web" class="w-10 h-10 object-contain">
                         </div>
                     </div>
 
                     <div class="md:w-1/2">
-                        <span class="text-brand-pink font-semibold tracking-wider uppercase text-sm mb-2 block">Conoce a
+                        <span class="text-brand-pink font-semibold tracking-wider uppercase text-sm mb-2 block">Conocé a
                             la autora</span>
                         <h2 class="font-serif text-4xl font-bold text-brand-text mb-2">Cecilia Karina Rosso</h2>
                         <h4 class="text-lg text-brand-lilac font-medium mb-6">Coach del Ser / Propósito de Vida</h4>
@@ -411,17 +421,17 @@
                     <div class="grid md:grid-cols-3 gap-6">
                         <div
                             class="glass-card rounded-2xl p-6 transform transition hover:-translate-y-2 group flex flex-col h-full">
-                            <div class="h-48 md:h-56 rounded-xl mb-4 flex items-center justify-center relative overflow-hidden bg-brand-light/30 border border-brand-lilac/20 cursor-pointer"
+                            <div class="h-48 md:h-56 rounded-xl mb-6 flex items-center justify-center relative overflow-hidden bg-brand-light/30 border border-brand-lilac/20 cursor-pointer"
                                 onclick="openProductModal()">
                                 <span
                                     class="bg-white/90 text-brand-text text-xs font-bold px-3 py-1 rounded-full absolute top-4 right-4 z-10 shadow-sm">Disponible</span>
-                                <img src="Libro.png" alt="Libro Comunicar"
+                                <img src="assets/images/libro.png" alt="Libro Comunicar"
                                     class="h-44 md:h-52 w-auto object-contain drop-shadow-md group-hover:scale-105 transition duration-300"
                                     onerror="this.src='https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&auto=format&fit=crop'">
                             </div>
-                            <h3 class="font-serif text-lg md:text-xl font-bold text-brand-text mb-1 cursor-pointer"
-                                onclick="openProductModal()">Comunicar para vivir más
-                                livianos</h3>
+                            <h3 class="font-serif text-lg md:text-xl font-bold text-brand-text mb-1 cursor-pointer min-h-[3rem] md:min-h-[3.5rem]"
+                                onclick="openProductModal()">Comunicar <span class="whitespace-nowrap">para vivir más
+                                    livianos</span></h3>
                             <p class="text-xs md:text-sm text-brand-text/70 mb-3">Vol. 1 - Comunicación y Vínculos</p>
 
                             <div class="mb-4 flex items-end gap-1.5 mt-auto">
@@ -441,17 +451,17 @@
                             </div>
                         </div>
 
-                        <div class="glass-card rounded-2xl p-6 opacity-70 transform transition hover:-translate-y-2">
+                        <div class="glass-card rounded-2xl p-6 opacity-90 transform transition hover:-translate-y-2 group flex flex-col h-full">
                             <div
-                                class="bg-brand-pink/60 h-48 rounded-xl mb-6 flex items-center justify-center border-2 border-dashed border-white/50">
+                                class="bg-white/45 h-48 md:h-56 rounded-xl mb-6 flex items-center justify-center border border-white/60 relative overflow-hidden">
+                                <div class="absolute inset-0 bg-book-cover-gradient opacity-60"></div>
                                 <span
-                                    class="bg-brand-text/10 text-brand-text text-xs font-bold px-3 py-1 rounded-full absolute top-4 right-4 backdrop-blur-md">Próximamente</span>
-                                <i data-lucide="lock" class="w-10 h-10 text-white/70"></i>
+                                    class="bg-white/90 text-brand-text text-xs font-bold px-3 py-1 rounded-full absolute top-4 right-4 z-10 shadow-sm">Próximamente</span>
+                                <i data-lucide="sparkles" class="w-10 h-10 text-white/85 relative z-10"></i>
                             </div>
-                            <h3 class="font-serif text-xl font-bold text-brand-text text-gra mb-2">*Proximamente*
+                            <h3 class="font-serif text-lg md:text-xl font-bold text-brand-text mb-1 min-h-[3rem] md:min-h-[3.5rem]">Próximo volumen
                             </h3>
-                            <p class="text-sm text-brand-text/70 mb-4">*Proximamente*</p>
-                            <span class="text-brand-text/50 text-sm italic">En desarrollo</span>
+                            <span class="text-brand-text/50 text-sm italic">En preparación</span>
                         </div>
                     </div>
                 </div>
@@ -462,7 +472,7 @@
                 class="py-16 px-6 max-w-4xl mx-auto border-t border-brand-lilac/20 relative z-10 w-full bg-brand-light">
                 <div class="text-center mb-10">
                     <h2 class="font-serif text-3xl font-bold text-brand-text mb-2">Preguntas Frecuentes</h2>
-                    <p class="text-gray-500">Todo lo que necesitas saber antes de tu compra.</p>
+                    <p class="text-gray-500">Todo lo que necesitás saber antes de tu compra.</p>
                 </div>
                 <div class="space-y-4">
                     <div
@@ -493,8 +503,8 @@
                         <div class="max-h-0 overflow-hidden transition-all duration-300 px-5" style="max-height: 0px;">
                             <p class="text-gray-600 text-sm pb-5 border-t border-gray-100 pt-3">
                                 Sí, hacemos envíos a toda la República Argentina a través de empresas logísticas
-                                confiables. Puedes cotizar el envío directamente en el Carrito ingresando tu Código
-                                Postal.
+                                confiables. Podés cotizar el envío directamente en el carrito ingresando tu código
+                                postal.
                             </p>
                         </div>
                     </div>
@@ -561,8 +571,8 @@
                         <div class="flex flex-col items-center z-10">
                             <div class="book-container relative w-40 sm:w-56 md:w-48 lg:w-64">
                                 <div class="book-3d-wrapper" style="position: relative; width: 100%;">
-                                    <img id="book-front-img" src="Libro.png" alt="Portada del libro"
-                                        class="w-full h-auto drop-shadow-2xl rounded-sm object-contain">
+                                    <img id="book-front-img" src="assets/images/libro.png" alt="Portada del libro"
+                                        class="w-full h-auto drop-shadow-lg rounded-sm object-contain">
                                 </div>
                             </div>
                             <div class="flex gap-4 mt-4 md:mt-4">
@@ -581,8 +591,7 @@
                             - Vol. 1</span>
                         <h1
                             class="font-serif text-2xl md:text-3xl lg:text-4xl font-bold text-brand-text mb-1 md:mb-1 leading-tight">
-                            Comunicar para vivir
-                            más livianos</h1>
+                            Comunicar <span class="whitespace-nowrap">para vivir más livianos</span></h1>
                         <p class="text-brand-lilac font-medium mb-3 md:mb-4 text-sm md:text-sm">Por Cecilia Karina Rosso
                         </p>
 
@@ -593,7 +602,7 @@
 
                         <div class="text-gray-600 leading-snug md:leading-snug mb-4 md:mb-4 space-y-1.5 md:space-y-2">
                             <p class="text-xs md:text-sm hidden sm:block">Una invitación a observar cómo nos comunicamos
-                                en la vida real. Descubre formas más
+                                en la vida real. Descubrí formas más
                                 claras y humanas de decir, escuchar y convivir para tener <span
                                     class="font-bold italic">"conversaciones posibles"</span>.</p>
                             <p class="text-xs md:text-xs text-gray-500 italic"><i data-lucide="info"
@@ -652,7 +661,7 @@
                             <p class="text-gray-600 mb-2 font-medium">Estamos procesando tu orden.</p>
                             <p class="text-gray-500 text-sm">Recibirás un correo de confirmación en breve. Por favor,
                                 revisa tu bandeja de entrada y la carpeta de Spam.</p>
-                            <p class="text-gray-500 text-sm italic mt-3">Cualquier duda, contáctanos en Instagram: <a
+                            <p class="text-gray-500 text-sm italic mt-3">Cualquier duda, escribinos en Instagram: <a
                                     href="https://instagram.com/ceciliarosso.coach" target="_blank"
                                     class="text-brand-lilac hover:underline">@ceciliarosso.coach</a></p>
                         </div>
@@ -693,9 +702,9 @@
                                 <h3 class="text-xl font-bold text-brand-text mb-2 mt-6">1. Responsable del tratamiento
                                     de datos</h3>
                                 <p><strong>Cecilia Karina Rosso</strong><br>
-                                    Email: tu correo<br>
+                                    Email: rossoceci@gmail.com<br>
                                     WhatsApp: +54 9 11 2318-9132<br>
-                                    Sitio web: tu dominio</p>
+                                    Sitio web: https://ceciliarosso.netlify.app/</p>
 
                                 <h3 class="text-xl font-bold text-brand-text mb-2 mt-6">2. Datos personales que
                                     recolectamos</h3>
@@ -711,7 +720,7 @@
                                     <strong class="flex items-center gap-2 text-brand-pink mb-1"><i data-lucide="lock"
                                             class="w-4 h-4"></i> Trato seguro</strong>
                                     No recolectamos datos sensibles ni bancarios. Todos los pagos con tarjetas son
-                                    procesados directamente y con máxima seguridad por MercadoPago.
+                                    procesados directamente y con máxima seguridad por Mercado Pago.
                                 </div>
 
                                 <h3 class="text-xl font-bold text-brand-text mb-2 mt-6">3. Finalidad del tratamiento
@@ -723,7 +732,7 @@
                                 <h3 class="text-xl font-bold text-brand-text mb-2 mt-6">4. Compartición de datos con
                                     terceros</h3>
                                 <ul class="list-disc pl-5 space-y-1">
-                                    <li><strong>MercadoPago:</strong> Plataforma externa y obligatoria para el
+                                    <li><strong>Mercado Pago:</strong> Plataforma externa y obligatoria para el
                                         procesamiento del pago online (mercadopago.com.ar).</li>
                                     <li><strong>WhatsApp:</strong> Canal formal para coordinar envíos de forma manual.
                                     </li>
@@ -797,7 +806,8 @@
         <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-4 gap-10 md:gap-8">
             <div class="col-span-2">
                 <div class="font-serif text-2xl font-bold text-white tracking-wide mb-4 flex items-center gap-3">
-                    <img src="iconoweb.png" alt="CR Logo" class="w-10 h-10 rounded-xl object-contain bg-white/10 p-1">
+                    <img src="assets/images/iconoweb.png" alt="CR Logo"
+                        class="w-10 h-10 rounded-xl object-contain bg-white/10 p-1">
                     <span>Cecilia <span class="font-light italic text-brand-pink">Rosso</span></span>
                 </div>
                 <p class="max-w-xs text-sm mb-6">
@@ -813,11 +823,13 @@
                                 d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z" />
                         </svg>
                     </a>
-                    <a href="#"
+                    <a href="mailto:rossoceci@gmail.com"
                         class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-pink hover:text-white transition">
                         <i data-lucide="mail" class="w-5 h-5"></i>
                     </a>
                 </div>
+                <a href="mailto:rossoceci@gmail.com"
+                    class="mt-4 inline-flex text-sm text-white/70 hover:text-brand-peach transition">rossoceci@gmail.com</a>
             </div>
 
             <div>
@@ -858,9 +870,9 @@
         </div>
     </footer>
 
-    <script src="js/data.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/cart.js"></script>
+    <script src="src/js/data.js"></script>
+    <script src="src/js/main.js"></script>
+    <script src="src/js/cart.js"></script>
 </body>
 
 </html>
