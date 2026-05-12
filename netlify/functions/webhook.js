@@ -434,12 +434,22 @@ async function sendWhatsApp(metadata, shippingRecord = {}) {
 
 async function registerOrderInSheets(row) {
     const scriptUrl = (process.env.GOOGLE_SHEETS_URL || '').trim();
+    const sheetsSecret = (process.env.GOOGLE_SHEETS_SECRET || '').trim();
+
     if (!scriptUrl || !scriptUrl.includes('script.google.com')) {
         console.log('No se registra en Google Sheets porque falta GOOGLE_SHEETS_URL.');
         return;
     }
 
-    await postJson(scriptUrl, row);
+    if (!sheetsSecret) {
+        console.log('No se registra en Google Sheets porque falta GOOGLE_SHEETS_SECRET.');
+        return;
+    }
+
+    await postJson(scriptUrl, {
+        ...row,
+        token: sheetsSecret
+    });
 }
 
 function buildSheetRow({ paymentId, paymentData, metadata, shipmentRecord, zipnovaError }) {
