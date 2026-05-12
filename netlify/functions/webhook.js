@@ -1,4 +1,5 @@
 const shippingProviderService = require('./lib/shipping-provider-service');
+const { getStore } = require('@netlify/blobs');
 const {
     calculateSubtotal,
     normalizeAddress,
@@ -6,6 +7,9 @@ const {
     numberOrZero,
     validateShippingOption
 } = require('./lib/shipping-utils');
+
+const WEBHOOK_LOCK_STORE = 'mp-webhook-payments';
+const PROCESSING_LOCK_TTL_MS = 10 * 60 * 1000;
 
 function getPaymentId(body) {
     if (body?.['data.id']) return body['data.id'];
@@ -159,6 +163,65 @@ function normalizeShipmentResult(result = {}) {
         carrier_name: result.carrier_name || '',
         shipping_status: result.status || ''
     };
+}
+
+function getPaymentLockStore() {
+    return getStore({
+        fetch,
+        name: WEBHOOK_LOCK_STORE
+    });
+}
+
+function buildPaymentLockKey(paymentId) {
+    return `payment-${paymentId}`;
+}
+
+function isFreshProcessingLock(record) {
+    if (record?.status !== 'processing' || !record?.started_at) return false;
+
+    const startedAt = new Date(record.started_at).getTime();
+    if (!Number.isFinite(startedAt)) return false;
+
+    return Date.now() - startedAt < PROCESSING_LOCK_TTL_MS;
+}
+
+async function acquirePaymentProcessingLock(paymentId) {
+    try {
+        const store = getPaymentLockStore();
+        const key = buildPaymentLockKey(paymentId);
+        const existing = await store.get(key, { type: 'json' });
+
+        if (existing?.status === 'completed' || isFreshProcessingLock(existing)) {
+            return { shouldProcess: false, record: existing };
+        }
+
+        const lockRecord = {
+            status: 'processing',
+            payment_id: String(paymentId),
+            started_at: new Date().toISOString()
+        };
+
+        await store.setJSON(key, lockRecord);
+        return { shouldProcess: true, key, store, record: lockRecord };
+    } catch (error) {
+        console.warn('No se pudo usar Netlify Blobs para idempotencia:', error.message || error);
+        return { shouldProcess: true, unavailable: true };
+    }
+}
+
+async function completePaymentProcessingLock(lock, data = {}) {
+    if (!lock?.store || !lock?.key) return;
+
+    try {
+        await lock.store.setJSON(lock.key, {
+            ...lock.record,
+            ...data,
+            status: 'completed',
+            completed_at: new Date().toISOString()
+        });
+    } catch (error) {
+        console.warn('No se pudo marcar el webhook como procesado:', error.message || error);
+    }
 }
 
 function buildNotificationContext({ metadata, shippingRecord = {} }) {
@@ -455,11 +518,18 @@ exports.handler = async (event) => {
 
         if (isPaidApprovedPayment(paymentData)) {
             let orderData;
+            let processingLock;
             try {
                 orderData = validateOrderMetadata(metadata, paymentData);
             } catch (error) {
                 console.warn(`Webhook aprobado ignorado: ${error.message || error}. Payment ID: ${paymentId}`);
                 return { statusCode: 200, body: 'Orden aprobada ignorada por metadata invalida' };
+            }
+
+            processingLock = await acquirePaymentProcessingLock(paymentId);
+            if (!processingLock.shouldProcess) {
+                console.log(`Webhook duplicado ignorado. Payment ID: ${paymentId}`);
+                return { statusCode: 200, body: 'Webhook duplicado ignorado' };
             }
 
             try {
@@ -489,6 +559,13 @@ exports.handler = async (event) => {
             } catch (error) {
                 console.error('Error enviando WhatsApp:', error.message || error);
             }
+
+            await completePaymentProcessingLock(processingLock, {
+                order_id: metadataValue(metadata, 'order_id', ''),
+                zipnova_shipment_id: shipmentRecord.zipnova_shipment_id || '',
+                tracking_number: shipmentRecord.tracking_number || '',
+                zipnova_error: zipnovaError || ''
+            });
         } else if (paymentData.status === 'approved') {
             console.warn(`Webhook aprobado ignorado: pago no acreditado de forma valida. Payment ID: ${paymentId}, status_detail: ${paymentData.status_detail || 'sin detalle'}`);
             return { statusCode: 200, body: 'Pago aprobado no acreditado ignorado' };
