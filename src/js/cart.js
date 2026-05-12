@@ -502,11 +502,8 @@ async function handleCheckout(e) {
         const data = await response.json();
 
         if (response.ok && data.init_point) {
-            cart = [];
-            updateCartUI();
             closeModal();
-            window.open(data.init_point, '_blank');
-            showPage('success-view');
+            window.location.href = data.init_point;
         } else {
             throw new Error(data.error || "Error en Mercado Pago");
         }
