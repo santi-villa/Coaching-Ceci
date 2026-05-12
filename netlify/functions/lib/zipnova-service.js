@@ -8,6 +8,7 @@ const {
 
 const ZIPNOVA_BASE_URL = 'https://api.zipnova.com.ar/v2';
 const DEFAULT_ACCOUNT_ID = 21020;
+const DEFAULT_ORIGIN_ID = 377048;
 const ORIGIN_ZIPCODE = '1414';
 
 function getAuthHeader() {
@@ -23,6 +24,10 @@ function getAuthHeader() {
 
 function getAccountId() {
     return Number(process.env.ZIPNOVA_ACCOUNT_ID || process.env.ZIPPIN_ACCOUNT_ID || DEFAULT_ACCOUNT_ID);
+}
+
+function getOriginId() {
+    return Number(process.env.ZIPNOVA_ORIGIN_ID || process.env.ZIPPIN_ORIGIN_ID || DEFAULT_ORIGIN_ID);
 }
 
 function getPrice(rate = {}) {
@@ -81,7 +86,8 @@ function buildPackage(cartItems) {
         width: dimensions.width,
         height: dimensions.height,
         weight: dimensions.weightGrams,
-        classification_id: dimensions.classification_id
+        classification_id: dimensions.classification_id,
+        description_1: 'Comunicar para vivir mas livianos'
     };
 }
 
@@ -133,11 +139,12 @@ async function createShipment({ paymentId, customer, address, cartItems, declare
     const externalId = `MP-${paymentId}`;
     const payload = {
         account_id: getAccountId(),
+        origin_id: getOriginId(),
         external_id: externalId,
         logistic_type: shippingQuote?.logistic_type,
         service_type: shippingQuote?.service_type,
         declared_value: Math.max(1, Math.round(numberOrZero(declaredValue))),
-        origin: { zipcode: ORIGIN_ZIPCODE },
+        source: 'ceciliarosso-web',
         destination: {
             name: customer?.name || 'Comprador',
             document: customer?.dni || '0',
