@@ -1,4 +1,5 @@
 const shippingProviderService = require('./lib/shipping-provider-service');
+const { randomUUID } = require('crypto');
 const { getStore } = require('@netlify/blobs');
 const {
     calculateSubtotal,
@@ -10,6 +11,11 @@ const {
 
 const WEBHOOK_LOCK_STORE = 'mp-webhook-payments';
 const PROCESSING_LOCK_TTL_MS = 10 * 60 * 1000;
+const LOCK_CONFIRMATION_DELAY_MS = 250;
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 function getPaymentId(body) {
     if (body?.['data.id']) return body['data.id'];
@@ -24,9 +30,7 @@ function getPaymentId(body) {
 
 function isPaymentNotification(body) {
     return body?.type === 'payment' ||
-        body?.topic === 'payment' ||
-        body?.action?.startsWith('payment.') ||
-        (typeof body?.resource === 'string' && body.resource.includes('/payments/'));
+        body?.action?.startsWith('payment.');
 }
 
 function metadataValue(metadata, key, fallback = '') {
@@ -198,10 +202,18 @@ async function acquirePaymentProcessingLock(paymentId) {
         const lockRecord = {
             status: 'processing',
             payment_id: String(paymentId),
+            owner: randomUUID(),
             started_at: new Date().toISOString()
         };
 
         await store.setJSON(key, lockRecord);
+        await sleep(LOCK_CONFIRMATION_DELAY_MS);
+
+        const confirmed = await store.get(key, { type: 'json' });
+        if (confirmed?.owner !== lockRecord.owner) {
+            return { shouldProcess: false, record: confirmed };
+        }
+
         return { shouldProcess: true, key, store, record: lockRecord };
     } catch (error) {
         console.warn('No se pudo usar Netlify Blobs para idempotencia:', error.message || error);
@@ -446,10 +458,22 @@ async function registerOrderInSheets(row) {
         return;
     }
 
-    await postJson(scriptUrl, {
+    const response = await postJson(scriptUrl, {
         ...row,
         token: sheetsSecret
     });
+    const text = await response.text();
+
+    let result;
+    try {
+        result = JSON.parse(text);
+    } catch (error) {
+        throw new Error(`Respuesta invalida de Google Sheets: ${text.slice(0, 300)}`);
+    }
+
+    if (result.result !== 'success') {
+        throw new Error(`Google Sheets rechazo la venta: ${result.error || text}`);
+    }
 }
 
 function buildSheetRow({ paymentId, paymentData, metadata, shipmentRecord, zipnovaError }) {
@@ -490,7 +514,9 @@ function buildSheetRow({ paymentId, paymentData, metadata, shipmentRecord, zipno
         telefono: customerPhone,
         tipo_entrega: shippingMethod,
         direccion: addressLine,
+        address: addressLine,
         estado: sheetStatus,
+        delivery_type: metadataValue(metadata, 'delivery_type', 'shipping'),
         order_id: metadataValue(metadata, 'order_id', paymentData.external_reference || `MP-${paymentId}`),
         payment_id: String(paymentId),
         merchant_order_id: String(paymentData.order?.id || paymentData.merchant_order_id || ''),
@@ -551,6 +577,11 @@ exports.handler = async (event) => {
         };
 
         const paymentId = getPaymentId(body);
+        if (body?.topic === 'payment' && body?.type !== 'payment' && !body?.action?.startsWith('payment.')) {
+            console.log(`Webhook Mercado Pago topic=payment ignorado para evitar doble procesamiento. Payment ID: ${paymentId || 'sin id'}`);
+            return { statusCode: 200, body: 'Webhook payment legacy ignorado' };
+        }
+
         if (!isPaymentNotification(body) || !paymentId) {
             return { statusCode: 200, body: 'OK' };
         }
