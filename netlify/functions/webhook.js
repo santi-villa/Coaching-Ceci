@@ -433,8 +433,11 @@ async function sendWhatsApp(metadata, shippingRecord = {}) {
 }
 
 async function registerOrderInSheets(row) {
-    const scriptUrl = process.env.GOOGLE_SHEETS_URL || 'https://script.google.com/macros/s/AKfycbyXPXUuMBJnMNpKOeD6vuzEf_AkCKE5weYlVh6Qj4fmzyyV3Jl_mWBwgbMRz24ZLQcl1Q/exec';
-    if (!scriptUrl || !scriptUrl.includes('script.google.com')) return;
+    const scriptUrl = (process.env.GOOGLE_SHEETS_URL || '').trim();
+    if (!scriptUrl || !scriptUrl.includes('script.google.com')) {
+        console.log('No se registra en Google Sheets porque falta GOOGLE_SHEETS_URL.');
+        return;
+    }
 
     await postJson(scriptUrl, row);
 }
@@ -451,17 +454,42 @@ function buildSheetRow({ paymentId, paymentData, metadata, shipmentRecord, zipno
     const productQuantity = normalizedCartItems.reduce((sum, item) => {
         return sum + Math.max(0, Math.trunc(numberOrZero(item.quantity || 0)));
     }, 0);
+    const customerName = metadataValue(metadata, 'customer_name', '');
+    const customerDni = metadataValue(metadata, 'customer_dni', '');
+    const customerEmail = metadataValue(metadata, 'customer_email', '');
+    const customerPhone = metadataValue(metadata, 'customer_phone', '');
+    const shippingMethod = metadataValue(metadata, 'shipping_method_visible', 'Envio a domicilio');
+    const addressLine = [
+        `${address.street} ${address.number}`.trim(),
+        address.apartment,
+        address.city,
+        address.province,
+        address.postalCode ? `CP ${address.postalCode}` : ''
+    ].filter(Boolean).join(', ');
+    const sheetStatus = zipnovaError
+        ? 'Pago aprobado - error al crear envio'
+        : shipmentRecord.tracking_number
+            ? 'Pago aprobado - envio creado'
+            : orderStatus;
 
     return {
+        fecha_venta: paymentData.date_created || now,
+        nombre_cliente: customerName,
+        dni: customerDni,
+        email: customerEmail,
+        telefono: customerPhone,
+        tipo_entrega: shippingMethod,
+        direccion: addressLine,
+        estado: sheetStatus,
         order_id: metadataValue(metadata, 'order_id', paymentData.external_reference || `MP-${paymentId}`),
         payment_id: String(paymentId),
         merchant_order_id: String(paymentData.order?.id || paymentData.merchant_order_id || ''),
         preference_id: paymentData.preference_id || '',
         payment_method: paymentData.payment_method_id || paymentData.payment_type_id || '',
-        customer_name: metadataValue(metadata, 'customer_name', ''),
-        customer_dni: metadataValue(metadata, 'customer_dni', ''),
-        customer_email: metadataValue(metadata, 'customer_email', ''),
-        customer_phone: metadataValue(metadata, 'customer_phone', ''),
+        customer_name: customerName,
+        customer_dni: customerDni,
+        customer_email: customerEmail,
+        customer_phone: customerPhone,
         product_items: productItems,
         product_quantity: productQuantity,
         shipping_postal_code: address.postalCode,
@@ -470,7 +498,7 @@ function buildSheetRow({ paymentId, paymentData, metadata, shipmentRecord, zipno
         shipping_street: address.street,
         shipping_number: address.number,
         shipping_apartment: address.apartment,
-        shipping_method_visible: metadataValue(metadata, 'shipping_method_visible', 'Envio a domicilio'),
+        shipping_method_visible: shippingMethod,
         shipping_price: numberOrZero(metadataValue(metadata, 'shipping_cost', 0)),
         shipping_option_snapshot: metadataValue(metadata, 'shipping_option_snapshot', ''),
         subtotal: numberOrZero(metadataValue(metadata, 'subtotal', 0)),
