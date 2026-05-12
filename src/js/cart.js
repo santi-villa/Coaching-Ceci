@@ -251,6 +251,23 @@ function updateCheckoutSummary() {
     totalEl.textContent = formatMoney(subtotal + quotedShippingCost);
 }
 
+function showMercadoPagoRedirect() {
+    const overlay = document.getElementById('mp-redirect-overlay');
+    if (!overlay) return;
+    overlay.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    if (typeof lucide !== 'undefined') lucide.createIcons({ root: overlay });
+}
+
+function hideMercadoPagoRedirect() {
+    const overlay = document.getElementById('mp-redirect-overlay');
+    if (!overlay) return;
+    overlay.classList.add('hidden');
+    if (typeof isCartOpen === 'undefined' || !isCartOpen) {
+        document.body.style.overflow = 'auto';
+    }
+}
+
 function updateCartUI() {
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     if (totalItems > 0) {
@@ -476,6 +493,7 @@ async function handleCheckout(e) {
 
     try {
         clearCheckoutMessage();
+        showMercadoPagoRedirect();
         const response = await fetch('/.netlify/functions/checkout', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -502,13 +520,13 @@ async function handleCheckout(e) {
         const data = await response.json();
 
         if (response.ok && data.init_point) {
-            closeModal();
             window.location.href = data.init_point;
         } else {
             throw new Error(data.error || "Error en Mercado Pago");
         }
     } catch (error) {
         console.error("Error al ejecutar fetch:", error);
+        hideMercadoPagoRedirect();
         btn.innerHTML = originalText;
         btn.classList.remove('opacity-75', 'cursor-not-allowed');
         btn.disabled = false;

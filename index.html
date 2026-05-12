@@ -57,7 +57,7 @@
 
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <link rel="stylesheet" href="src/css/styles.css?v=2">
+    <link rel="stylesheet" href="src/css/styles.css?v=3">
 </head>
 
 <body class="font-sans text-brand-text bg-brand-light antialiased selection:bg-brand-pink selection:text-white">
@@ -802,6 +802,24 @@
 
     </main>
 
+    <div id="mp-redirect-overlay"
+        class="fixed inset-0 z-[120] hidden bg-brand-text/92 text-white px-6 py-10">
+        <div class="min-h-full flex items-center justify-center">
+            <div class="mp-redirect-panel w-full max-w-md text-center">
+                <div class="mp-redirect-mark mx-auto mb-7">
+                    <i data-lucide="credit-card" class="w-9 h-9"></i>
+                </div>
+                <p class="uppercase tracking-[0.26em] text-xs font-bold text-white/70 mb-3">Pago seguro</p>
+                <h2 class="font-serif text-4xl sm:text-5xl font-bold leading-tight mb-4">Redirigiendo a Mercado Pago</h2>
+                <p class="text-white/78 leading-relaxed mb-7">Estamos preparando tu compra. No cierres esta ventana ni vuelvas atrás.</p>
+                <div class="mp-redirect-bar" aria-hidden="true">
+                    <span></span>
+                </div>
+                <p class="mt-5 text-xs text-white/55">Si tarda unos segundos, es normal.</p>
+            </div>
+        </div>
+    </div>
+
     <footer class="bg-brand-text text-white/80 py-12 border-t-8 border-brand-lilac">
         <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-4 gap-10 md:gap-8">
             <div class="col-span-2">
@@ -872,7 +890,7 @@
 
     <script src="src/js/data.js"></script>
     <script src="src/js/main.js"></script>
-    <script src="src/js/cart.js"></script>
+    <script src="src/js/cart.js?v=3"></script>
 </body>
 
 </html>
