@@ -443,13 +443,27 @@ function buildSheetRow({ paymentId, paymentData, metadata, shipmentRecord, zipno
     const address = getAddress(metadata);
     const now = new Date().toISOString();
     const orderStatus = paymentData.status === 'approved' ? 'paid' : paymentData.status;
+    const cartItems = parseJsonMetadata(metadata, 'cart_snapshot', []);
+    const normalizedCartItems = Array.isArray(cartItems) ? cartItems : [];
+    const productItems = normalizedCartItems
+        .map(item => `${item.title || item.id || 'Producto'} x${Math.max(1, Math.trunc(numberOrZero(item.quantity || 1)))}`)
+        .join(', ');
+    const productQuantity = normalizedCartItems.reduce((sum, item) => {
+        return sum + Math.max(0, Math.trunc(numberOrZero(item.quantity || 0)));
+    }, 0);
 
     return {
         order_id: metadataValue(metadata, 'order_id', paymentData.external_reference || `MP-${paymentId}`),
         payment_id: String(paymentId),
+        merchant_order_id: String(paymentData.order?.id || paymentData.merchant_order_id || ''),
+        preference_id: paymentData.preference_id || '',
+        payment_method: paymentData.payment_method_id || paymentData.payment_type_id || '',
         customer_name: metadataValue(metadata, 'customer_name', ''),
+        customer_dni: metadataValue(metadata, 'customer_dni', ''),
         customer_email: metadataValue(metadata, 'customer_email', ''),
         customer_phone: metadataValue(metadata, 'customer_phone', ''),
+        product_items: productItems,
+        product_quantity: productQuantity,
         shipping_postal_code: address.postalCode,
         shipping_province: address.province,
         shipping_city: address.city,
@@ -468,6 +482,7 @@ function buildSheetRow({ paymentId, paymentData, metadata, shipmentRecord, zipno
         tracking_number: shipmentRecord.tracking_number || '',
         tracking_url: shipmentRecord.tracking_url || '',
         label_url: shipmentRecord.label_url || '',
+        carrier_name: shipmentRecord.carrier_name || metadataValue(metadata, 'shipping_carrier_name', ''),
         zipnova_error: zipnovaError || '',
         created_at: paymentData.date_created || now,
         updated_at: now
