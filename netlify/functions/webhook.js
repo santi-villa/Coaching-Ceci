@@ -476,6 +476,16 @@ async function registerOrderInSheets(row) {
     }
 }
 
+async function registerPaidOrderInSheets({ paymentId, paymentData, metadata, shipmentRecord, zipnovaError }) {
+    try {
+        const sheetRow = buildSheetRow({ paymentId, paymentData, metadata, shipmentRecord, zipnovaError });
+        await registerOrderInSheets(sheetRow);
+        console.log('Venta registrada en Google Sheets.');
+    } catch (error) {
+        console.error('Error registrando en Google Sheets:', error.message || error);
+    }
+}
+
 function buildSheetRow({ paymentId, paymentData, metadata, shipmentRecord, zipnovaError }) {
     const address = getAddress(metadata);
     const now = new Date().toISOString();
@@ -644,6 +654,8 @@ exports.handler = async (event) => {
                 console.error('Error enviando WhatsApp:', error.message || error);
             }
 
+            await registerPaidOrderInSheets({ paymentId, paymentData, metadata, shipmentRecord, zipnovaError });
+
             await completePaymentProcessingLock(processingLock, {
                 order_id: metadataValue(metadata, 'order_id', ''),
                 zipnova_shipment_id: shipmentRecord.zipnova_shipment_id || '',
@@ -653,14 +665,6 @@ exports.handler = async (event) => {
         } else if (paymentData.status === 'approved') {
             console.warn(`Webhook aprobado ignorado: pago no acreditado de forma valida. Payment ID: ${paymentId}, status_detail: ${paymentData.status_detail || 'sin detalle'}`);
             return { statusCode: 200, body: 'Pago aprobado no acreditado ignorado' };
-        }
-
-        try {
-            const sheetRow = buildSheetRow({ paymentId, paymentData, metadata, shipmentRecord, zipnovaError });
-            await registerOrderInSheets(sheetRow);
-            console.log('Venta registrada en Google Sheets.');
-        } catch (error) {
-            console.error('Error registrando en Google Sheets:', error.message || error);
         }
 
         return { statusCode: 200, body: 'OK' };
