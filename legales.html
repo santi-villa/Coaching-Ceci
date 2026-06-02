@@ -1,80 +1,167 @@
----
-Política de Privacidad y Términos y Condiciones
-Última actualización: Abril 2026
----
-🔒 Política de Privacidad
-1. Responsable del tratamiento de datos
-Cecilia Karina Rosso
-Email: tu email
-WhatsApp: +54 9 11 2318-9132
-Sitio web: tu dominio
-2. Datos personales que recolectamos
-Para procesar tu compra recolectamos:
-- Nombre completo
-- Teléfono (10 a 13 dígitos, sin 0 ni 15)
-- Dirección, ciudad, código postal y provincia (solo si elegís envío a domicilio)
-- Email (solo si te suscribís a la newsletter)
-No recolectamos datos sensibles ni información bancaria. Los pagos con tarjeta son procesados directamente por
-MercadoPago.
-3. Finalidad del tratamiento
-Los datos se utilizan exclusivamente para:
-- Procesar y entregar tu pedido del libro "Comunicar para vivir más livianos"
-- Contactarte sobre el estado de tu compra
-- Enviarte la newsletter (solo si te suscribiste voluntariamente)
-4. Base legal
-El tratamiento de datos se basa en el consentimiento del usuario al completar el formulario de compra o suscripción, y
-en la ejecución de una compraventa (Ley 25.326 de Protección de los Datos Personales, Argentina).
-5. Compartición de datos con terceros
-Tus datos pueden ser compartidos con:
-- MercadoPago: procesamiento de pagos online. Su propia política aplica (www.mercadopago.com.ar)
-- WhatsApp (Meta): si elegís coordinar por WhatsApp, los datos viajan por esa plataforma
-- Brevo (Sendinblue): para gestión de la newsletter
-- Google Fonts / Tailwind CSS: cargan recursos visuales desde sus servidores (solo datos técnicos)
-No vendemos ni transferimos tus datos a otros terceros.
-6. Almacenamiento y seguridad
-- No contamos con base de datos propia; los pedidos se procesan vía MercadoPago o WhatsApp
-- Usamos localStorage del navegador únicamente para guardar el contenido del carrito
-- El token de acceso de MercadoPago está protegido en el servidor (Netlify Functions)
-7. Derechos del usuario (Ley 25.326)
-Podés ejercer tus derechos de acceso, rectificación, actualización y supresión de tus datos personales contactándonos
-por WhatsApp o email.
-> La Agencia de Acceso a la Información Pública, Órgano de Control de la Ley Nº 25.326, tiene la atribución de atender
-las denuncias y reclamos que interpongan quienes resulten afectados en sus derechos por tratamiento de sus datos
-personales.
-8. Cookies y tecnologías similares
-Este sitio utiliza localStorage para el funcionamiento del carrito de compras. No utilizamos cookies de rastreo ni
-publicitarias.
----
-📋 Términos y Condiciones
-1. Objeto
-Este sitio ofrece la venta del libro físico "Comunicar para vivir más livianos" (Tomo 1), de autoría de Cecilia Karina
-Rosso, con tapa blanda y aproximadamente 200 páginas.
-2. Precios y formas de pago
-- Precio del libro: $25.000 ARS (precio sujeto a cambios sin previo aviso)
-- Costo de envío: $2.300 ARS adicionales si se elige envío a domicilio
-Métodos de pago aceptados:
-1. MercadoPago: pagos online con tarjeta u otros medios disponibles en la plataforma
-2. Efectivo: pago en efectivo al retirar el libro personalmente
-3. WhatsApp: coordinación directa del pago y entrega vía mensaje
-3. Entrega
-- Retiro en persona: Zona Norte, Gran Buenos Aires (GBA). Se coordinará fecha y hora por WhatsApp.
-- Envío a domicilio: se enviará a la dirección provista. Los plazos y modalidad de envío se coordinarán tras la compra.
-4. Proceso de compra
-Al hacer clic en "Finalizar compra", el usuario declara que toda la información provista es verídica. El pedido se
-confirma una vez verificado el pago (en caso de MercadoPago) o recibido el mensaje de WhatsApp.
-5. Política de reembolsos y devoluciones
-- Una vez entregado el libro, no se aceptan devoluciones salvo defectos de impresión o daños durante el envío (debe
-notificarse dentro de las 48 horas de recibido)
-- Si se realizó un pago por MercadoPago y el pedido no se concreta, se coordinará el reintegro del importe abonado
-6. Propiedad intelectual
-Todo el contenido de este sitio (textos, imágenes, diseño, logo) es propiedad de Cecilia Karina Rosso. Queda prohibida
-la reproducción total o parcial sin autorización expresa.
-7. Aviso sobre MercadoPago
-> Los pagos realizados a través de este sitio están sujetos a las Políticas de Privacidad y Términos y Condiciones de
-MercadoPago. Para más información visite www.mercadopago.com.ar.
-8. Jurisdicción
-Este acuerdo se rige por las leyes de la República Argentina. Ante cualquier controversia, las partes se someten a los
-tribunales ordinarios de la Provincia de Buenos Aires.
----
-© 2026 Cecilia Karina Rosso. Todos los derechos reservados.
----
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legales - Cecilia Karina Rosso</title>
+    <link rel="icon" type="image/png" href="assets/images/iconoweb.png">
+    <link rel="apple-touch-icon" href="assets/images/iconoweb.png">
+    <meta name="description" content="Política de privacidad, términos y condiciones de Cecilia Karina Rosso.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            lilac: '#5BA8A6',
+                            text: '#3A3028',
+                            light: '#F4E9D8',
+                            peach: '#EADBC5',
+                            cream: '#FFF8EC'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="src/css/styles.css?v=15">
+</head>
+<body class="bg-brand-light text-brand-text font-sans antialiased min-h-screen">
+    <main class="relative overflow-hidden min-h-screen py-12 px-6 bg-section-plain">
+
+
+
+
+        <article class="max-w-4xl mx-auto bg-card-soft rounded-3xl shadow-xl border border-brand-lilac/20 p-7 md:p-12 relative overflow-hidden">
+            <div class="absolute inset-0 bg-brand-cream/70 mix-blend-overlay pointer-events-none"></div>
+            <div class="relative z-10">
+                <a href="index.html" class="inline-flex items-center gap-2 text-brand-text/70 hover:text-brand-text transition mb-8 font-medium bg-brand-cream border border-brand-lilac/20 px-5 py-2.5 rounded-full shadow-sm">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i> Volver al inicio
+                </a>
+
+                <p class="uppercase tracking-[0.24em] text-xs font-bold text-brand-lilac mb-3">Información legal</p>
+                <h1 class="font-serif text-4xl md:text-5xl font-bold mb-4">Política de Privacidad y Términos</h1>
+                <p class="text-brand-lilac font-medium mb-10 pb-6 border-b border-brand-lilac/20">Última actualización: Abril 2026</p>
+
+                <section class="space-y-5 text-brand-text/70 leading-relaxed">
+                    <h2 class="font-serif text-3xl font-bold text-brand-text flex items-center gap-3">
+                        <i data-lucide="shield-check" class="w-8 h-8 text-brand-lilac"></i> Política de Privacidad
+                    </h2>
+                    <h3 class="text-xl font-bold text-brand-text">1. Responsable del tratamiento de datos</h3>
+                    <p><strong>Cecilia Karina Rosso</strong><br>Email: rossoceci@gmail.com<br>WhatsApp: +54 9 11 2318-9132<br>Sitio web: https://ceciliarosso.netlify.app/</p>
+
+                    <h3 class="text-xl font-bold text-brand-text">2. Datos personales que recolectamos</h3>
+                    <p>Para procesar tu compra recolectamos:</p>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>Nombre completo.</li>
+                        <li>Teléfono, de 10 a 13 dígitos, sin 0 ni 15.</li>
+                        <li>Dirección, ciudad, código postal y provincia, solo si elegís envío a domicilio.</li>
+                        <li>Email, solo si te suscribís a la newsletter.</li>
+                    </ul>
+                    <p>No recolectamos datos sensibles ni información bancaria. Los pagos con tarjeta son procesados directamente por Mercado Pago.</p>
+
+                    <h3 class="text-xl font-bold text-brand-text">3. Finalidad del tratamiento</h3>
+                    <p>Los datos se utilizan exclusivamente para:</p>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>Procesar y entregar tu pedido del libro "Comunicar para vivir más livianos".</li>
+                        <li>Contactarte sobre el estado de tu compra.</li>
+                        <li>Enviarte la newsletter, solo si te suscribiste voluntariamente.</li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold text-brand-text">4. Base legal</h3>
+                    <p>El tratamiento de datos se basa en el consentimiento del usuario al completar el formulario de compra o suscripción, y en la ejecución de una compraventa, conforme a la Ley 25.326 de Protección de los Datos Personales de Argentina.</p>
+
+                    <h3 class="text-xl font-bold text-brand-text">5. Compartición de datos con terceros</h3>
+                    <p>Tus datos pueden ser compartidos con:</p>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>Mercado Pago, para procesamiento de pagos online. Su propia política aplica en www.mercadopago.com.ar.</li>
+                        <li>WhatsApp (Meta), si elegís coordinar por WhatsApp.</li>
+                        <li>Brevo (Sendinblue), para gestión de la newsletter.</li>
+                        <li>Google Fonts / Tailwind CSS, que cargan recursos visuales desde sus servidores y pueden recibir datos técnicos.</li>
+                    </ul>
+                    <p>No vendemos ni transferimos tus datos a otros terceros ajenos a la operación.</p>
+
+                    <h3 class="text-xl font-bold text-brand-text">6. Almacenamiento y seguridad</h3>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>No contamos con base de datos propia; los pedidos se procesan vía Mercado Pago o WhatsApp.</li>
+                        <li>Usamos localStorage del navegador únicamente para guardar el contenido del carrito.</li>
+                        <li>El token de acceso de Mercado Pago está protegido en el servidor mediante Netlify Functions.</li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold text-brand-text">7. Derechos del usuario</h3>
+                    <p>Podés ejercer tus derechos de acceso, rectificación, actualización y supresión de tus datos personales contactándonos por WhatsApp o email.</p>
+                    <blockquote class="bg-brand-lilac/10 border border-brand-lilac/20 rounded-2xl p-5 text-brand-text/80">
+                        La Agencia de Acceso a la Información Pública, Órgano de Control de la Ley Nº 25.326, tiene la atribución de atender las denuncias y reclamos que interpongan quienes resulten afectados en sus derechos por tratamiento de sus datos personales.
+                    </blockquote>
+
+                    <h3 class="text-xl font-bold text-brand-text">8. Cookies y tecnologías similares</h3>
+                    <p>Este sitio utiliza localStorage para el funcionamiento del carrito de compras. No utilizamos cookies de rastreo ni publicitarias.</p>
+                </section>
+
+                <div class="h-px bg-brand-lilac/20 my-10"></div>
+
+                <section class="space-y-5 text-brand-text/70 leading-relaxed">
+                    <h2 class="font-serif text-3xl font-bold text-brand-text flex items-center gap-3">
+                        <i data-lucide="file-text" class="w-8 h-8 text-brand-lilac"></i> Términos y Condiciones
+                    </h2>
+                    <h3 class="text-xl font-bold text-brand-text">1. Objeto</h3>
+                    <p>Este sitio ofrece la venta del libro físico "Comunicar para vivir más livianos" (Tomo 1), de autoría de Cecilia Karina Rosso, con tapa blanda y aproximadamente 200 páginas.</p>
+
+                    <h3 class="text-xl font-bold text-brand-text">2. Precios y formas de pago</h3>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>Precio del libro: $25.000 ARS, sujeto a cambios sin previo aviso.</li>
+                        <li>Costo de envío: $2.300 ARS adicionales si se elige envío a domicilio.</li>
+                    </ul>
+                    <p class="font-medium text-brand-text">Métodos de pago aceptados:</p>
+                    <ol class="list-decimal pl-6 space-y-1">
+                        <li>Mercado Pago: pagos online con tarjeta u otros medios disponibles en la plataforma.</li>
+                        <li>Efectivo: pago en efectivo al retirar el libro personalmente.</li>
+                        <li>WhatsApp: coordinación directa del pago y entrega vía mensaje.</li>
+                    </ol>
+
+                    <h3 class="text-xl font-bold text-brand-text">3. Entrega</h3>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>Retiro en persona: Zona Norte, Gran Buenos Aires (GBA). Se coordinará fecha y hora por WhatsApp.</li>
+                        <li>Envío a domicilio: se enviará a la dirección provista. Los plazos y modalidad de envío se coordinarán tras la compra.</li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold text-brand-text">4. Proceso de compra</h3>
+                    <p>Al hacer clic en "Finalizar compra", el usuario declara que toda la información provista es verídica. El pedido se confirma una vez verificado el pago, en caso de Mercado Pago, o recibido el mensaje de WhatsApp.</p>
+
+                    <h3 class="text-xl font-bold text-brand-text">5. Política de reembolsos y devoluciones</h3>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>Una vez entregado el libro, no se aceptan devoluciones salvo defectos de impresión o daños durante el envío, notificados dentro de las 48 horas de recibido.</li>
+                        <li>Si se realizó un pago por Mercado Pago y el pedido no se concreta, se coordinará el reintegro del importe abonado.</li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold text-brand-text">6. Propiedad intelectual</h3>
+                    <p>Todo el contenido de este sitio, incluyendo textos, imágenes, diseño y logo, es propiedad de Cecilia Karina Rosso. Queda prohibida la reproducción total o parcial sin autorización expresa.</p>
+
+                    <h3 class="text-xl font-bold text-brand-text">7. Aviso sobre Mercado Pago</h3>
+                    <blockquote class="bg-brand-lilac/10 border border-brand-lilac/20 rounded-2xl p-5 text-brand-text/80">
+                        Los pagos realizados a través de este sitio están sujetos a las Políticas de Privacidad y Términos y Condiciones de Mercado Pago. Para más información visite www.mercadopago.com.ar.
+                    </blockquote>
+
+                    <h3 class="text-xl font-bold text-brand-text">8. Jurisdicción</h3>
+                    <p>Este acuerdo se rige por las leyes de la República Argentina. Ante cualquier controversia, las partes se someten a los tribunales ordinarios de la Provincia de Buenos Aires.</p>
+                </section>
+
+                <p class="mt-12 pt-6 border-t border-brand-lilac/20 text-sm text-brand-text/55 text-center">© 2026 Cecilia Karina Rosso. Todos los derechos reservados.</p>
+            </div>
+        </article>
+    </main>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

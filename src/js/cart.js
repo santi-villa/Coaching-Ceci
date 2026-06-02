@@ -278,12 +278,14 @@ function updateCartUI() {
     }
 
     if (cart.length === 0) {
+        cartDrawer.classList.remove('cart-has-items');
         emptyCartMsg.classList.remove('hidden');
         checkoutBtn.disabled = true;
         cartTotalEl.textContent = '$0';
         const itemDivs = cartItemsContainer.querySelectorAll('.cart-item-row');
         itemDivs.forEach(div => div.remove());
     } else {
+        cartDrawer.classList.add('cart-has-items');
         emptyCartMsg.classList.add('hidden');
         checkoutBtn.disabled = false;
 
@@ -295,20 +297,29 @@ function updateCartUI() {
         cart.forEach(item => {
             totalPrice += item.price * item.quantity;
             const itemHTML = `
-                <div class="cart-item-row flex items-center gap-3 bg-white p-3 rounded-xl border border-gray-100 shadow-sm relative">
-                    <div class="w-16 h-24 bg-brand-light flex items-center justify-center rounded-lg p-1 overflow-hidden shrink-0">
-                        <img src="${item.image}" class="w-full h-full object-contain" onerror="this.src='https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&auto=format&fit=crop'">
+                <div class="cart-item-row cart-item-editorial grid grid-cols-[6.25rem_1fr] gap-4 p-4 rounded-2xl relative">
+                    <div class="cart-book-thumb w-24 h-32 flex items-center justify-center rounded-xl p-1.5 overflow-hidden shrink-0">
+                        <img src="${item.image}" class="w-full h-full object-contain drop-shadow-md" onerror="this.src='https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&auto=format&fit=crop'">
                     </div>
-                    <div class="flex-grow">
-                        <h4 class="font-medium text-brand-text text-sm leading-tight mb-1">${item.title}</h4>
-                        <p class="text-brand-lilac font-bold">$${item.price.toLocaleString('es-AR')}</p>
-                        <div class="flex items-center gap-2 mt-2">
-                            <button onclick="updateItemQuantity('${item.id}', -1)" class="w-7 h-7 rounded-full bg-gray-100 text-gray-600 hover:bg-brand-lilac hover:text-white flex items-center justify-center transition text-lg font-bold">-</button>
-                            <span class="text-sm font-medium w-6 text-center">${item.quantity}</span>
-                            <button onclick="updateItemQuantity('${item.id}', 1)" class="w-7 h-7 rounded-full bg-gray-100 text-gray-600 hover:bg-brand-lilac hover:text-white flex items-center justify-center transition text-lg font-bold">+</button>
+                    <div class="min-w-0 pr-5 flex flex-col justify-between">
+                        <div>
+                            <span class="text-[10px] uppercase tracking-[0.18em] font-bold text-brand-lilac">Vol. 1</span>
+                            <h4 class="font-serif font-bold text-brand-text text-lg leading-tight mt-1">${item.title}</h4>
+                            <p class="text-brand-text/55 text-xs mt-1">Tapa blanda · 104 páginas</p>
+                        </div>
+                        <div class="flex items-end justify-between gap-3 mt-4">
+                            <div class="inline-flex items-center gap-2 rounded-full bg-brand-cream/70 border border-brand-lilac/15 p-1">
+                                <button onclick="updateItemQuantity('${item.id}', -1)" class="cart-qty-btn w-7 h-7 rounded-full flex items-center justify-center transition text-lg font-bold">-</button>
+                                <span class="text-sm font-bold w-7 text-center text-brand-text">${item.quantity}</span>
+                                <button onclick="updateItemQuantity('${item.id}', 1)" class="cart-qty-btn w-7 h-7 rounded-full flex items-center justify-center transition text-lg font-bold">+</button>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-[10px] uppercase tracking-[0.16em] font-bold text-brand-text/45">Total</p>
+                                <p class="cart-line-total font-bold text-base">$${(item.price * item.quantity).toLocaleString('es-AR')}</p>
+                            </div>
                         </div>
                     </div>
-                    <button onclick="removeFromCart('${item.id}')" class="text-gray-400 hover:text-red-500 p-1 absolute top-2 right-2 transition">
+                    <button onclick="removeFromCart('${item.id}')" class="text-brand-text/35 hover:text-red-500 p-1 absolute top-3 right-3 transition">
                         <i data-lucide="trash-2" class="w-4 h-4"></i>
                     </button>
                 </div>
