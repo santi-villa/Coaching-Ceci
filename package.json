@@ -10,7 +10,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "netlify dev",
-    "start": "netlify dev"
+    "start": "netlify dev",
+    "build": "rm -rf dist && mkdir -p dist && cp -r index.html legales.html links.html src assets dist/"
   },
   "keywords": [],
   "author": "",
