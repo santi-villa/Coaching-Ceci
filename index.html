@@ -27,20 +27,20 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = {
+            tailwind.config = {
             theme: {
                 extend: {
                     colors: {
                         brand: {
-                            lilac: '#82C5CD',
-                            pink: '#82C5CD',
-                            peach: '#EED8C0',
-                            text: '#2F3A3A',
-                            light: '#F7ECE0',
-                            green: '#8CBBA3',
-                            sky: '#B9DDE2',
-                            ink: '#5E4032',
-                            cream: '#FFF7ED'
+                            lilac: '#51ABB1',
+                            pink: '#51ABB1',
+                            peach: '#DDBEA1',
+                            text: '#4A382B',
+                            light: '#F8ECE0',
+                            green: '#B8D0C9',
+                            sky: '#B8D0C9',
+                            ink: '#4A382B',
+                            cream: '#FCFAF6'
                         }
                     },
                     fontFamily: {
@@ -61,7 +61,7 @@
     <link rel="stylesheet" href="src/css/styles.css?v=15">
 </head>
 
-<body class="font-sans text-brand-text bg-brand-light antialiased selection:bg-brand-lilac selection:text-white">
+<body class="font-sans text-brand-text antialiased selection:bg-brand-lilac selection:text-white">
 
     <nav id="main-nav"
         class="fixed w-full z-30 px-3 sm:px-6 py-4 text-brand-text transition-all duration-300">
@@ -589,7 +589,7 @@
 
                 <!-- Botón de volver unificado (PC y Mobile) -->
                 <button onclick="closeProductModal()"
-                    class="absolute top-4 left-4 bg-brand-cream/90 text-brand-text/80 hover:text-brand-text transition px-4 py-2 rounded-full z-20 shadow-md backdrop-blur-md flex items-center gap-2 text-sm font-bold border border-white/50 transform hover:scale-105 active:scale-95">
+                    class="absolute top-4 left-4 bg-brand-cream/90 text-brand-text/80 hover:text-brand-text transition px-4 py-2 rounded-full z-20 shadow-md backdrop-blur-md flex items-center gap-2 text-sm font-bold border border-brand-lilac/15 transform hover:scale-105 active:scale-95">
                     <i data-lucide="arrow-left" class="w-5 h-5"></i> Volver a la tienda
                 </button>
 
@@ -696,8 +696,8 @@
                     <div class="absolute inset-0 bg-brand-cream/70 mix-blend-overlay"></div>
                     <div class="relative z-10">
                         <div
-                            class="w-24 h-24 bg-brand-green/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <i data-lucide="check-circle" class="w-12 h-12 text-brand-green"></i>
+                            class="w-24 h-24 bg-brand-lilac/15 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i data-lucide="check-circle" class="w-12 h-12 text-brand-lilac"></i>
                         </div>
                         <h1 class="font-serif text-4xl md:text-5xl font-bold text-brand-text mb-4">¡Gracias por tu
                             compra!</h1>

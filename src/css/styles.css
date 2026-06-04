@@ -1,19 +1,29 @@
 :root {
-    --color-bg-main: #F7ECE0;
-    --color-bg-soft: #FDFDFC;
-    --color-cream: #FFF7ED;
-    --color-beige: #EED8C0;
-    --color-beige-dark: #D3B493;
-    --color-turquoise-soft: #B9DDE2;
-    --color-turquoise: #82C5CD;
-    --color-turquoise-deep: #3C8F9B;
-    --color-brown-soft: #A67C5F;
-    --color-brown-dark: #5E4032;
-    --color-text-main: #2F3A3A;
-    --color-text-muted: #6F625A;
-    --shadow-card: 0 14px 40px rgba(94, 64, 50, 0.08);
-    --shadow-button: 0 14px 28px rgba(60, 143, 155, 0.22);
-    --border-soft: 1px solid rgba(211, 180, 147, 0.55);
+    --bg-card: #F8ECE0;
+    --bg-soft: #F5E2CE;
+    --border-soft-color: #DDBEA1;
+    --accent-soft: #B8D0C9;
+    --accent: #51ABB1;
+    --accent-dark: #3C8C90;
+    --text-main: #4A382B;
+    --text-muted: #8B7157;
+    --white-warm: #FCFAF6;
+
+    --color-bg-main: var(--bg-card);
+    --color-bg-soft: var(--white-warm);
+    --color-cream: var(--white-warm);
+    --color-beige: var(--bg-soft);
+    --color-beige-dark: var(--border-soft-color);
+    --color-turquoise-soft: var(--accent-soft);
+    --color-turquoise: var(--accent);
+    --color-turquoise-deep: var(--accent-dark);
+    --color-brown-soft: var(--text-muted);
+    --color-brown-dark: var(--text-main);
+    --color-text-main: var(--text-main);
+    --color-text-muted: var(--text-muted);
+    --shadow-card: 0 18px 45px rgba(74, 56, 43, 0.10);
+    --shadow-button: 0 14px 28px rgba(60, 140, 144, 0.22);
+    --border-soft: 1px solid rgba(221, 190, 161, 0.55);
 }
 
 /* Glass Card */
@@ -26,20 +36,20 @@ body {
     max-width: 100%;
     overflow-x: hidden;
     background:
-        radial-gradient(circle at 8% 8%, rgba(185, 221, 226, 0.24), transparent 18rem),
-        radial-gradient(circle at 94% 18%, rgba(238, 216, 192, 0.36), transparent 20rem),
-        linear-gradient(180deg, var(--color-bg-main), var(--color-cream));
-    color: var(--color-text-main);
+        radial-gradient(circle at 8% 8%, rgba(81, 171, 177, 0.18), transparent 18rem),
+        radial-gradient(circle at 94% 18%, rgba(245, 226, 206, 0.30), transparent 20rem),
+        linear-gradient(180deg, var(--bg-card), var(--white-warm));
+    color: var(--text-main);
 }
 
 body {
-    color: var(--color-text-main);
+    color: var(--text-main);
     text-rendering: optimizeLegibility;
 }
 
 ::selection {
-    background: var(--color-turquoise-deep);
-    color: var(--color-cream);
+    background: var(--accent);
+    color: var(--white-warm);
 }
 
 a,
@@ -59,15 +69,19 @@ button {
     padding: 0.55rem 0.75rem;
     border: var(--border-soft);
     border-radius: 999px;
-    background: rgba(255, 247, 237, 0.72);
-    box-shadow: 0 14px 36px rgba(94, 64, 50, 0.09);
-    backdrop-filter: blur(16px);
+    background: var(--bg-card);
+    box-shadow: 0 14px 36px rgba(74, 56, 43, 0.09);
     transition: background 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
 }
 
 #main-nav.nav-scrolled > div {
-    background: rgba(255, 247, 237, 0.94);
-    box-shadow: 0 16px 42px rgba(94, 64, 50, 0.13);
+    background: var(--bg-card);
+    box-shadow: 0 16px 42px rgba(74, 56, 43, 0.13);
+}
+
+#main-nav.nav-scrolled > div {
+    background: rgba(248, 236, 224, 0.94);
+    box-shadow: 0 16px 42px rgba(74, 56, 43, 0.13);
 }
 
 #nav-brand {
@@ -82,33 +96,33 @@ button {
 }
 
 #brand-surname {
-    color: var(--color-turquoise-deep) !important;
+    color: var(--accent) !important;
 }
 
 .nav-links a,
 #nav-actions button {
-    color: var(--color-brown-dark);
+    color: var(--text-main);
 }
 
 .nav-links a:hover,
 #nav-actions button:hover {
-    color: var(--color-turquoise-deep);
+    color: var(--accent);
     opacity: 1;
 }
 
 .glass-card {
-    background: rgba(255, 247, 237, 0.76);
-    backdrop-filter: blur(10px);
+    background: var(--bg-card);
     border: var(--border-soft);
+    border-radius: 24px;
     box-shadow: var(--shadow-card);
 }
 
 /* Hero editorial */
 .hero-editorial {
     background:
-        linear-gradient(90deg, rgba(255, 247, 237, 0.9) 0%, rgba(255, 247, 237, 0.72) 44%, rgba(255, 247, 237, 0.4) 100%),
+        linear-gradient(90deg, rgba(248, 236, 224, 0.92) 0%, rgba(248, 236, 224, 0.70) 44%, rgba(248, 236, 224, 0.35) 100%),
         url("../../assets/images/backgrounds/bg-hero.webp") center / cover no-repeat,
-        var(--color-bg-main);
+        var(--bg-card);
 }
 
 .hero-editorial::before {
@@ -116,9 +130,9 @@ button {
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(circle at 17% 30%, rgba(255, 247, 237, 0.72), transparent 19rem),
-        radial-gradient(circle at 80% 54%, rgba(185, 221, 226, 0.18), transparent 23rem),
-        linear-gradient(180deg, rgba(255, 247, 237, 0.2), rgba(247, 236, 224, 0.08) 58%);
+        radial-gradient(circle at 17% 30%, rgba(248, 236, 224, 0.75), transparent 19rem),
+        radial-gradient(circle at 80% 54%, rgba(81, 171, 177, 0.12), transparent 23rem),
+        linear-gradient(180deg, rgba(248, 236, 224, 0.20), rgba(245, 226, 206, 0.06) 58%);
     pointer-events: none;
     z-index: 1;
 }
@@ -165,7 +179,7 @@ button {
     text-wrap: balance;
     color: var(--color-text-main);
     letter-spacing: 0;
-    text-shadow: 0 1px 0 rgba(255, 247, 237, 0.68);
+    text-shadow: 0 1px 0 rgba(248, 236, 224, 0.68);
 }
 
 .hero-copy,
@@ -179,10 +193,9 @@ button {
     position: relative;
     padding: clamp(1.25rem, 2vw, 2rem);
     border-radius: 2rem;
-    background: rgba(255, 247, 237, 0.42);
-    border: 1px solid rgba(238, 216, 192, 0.42);
-    box-shadow: 0 22px 56px rgba(94, 64, 50, 0.07);
-    backdrop-filter: blur(4px);
+    background: var(--bg-card);
+    border: 1px solid rgba(221, 190, 161, 0.75);
+    box-shadow: 0 18px 45px rgba(74, 56, 43, 0.10);
 }
 
 .hero-copy::before {
@@ -198,12 +211,12 @@ button {
 }
 
 .hero-eyebrow {
-    color: var(--color-turquoise-deep);
-    text-shadow: 0 1px 0 rgba(255, 247, 237, 0.82);
+    color: var(--accent-dark);
+    text-shadow: 0 1px 0 rgba(248, 236, 224, 0.82);
 }
 
 .hero-kicker {
-    color: var(--color-brown-dark);
+    color: var(--text-main);
 }
 
 .hero-lede {
@@ -217,12 +230,12 @@ button {
 .hero-trust span {
     padding: 0.35rem 0.65rem;
     border-radius: 999px;
-    background: rgba(255, 247, 237, 0.58);
-    border: 1px solid rgba(211, 180, 147, 0.32);
+    background: var(--bg-soft);
+    border: 1px solid rgba(221, 190, 161, 0.75);
 }
 
 .book-spotlight {
-    filter: drop-shadow(0 32px 42px rgba(94, 64, 50, 0.22));
+    filter: drop-shadow(0 32px 42px rgba(74, 56, 43, 0.22));
 }
 
 .book-spotlight::before {
@@ -231,8 +244,8 @@ button {
     inset: -10% -16% -12%;
     border-radius: 50% 44% 52% 48%;
     background:
-        radial-gradient(circle at 52% 40%, rgba(255, 247, 237, 0.78), transparent 45%),
-        radial-gradient(circle at 70% 70%, rgba(185, 221, 226, 0.46), transparent 48%);
+        radial-gradient(circle at 52% 40%, rgba(248, 236, 224, 0.78), transparent 45%),
+        radial-gradient(circle at 70% 70%, rgba(81, 171, 177, 0.46), transparent 48%);
     z-index: 0;
 }
 
@@ -245,7 +258,7 @@ button {
     bottom: -0.8rem;
     transform: translateX(-50%);
     border-radius: 999px;
-    background: rgba(94, 64, 50, 0.18);
+    background: rgba(74, 56, 43, 0.18);
     filter: blur(14px);
     z-index: 0;
 }
@@ -258,11 +271,11 @@ button {
     justify-content: center;
     padding: 5.5rem 1.25rem 2rem;
     background:
-        radial-gradient(circle at 92% 8%, rgba(185, 221, 226, 0.22), transparent 11rem),
-        linear-gradient(180deg, rgba(255, 247, 237, 0.88), rgba(247, 236, 224, 0.7)),
+        radial-gradient(circle at 92% 8%, rgba(81, 171, 177, 0.18), transparent 11rem),
+        linear-gradient(180deg, rgba(248, 236, 224, 0.92), rgba(245, 226, 206, 0.85)),
         url("../../assets/images/backgrounds/bg-footer.webp") center / cover no-repeat,
-        var(--color-bg-main);
-    color: var(--color-text-main);
+        var(--bg-card);
+    color: var(--text-main);
 }
 
 .mobile-menu-close {
@@ -275,14 +288,14 @@ button {
     align-items: center;
     justify-content: center;
     border-radius: 999px;
-    background: rgba(255, 247, 237, 0.9);
-    border: 1px solid rgba(60, 143, 155, 0.22);
-    color: var(--color-text-main);
-    box-shadow: 0 12px 28px rgba(94, 64, 50, 0.14);
+    background: var(--white-warm);
+    border: 1px solid rgba(221, 190, 161, 0.40);
+    color: var(--text-main);
+    box-shadow: 0 12px 28px rgba(74, 56, 43, 0.14);
 }
 
 .mobile-menu-eyebrow {
-    color: var(--color-turquoise-deep);
+    color: var(--accent-dark);
     font-size: 0.75rem;
     font-weight: 800;
     letter-spacing: 0.22em;
@@ -292,7 +305,7 @@ button {
 
 .mobile-menu-title {
     margin-top: 0.45rem;
-    color: var(--color-text-main);
+    color: var(--text-main);
     font-size: clamp(2.5rem, 12vw, 3.5rem);
     line-height: 0.95;
     text-align: center;
@@ -322,7 +335,7 @@ button {
     width: 100%;
     padding: 1rem 1.05rem;
     border-radius: 1.1rem;
-    background: rgba(255, 247, 237, 0.9);
+    background: rgba(248, 236, 224, 0.9);
     border: var(--border-soft);
     color: var(--color-text-main);
     box-shadow: var(--shadow-card);
@@ -338,45 +351,38 @@ button {
 
 .mobile-link:hover,
 .mobile-link:focus-visible {
-    background: rgba(185, 221, 226, 0.38);
-    box-shadow: 0 16px 34px rgba(60, 143, 155, 0.18);
+    background: rgba(81, 171, 177, 0.10);
+    box-shadow: 0 16px 34px rgba(60, 140, 144, 0.18);
     transform: translateY(-1px);
     outline: none;
 }
 
 .bg-section-soft {
     background:
-        linear-gradient(180deg, rgba(255, 247, 237, 0.88), rgba(247, 236, 224, 0.82)),
-        url("../../assets/images/backgrounds/bg-faq.webp") center / cover no-repeat,
-        var(--color-bg-main);
+        linear-gradient(180deg, rgba(248, 236, 224, 0.82), rgba(245, 226, 206, 0.68)),
+        url("../../assets/images/backgrounds/bg-section-soft.png") center / cover no-repeat,
+        var(--bg-card);
 }
 
 .bg-section-plain {
     background:
-        linear-gradient(180deg, rgba(255, 247, 237, 0.88), rgba(247, 236, 224, 0.86)),
+        linear-gradient(180deg, rgba(248, 236, 224, 0.90), rgba(245, 226, 206, 0.85)),
         url("../../assets/images/backgrounds/bg-faq.webp") center / cover no-repeat,
-        var(--color-bg-main);
-}
-
-.bg-collection-image {
-    background:
-        linear-gradient(135deg, rgba(255, 247, 237, 0.84), rgba(255, 247, 237, 0.5)),
-        url("../../assets/images/backgrounds/bg-launches.webp") center / cover no-repeat,
-        var(--color-bg-main);
+        var(--bg-card);
 }
 
 .cart-drawer-editorial {
     background:
-        linear-gradient(180deg, rgba(255, 247, 237, 0.94), rgba(247, 236, 224, 0.96)),
+        linear-gradient(180deg, rgba(248, 236, 224, 0.92), rgba(245, 226, 206, 0.92)),
         url("../../assets/images/backgrounds/bg-card-pattern.webp") center / cover no-repeat,
-        var(--color-bg-main);
-    box-shadow: -24px 0 70px rgba(94, 64, 50, 0.22);
-    border-left: 1px solid rgba(60, 143, 155, 0.18);
+        var(--bg-card);
+    box-shadow: -24px 0 70px rgba(74, 56, 43, 0.22);
+    border-left: 1px solid rgba(221, 190, 161, 0.40);
 }
 
 .cart-drawer-header,
 .cart-drawer-footer {
-    background: rgba(255, 247, 237, 0.9);
+    background: rgba(248, 236, 224, 0.95);
     backdrop-filter: blur(14px);
 }
 
@@ -385,31 +391,29 @@ button {
 }
 
 .cart-icon-badge {
-    background: linear-gradient(135deg, var(--color-turquoise-soft), var(--color-beige));
-    color: var(--color-text-main);
-    box-shadow: 0 12px 26px rgba(60, 143, 155, 0.22);
+    background: linear-gradient(135deg, var(--accent-soft), var(--bg-soft));
+    color: var(--text-main);
+    box-shadow: 0 12px 26px rgba(60, 140, 144, 0.22);
 }
 
 .cart-empty-mark {
-    background: rgba(185, 221, 226, 0.28);
-    color: var(--color-text-main);
-    box-shadow: inset 0 0 0 1px rgba(60, 143, 155, 0.22);
+    background: rgba(81, 171, 177, 0.12);
+    color: var(--text-main);
+    box-shadow: inset 0 0 0 1px rgba(60, 140, 144, 0.22);
 }
 
 .cart-item-editorial {
-    background:
-        linear-gradient(135deg, rgba(255, 247, 237, 0.94), rgba(255, 247, 237, 0.78)),
-        url("../../assets/images/backgrounds/bg-card-pattern.webp") center / cover no-repeat;
-    border: var(--border-soft);
-    box-shadow: var(--shadow-card);
-    backdrop-filter: blur(10px);
+    background: var(--bg-card);
+    border: 1px solid rgba(221, 190, 161, 0.75);
+    border-radius: 24px;
+    box-shadow: 0 18px 45px rgba(74, 56, 43, 0.10);
 }
 
 .cart-book-thumb {
     background:
-        radial-gradient(circle at 35% 15%, rgba(255, 247, 237, 0.9), transparent 42%),
-        linear-gradient(150deg, rgba(185, 221, 226, 0.42), rgba(238, 216, 192, 0.68));
-    box-shadow: inset 0 0 0 1px rgba(255, 247, 237, 0.72);
+        radial-gradient(circle at 35% 15%, rgba(248, 236, 224, 0.9), transparent 42%),
+        linear-gradient(150deg, rgba(81, 171, 177, 0.25), rgba(245, 226, 206, 0.60));
+    box-shadow: inset 0 0 0 1px rgba(252, 250, 246, 0.72);
 }
 
 .cart-step-label {
@@ -434,10 +438,10 @@ button {
 }
 
 .cart-summary-card {
-    background:
-        linear-gradient(135deg, rgba(255, 247, 237, 0.94), rgba(238, 216, 192, 0.5));
-    border: var(--border-soft);
-    box-shadow: inset 0 1px 0 rgba(255, 247, 237, 0.8);
+    background: var(--bg-soft);
+    border: 1px solid rgba(221, 190, 161, 0.75);
+    border-radius: 20px;
+    box-shadow: 0 18px 45px rgba(74, 56, 43, 0.08);
 }
 
 .cart-line-total {
@@ -445,20 +449,20 @@ button {
 }
 
 .cart-qty-btn {
-    background: rgba(238, 216, 192, 0.44);
-    color: var(--color-text-main);
-    border: 1px solid rgba(60, 143, 155, 0.14);
+    background: var(--bg-soft);
+    color: var(--text-main);
+    border: 1px solid rgba(221, 190, 161, 0.50);
 }
 
 .cart-qty-btn:hover {
-    background: rgba(185, 221, 226, 0.48);
+    background: rgba(81, 171, 177, 0.15);
 }
 
 .product-visual-editorial {
     background:
-        linear-gradient(180deg, rgba(255, 247, 237, 0.48), rgba(247, 236, 224, 0.22)),
+        linear-gradient(180deg, rgba(248, 236, 224, 0.50), rgba(245, 226, 206, 0.25)),
         url("../../assets/images/backgrounds/bg-book.webp") center / cover no-repeat,
-        var(--color-beige);
+        var(--bg-soft);
 }
 
 .product-visual-editorial::after {
@@ -476,21 +480,20 @@ button {
 
 .product-modal-shell {
     background:
-        linear-gradient(135deg, rgba(255, 247, 237, 0.9), rgba(238, 216, 192, 0.52)),
-        url("../../assets/images/backgrounds/bg-card-pattern.webp") center / cover no-repeat;
+        linear-gradient(135deg, rgba(248, 236, 224, 0.90), rgba(245, 226, 206, 0.78)),
+        url("../../assets/images/backgrounds/bg-product-editorial.png") center / cover no-repeat;
     backdrop-filter: blur(12px);
+    border-radius: 24px;
 }
 
 .product-editorial-card {
-    background: rgba(255, 247, 237, 0.92);
-    border: var(--border-soft);
-    box-shadow: 0 28px 80px rgba(94, 64, 50, 0.16);
+    background: var(--bg-card);
+    border: 1px solid rgba(221, 190, 161, 0.75);
+    box-shadow: 0 28px 80px rgba(74, 56, 43, 0.12);
 }
 
 .product-detail-panel {
-    background:
-        linear-gradient(180deg, rgba(255, 247, 237, 0.97), rgba(247, 236, 224, 0.88)),
-        var(--color-cream);
+    background: var(--bg-card);
 }
 
 .product-detail-panel h1 {
@@ -507,8 +510,9 @@ button {
 
 .product-meta-grid > div,
 .product-service-pill {
-    background: rgba(255, 247, 237, 0.72);
-    border: var(--border-soft);
+    background: var(--bg-soft);
+    border: 1px solid rgba(221, 190, 161, 0.75);
+    border-radius: 16px;
 }
 
 .product-meta-grid > div {
@@ -533,11 +537,10 @@ button {
 }
 
 .product-purchase-card {
-    background:
-        linear-gradient(135deg, rgba(255, 247, 237, 0.98), rgba(238, 216, 192, 0.5)),
-        url("../../assets/images/backgrounds/bg-card-pattern.webp") center / cover no-repeat;
-    border: var(--border-soft);
-    box-shadow: inset 0 1px 0 rgba(255, 247, 237, 0.8), var(--shadow-card);
+    background: var(--bg-card);
+    border: 1px solid rgba(221, 190, 161, 0.75);
+    border-radius: 24px;
+    box-shadow: 0 18px 45px rgba(74, 56, 43, 0.10);
 }
 
 .product-stock-pill,
@@ -547,16 +550,17 @@ button {
 }
 
 .product-stock-pill {
-    background: rgba(185, 221, 226, 0.42);
-    border: 1px solid rgba(60, 143, 155, 0.22);
+    background: var(--bg-soft);
+    border: 1px solid rgba(221, 190, 161, 0.75);
     border-radius: 999px;
     padding: 0.45rem 0.75rem;
     font-size: 0.72rem;
+    color: var(--text-main);
 }
 
 #product-view {
     background:
-        radial-gradient(circle at 20% 18%, rgba(185, 221, 226, 0.22), transparent 24rem),
+        radial-gradient(circle at 20% 18%, rgba(81, 171, 177, 0.22), transparent 24rem),
         rgba(47, 58, 58, 0.48);
 }
 
@@ -590,57 +594,58 @@ button {
     bottom: -1.15rem;
     transform: translateX(-50%);
     border-radius: 999px;
-    background: radial-gradient(ellipse at center, rgba(94, 64, 50, 0.24), rgba(94, 64, 50, 0));
+    background: radial-gradient(ellipse at center, rgba(74, 56, 43, 0.24), rgba(74, 56, 43, 0));
     filter: blur(16px);
     opacity: 0.5;
 }
 
 .bg-card-soft {
-    background: rgba(255, 247, 237, 0.86);
-    backdrop-filter: blur(10px);
-    border: var(--border-soft);
-    box-shadow: var(--shadow-card);
+    background: var(--bg-card);
+    border: 1px solid rgba(221, 190, 161, 0.75);
+    border-radius: 24px;
+    box-shadow: 0 18px 45px rgba(74, 56, 43, 0.10);
 }
 
 .btn-primary-soft {
-    background: var(--color-turquoise-deep);
-    color: var(--color-cream);
-    border: 1px solid rgba(60, 143, 155, 0.18);
+    background: var(--accent);
+    color: var(--white-warm);
+    border: none;
     border-radius: 999px;
-    box-shadow: var(--shadow-button);
-    transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+    box-shadow: 0 14px 32px rgba(81, 171, 177, 0.25);
+    transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
 }
 
 .btn-primary-soft:hover {
-    background: #327C86;
-    box-shadow: 0 18px 42px rgba(60, 143, 155, 0.3);
+    background: var(--accent-dark);
+    box-shadow: 0 18px 42px rgba(60, 140, 144, 0.35);
     transform: translateY(-1px);
 }
 
 .btn-secondary-soft {
-    background: rgba(255, 247, 237, 0.72);
-    color: var(--color-turquoise-deep);
-    border: 1px solid rgba(60, 143, 155, 0.42);
+    background: transparent;
+    color: var(--accent-dark);
+    border: 1px solid var(--accent);
     border-radius: 999px;
-    backdrop-filter: blur(8px);
     transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
 }
 
 .btn-secondary-soft:hover {
-    background: rgba(185, 221, 226, 0.28);
-    border-color: rgba(60, 143, 155, 0.62);
-    box-shadow: 0 12px 28px rgba(94, 64, 50, 0.08);
+    background: rgba(81, 171, 177, 0.08);
+    border-color: var(--accent-dark);
+    box-shadow: 0 12px 28px rgba(60, 140, 144, 0.12);
     transform: translateY(-1px);
 }
 
 .surface-warm {
-    background: rgba(255, 247, 237, 0.82);
-    border: var(--border-soft);
+    background: var(--bg-card);
+    border: 1px solid rgba(221, 190, 161, 0.75);
+    border-radius: 16px;
 }
 
 .surface-muted {
-    background: rgba(238, 216, 192, 0.34);
-    border: 1px solid rgba(211, 180, 147, 0.34);
+    background: var(--bg-soft);
+    border: 1px solid rgba(221, 190, 161, 0.75);
+    border-radius: 16px;
 }
 
 .section-flow {
@@ -651,9 +656,9 @@ button {
 
 .conversations-section {
     background:
-        linear-gradient(90deg, rgba(255, 247, 237, 0.88), rgba(255, 247, 237, 0.62)),
+        linear-gradient(90deg, rgba(248, 236, 224, 0.90), rgba(248, 236, 224, 0.60)),
         url("../../assets/images/backgrounds/bg-conversations.webp") center / cover no-repeat,
-        var(--color-bg-main);
+        var(--bg-card);
 }
 
 .conversations-section::before,
@@ -663,8 +668,8 @@ button {
     inset: 0;
     pointer-events: none;
     background:
-        radial-gradient(circle at 6% 18%, rgba(255, 247, 237, 0.56), transparent 17rem),
-        radial-gradient(circle at 88% 14%, rgba(185, 221, 226, 0.2), transparent 18rem);
+        radial-gradient(circle at 6% 18%, rgba(248, 236, 224, 0.56), transparent 17rem),
+        radial-gradient(circle at 88% 14%, rgba(81, 171, 177, 0.2), transparent 18rem);
 }
 
 .conversations-section .product-kicker,
@@ -681,7 +686,7 @@ button {
 }
 
 .conversations-section .w-24 {
-    background: linear-gradient(90deg, var(--color-turquoise-deep), rgba(60, 143, 155, 0));
+    background: linear-gradient(90deg, var(--accent), transparent);
 }
 
 .conversation-list {
@@ -696,13 +701,10 @@ button {
     gap: 1rem;
     align-items: start;
     padding: clamp(1.15rem, 2vw, 1.5rem);
-    border: var(--border-soft);
-    border-radius: 1.5rem;
-    background:
-        linear-gradient(135deg, rgba(255, 247, 237, 0.9), rgba(255, 247, 237, 0.72)),
-        url("../../assets/images/backgrounds/bg-card-pattern.webp") center / cover no-repeat;
-    box-shadow: var(--shadow-card);
-    backdrop-filter: blur(8px);
+    border: 1px solid rgba(221, 190, 161, 0.75);
+    border-radius: 24px;
+    background: var(--bg-card);
+    box-shadow: 0 18px 45px rgba(74, 56, 43, 0.10);
     overflow: hidden;
 }
 
@@ -712,11 +714,11 @@ button {
     inset: auto 1.1rem 1rem auto;
     width: 4.5rem;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(60, 143, 155, 0.42));
+    background: linear-gradient(90deg, transparent, rgba(81, 171, 177, 0.40));
 }
 
 .conversation-number {
-    color: rgba(166, 124, 95, 0.75);
+    color: var(--text-muted);
     font-weight: 900;
     letter-spacing: 0.16em;
     font-size: 0.74rem;
@@ -730,9 +732,9 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--color-turquoise-deep);
-    background: rgba(185, 221, 226, 0.25);
-    border: 1px solid rgba(60, 143, 155, 0.2);
+    color: var(--accent);
+    background: rgba(81, 171, 177, 0.12);
+    border: 1px solid rgba(81, 171, 177, 0.30);
 }
 
 .conversation-row h3 {
@@ -746,9 +748,9 @@ button {
 .author-section {
     position: relative;
     background:
-        linear-gradient(90deg, rgba(255, 247, 237, 0.76), rgba(255, 247, 237, 0.9)),
+        linear-gradient(90deg, rgba(248, 236, 224, 0.78), rgba(248, 236, 224, 0.92)),
         url("../../assets/images/backgrounds/bg-author.webp") center / cover no-repeat,
-        var(--color-bg-main);
+        var(--bg-card);
 }
 
 .author-portrait {
@@ -757,9 +759,9 @@ button {
     justify-self: center;
     padding: 0.75rem;
     border-radius: 999px 999px 4.5rem 4.5rem;
-    background: rgba(255, 247, 237, 0.72);
-    border: var(--border-soft);
-    box-shadow: var(--shadow-card);
+    background: var(--bg-card);
+    border: 1px solid rgba(221, 190, 161, 0.75);
+    box-shadow: 0 18px 45px rgba(74, 56, 43, 0.10);
 }
 
 .author-portrait::before {
@@ -776,18 +778,18 @@ button {
 
 .author-portrait-glow {
     background:
-        linear-gradient(135deg, rgba(185, 221, 226, 0.5), rgba(238, 216, 192, 0.56));
+        linear-gradient(135deg, rgba(81, 171, 177, 0.35), rgba(245, 226, 206, 0.50));
     filter: blur(14px);
     opacity: 0.7;
 }
 
 .author-photo {
-    border: 1px solid rgba(255, 247, 237, 0.92);
-    box-shadow: 0 24px 58px rgba(94, 64, 50, 0.14);
+    border: 1px solid rgba(248, 236, 224, 0.92);
+    box-shadow: 0 24px 58px rgba(74, 56, 43, 0.14);
 }
 
 .author-mark {
-    border: 1px solid rgba(60, 143, 155, 0.18);
+    border: 1px solid rgba(81, 171, 177, 0.30);
 }
 
 .author-copy {
@@ -797,11 +799,10 @@ button {
 
 .author-copy > .relative {
     padding: clamp(1.2rem, 2.4vw, 2rem);
-    border-radius: 1.75rem;
-    background: rgba(255, 247, 237, 0.62);
-    border: 1px solid rgba(211, 180, 147, 0.36);
-    box-shadow: 0 18px 48px rgba(94, 64, 50, 0.06);
-    backdrop-filter: blur(6px);
+    border-radius: 24px;
+    background: var(--bg-card);
+    border: 1px solid rgba(221, 190, 161, 0.75);
+    box-shadow: 0 18px 45px rgba(74, 56, 43, 0.10);
 }
 
 .author-bio {
@@ -811,15 +812,15 @@ button {
 }
 
 #bio-gradient {
-    background: linear-gradient(to top, rgba(255, 247, 237, 0.96), rgba(255, 247, 237, 0.72), transparent) !important;
+    background: linear-gradient(to top, rgba(248, 236, 224, 0.96), rgba(248, 236, 224, 0.72), transparent) !important;
 }
 
 .author-quote {
-    background:
-        linear-gradient(135deg, rgba(255, 247, 237, 0.9), rgba(185, 221, 226, 0.2));
-    border: 1px solid rgba(60, 143, 155, 0.2);
-    border-left: 4px solid var(--color-turquoise-deep);
-    box-shadow: var(--shadow-card);
+    background: var(--bg-soft);
+    border: 1px solid rgba(221, 190, 161, 0.75);
+    border-left: 4px solid var(--accent);
+    border-radius: 24px;
+    box-shadow: 0 18px 45px rgba(74, 56, 43, 0.08);
 }
 
 .collection-showcase {
@@ -831,9 +832,16 @@ button {
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(circle at 12% 18%, rgba(255, 247, 237, 0.58), transparent 18rem),
-        radial-gradient(circle at 88% 76%, rgba(185, 221, 226, 0.22), transparent 20rem);
+        radial-gradient(circle at 12% 18%, rgba(248, 236, 224, 0.58), transparent 18rem),
+        radial-gradient(circle at 88% 76%, rgba(81, 171, 177, 0.22), transparent 20rem);
     pointer-events: none;
+}
+
+.bg-collection-image {
+    background:
+        linear-gradient(90deg, rgba(248, 236, 224, 0.86), rgba(248, 236, 224, 0.62)),
+        url("../../assets/images/backgrounds/bg-collection-turquoise.png") center / cover no-repeat,
+        var(--bg-card);
 }
 
 .bg-collection-image > .absolute {
@@ -846,17 +854,14 @@ button {
     gap: 1.5rem;
     align-items: center;
     padding: 1.5rem;
-    border-radius: 1.75rem;
-    background:
-        linear-gradient(135deg, rgba(255, 247, 237, 0.88), rgba(255, 247, 237, 0.68)),
-        url("../../assets/images/backgrounds/bg-card-pattern.webp") center / cover no-repeat;
-    border: var(--border-soft);
-    box-shadow: var(--shadow-card);
-    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    background: var(--bg-card);
+    border: 1px solid rgba(221, 190, 161, 0.75);
+    box-shadow: 0 18px 45px rgba(74, 56, 43, 0.10);
 }
 
 .collection-feature:hover {
-    box-shadow: 0 22px 58px rgba(94, 64, 50, 0.11);
+    box-shadow: 0 18px 45px rgba(74, 56, 43, 0.15);
 }
 
 .collection-book-stage,
@@ -873,8 +878,8 @@ button {
     align-items: center;
     justify-content: center;
     background:
-        radial-gradient(circle at 38% 22%, rgba(255, 247, 237, 0.96), transparent 42%),
-        linear-gradient(150deg, rgba(185, 221, 226, 0.34), rgba(238, 216, 192, 0.68)),
+        radial-gradient(circle at 38% 22%, rgba(248, 236, 224, 0.96), transparent 42%),
+        linear-gradient(150deg, rgba(81, 171, 177, 0.20), rgba(245, 226, 206, 0.60)),
         url("../../assets/images/backgrounds/bg-book.webp") center / cover no-repeat;
 }
 
@@ -887,7 +892,7 @@ button {
     bottom: 2rem;
     transform: translateX(-50%);
     border-radius: 999px;
-    background: rgba(94, 64, 50, 0.14);
+    background: rgba(74, 56, 43, 0.14);
     filter: blur(14px);
 }
 
@@ -897,13 +902,10 @@ button {
 
 .collection-next-note {
     padding: 1.25rem;
-    border-radius: 1.75rem;
-    background:
-        linear-gradient(135deg, rgba(255, 247, 237, 0.78), rgba(185, 221, 226, 0.22)),
-        url("../../assets/images/backgrounds/bg-card-pattern.webp") center / cover no-repeat;
-    border: var(--border-soft);
-    backdrop-filter: blur(8px);
-    box-shadow: var(--shadow-card);
+    border-radius: 24px;
+    background: var(--bg-card);
+    border: 1px solid rgba(221, 190, 161, 0.75);
+    box-shadow: 0 18px 45px rgba(74, 56, 43, 0.10);
 }
 
 .collection-next-visual {
@@ -913,8 +915,8 @@ button {
     justify-content: center;
     margin-bottom: 1.25rem;
     background:
-        radial-gradient(circle at 50% 42%, rgba(255, 247, 237, 0.72), transparent 42%),
-        linear-gradient(135deg, rgba(60, 143, 155, 0.22), rgba(238, 216, 192, 0.38)),
+        radial-gradient(circle at 50% 42%, rgba(248, 236, 224, 0.75), transparent 42%),
+        linear-gradient(135deg, rgba(81, 171, 177, 0.20), rgba(245, 226, 206, 0.35)),
         url("../../assets/images/backgrounds/bg-launches.webp") center / cover no-repeat;
 }
 
@@ -925,9 +927,9 @@ button {
 
 .faq-section {
     background:
-        linear-gradient(90deg, rgba(255, 247, 237, 0.9), rgba(255, 247, 237, 0.64)),
+        linear-gradient(90deg, rgba(248, 236, 224, 0.92), rgba(248, 236, 224, 0.65)),
         url("../../assets/images/backgrounds/bg-faq.webp") center / cover no-repeat,
-        var(--color-bg-main);
+        var(--bg-card);
 }
 
 .faq-section::before {
@@ -935,36 +937,32 @@ button {
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(circle at 12% 18%, rgba(255, 247, 237, 0.58), transparent 19rem),
-        radial-gradient(circle at 88% 76%, rgba(185, 221, 226, 0.18), transparent 22rem);
+        radial-gradient(circle at 12% 18%, rgba(248, 236, 224, 0.58), transparent 19rem),
+        radial-gradient(circle at 88% 76%, rgba(81, 171, 177, 0.18), transparent 22rem);
     pointer-events: none;
 }
 
 .faq-editorial-item {
-    border: var(--border-soft);
-    border-radius: 1.25rem;
-    background:
-        linear-gradient(90deg, rgba(255, 247, 237, 0.86), rgba(255, 247, 237, 0.68)),
-        url("../../assets/images/backgrounds/bg-card-pattern.webp") center / cover no-repeat;
-    box-shadow: 0 10px 28px rgba(94, 64, 50, 0.055);
+    border: 1px solid rgba(221, 190, 161, 0.75);
+    border-radius: 24px;
+    background: var(--bg-card);
+    box-shadow: 0 18px 45px rgba(74, 56, 43, 0.08);
     overflow: hidden;
-    transition: background 0.2s ease, box-shadow 0.2s ease;
+    transition: box-shadow 0.2s ease;
 }
 
 .faq-editorial-item:hover {
-    background:
-        linear-gradient(90deg, rgba(255, 247, 237, 0.94), rgba(185, 221, 226, 0.18)),
-        url("../../assets/images/backgrounds/bg-card-pattern.webp") center / cover no-repeat;
-    box-shadow: var(--shadow-card);
+    background: var(--bg-card);
+    box-shadow: 0 18px 45px rgba(74, 56, 43, 0.15);
 }
 
 .site-footer {
     background:
-        linear-gradient(180deg, rgba(255, 247, 237, 0.88), rgba(238, 216, 192, 0.72)),
+        linear-gradient(180deg, rgba(248, 236, 224, 0.90), rgba(245, 226, 206, 0.75)),
         url("../../assets/images/backgrounds/bg-footer.webp") center / cover no-repeat,
-        var(--color-beige);
-    border-top: 1px solid rgba(60, 143, 155, 0.2);
-    color: var(--color-text-main);
+        var(--bg-soft);
+    border-top: 1px solid rgba(81, 171, 177, 0.25);
+    color: var(--text-main);
 }
 
 .site-footer::before {
@@ -973,8 +971,8 @@ button {
     inset: 0 0 auto 0;
     height: 100%;
     background:
-        radial-gradient(circle at 12% 0%, rgba(185, 221, 226, 0.26), transparent 20rem),
-        linear-gradient(180deg, rgba(255, 247, 237, 0.15), rgba(255, 247, 237, 0.5));
+        radial-gradient(circle at 12% 0%, rgba(81, 171, 177, 0.26), transparent 20rem),
+        linear-gradient(180deg, rgba(248, 236, 224, 0.15), rgba(248, 236, 224, 0.5));
     pointer-events: none;
 }
 
@@ -983,14 +981,14 @@ button {
 }
 
 .footer-social-link {
-    background: rgba(255, 247, 237, 0.72);
-    color: var(--color-text-main);
-    border: 1px solid rgba(60, 143, 155, 0.16);
+    background: var(--bg-card);
+    color: var(--text-main);
+    border: 1px solid rgba(221, 190, 161, 0.50);
 }
 
 .footer-social-link:hover {
-    background: var(--color-turquoise-deep);
-    color: var(--color-cream);
+    background: var(--accent);
+    color: var(--white-warm);
 }
 
 .site-footer > div:last-child {
@@ -999,18 +997,17 @@ button {
 
 .bg-section-plain {
     background:
-        linear-gradient(180deg, rgba(255, 247, 237, 0.88), rgba(247, 236, 224, 0.86)),
+        linear-gradient(180deg, rgba(248, 236, 224, 0.90), rgba(245, 226, 206, 0.85)),
         url("../../assets/images/backgrounds/bg-faq.webp") center / cover no-repeat,
-        var(--color-bg-main);
+        var(--bg-card);
 }
 
 #success-view .bg-card-soft,
 #legales-view .bg-card-soft {
-    background:
-        linear-gradient(135deg, rgba(255, 247, 237, 0.94), rgba(255, 247, 237, 0.78)),
-        url("../../assets/images/backgrounds/bg-card-pattern.webp") center / cover no-repeat;
-    border: var(--border-soft);
-    box-shadow: 0 22px 58px rgba(94, 64, 50, 0.11);
+    background: var(--bg-card);
+    border: 1px solid rgba(221, 190, 161, 0.75);
+    border-radius: 24px;
+    box-shadow: 0 18px 45px rgba(74, 56, 43, 0.10);
 }
 
 #legales-view .space-y-10 {
@@ -1026,9 +1023,9 @@ button {
 @media (max-width: 767px) {
     .hero-editorial {
         background:
-            linear-gradient(180deg, rgba(255, 247, 237, 0.9), rgba(255, 247, 237, 0.56)),
-            url("../../assets/images/backgrounds/bg-hero.webp") center / cover no-repeat,
-            var(--color-bg-main);
+            linear-gradient(180deg, rgba(248, 236, 224, 0.90), rgba(248, 236, 224, 0.50)),
+            url("../../assets/images/backgrounds/bg-hero.webp") 58% top / cover no-repeat,
+            var(--bg-card);
     }
 
     .hero-editorial {
@@ -1039,8 +1036,8 @@ button {
 
     .hero-editorial::before {
         background:
-            radial-gradient(circle at 50% 24%, rgba(255, 247, 237, 0.32), rgba(185, 221, 226, 0.08) 42%, transparent 70%),
-            linear-gradient(180deg, rgba(255, 247, 237, 0.18), rgba(255, 247, 237, 0.05) 62%, rgba(255, 247, 237, 0.1));
+            radial-gradient(circle at 50% 24%, rgba(248, 236, 224, 0.35), rgba(81, 171, 177, 0.06) 42%, transparent 70%),
+            linear-gradient(180deg, rgba(248, 236, 224, 0.20), rgba(248, 236, 224, 0.05) 62%, rgba(248, 236, 224, 0.10));
     }
 
     .hero-editorial::after {
@@ -1068,7 +1065,7 @@ button {
         min-width: 0;
         max-width: 100%;
         color: var(--color-text-main) !important;
-        text-shadow: 0 1px 0 rgba(255, 247, 237, 0.82);
+        text-shadow: 0 1px 0 rgba(248, 236, 224, 0.82);
     }
 
     #nav-brand span:first-child {
@@ -1110,8 +1107,8 @@ button {
         align-items: center;
         justify-content: center;
         border-radius: 999px;
-        background: rgba(255, 247, 237, 0.58);
-        border: 1px solid rgba(211, 180, 147, 0.42);
+        background: rgba(248, 236, 224, 0.58);
+        border: 1px solid rgba(221, 190, 161, 0.50);
     }
 
     #nav-actions svg {
@@ -1137,10 +1134,9 @@ button {
         min-width: 0;
         padding: 1.35rem 1.05rem;
         border-radius: 1.5rem;
-        background: rgba(255, 247, 237, 0.72);
-        border: 1px solid rgba(238, 216, 192, 0.5);
-        box-shadow: 0 18px 48px rgba(94, 64, 50, 0.08);
-        backdrop-filter: blur(6px);
+        background: var(--bg-card);
+        border: 1px solid rgba(221, 190, 161, 0.75);
+        box-shadow: 0 18px 45px rgba(74, 56, 43, 0.10);
         text-shadow: none;
     }
 
@@ -1153,29 +1149,29 @@ button {
     .hero-title {
         font-size: clamp(1.9rem, 8.2vw, 2.15rem);
         max-width: 100%;
-        color: var(--color-text-main) !important;
-        filter: drop-shadow(0 1px 0 rgba(255, 247, 237, 0.62));
+        color: var(--text-main) !important;
+        filter: drop-shadow(0 1px 0 rgba(248, 236, 224, 0.62));
     }
 
     .hero-title span {
         white-space: normal !important;
-        color: var(--color-text-main) !important;
+        color: var(--text-main) !important;
     }
 
     .hero-copy > span,
     .hero-kicker,
     .hero-lede,
     .hero-trust {
-        color: var(--color-text-main) !important;
+        color: var(--text-main) !important;
     }
 
     .hero-copy > span {
-        color: var(--color-turquoise-deep) !important;
-        text-shadow: 0 1px 0 rgba(255, 247, 237, 0.8);
+        color: var(--accent-dark) !important;
+        text-shadow: 0 1px 0 rgba(248, 236, 224, 0.8);
     }
 
     .hero-kicker {
-        color: rgba(47, 58, 58, 0.8) !important;
+        color: var(--text-main) !important;
     }
 
     .hero-lede {
@@ -1185,7 +1181,7 @@ button {
         line-height: 1.42;
         margin-left: auto;
         margin-right: auto;
-        color: rgba(47, 58, 58, 0.78) !important;
+        color: var(--text-muted) !important;
     }
 
     .hero-trust {
@@ -1222,9 +1218,9 @@ button {
         padding-top: 4rem;
         padding-bottom: 4rem;
         background:
-            linear-gradient(180deg, rgba(255, 247, 237, 0.9), rgba(255, 247, 237, 0.72)),
-            url("../../assets/images/backgrounds/bg-author.webp") center / cover no-repeat,
-            var(--color-bg-main);
+            linear-gradient(180deg, rgba(248, 236, 224, 0.88), rgba(248, 236, 224, 0.66)),
+            url("../../assets/images/backgrounds/bg-author.webp") 44% center / cover no-repeat,
+            var(--bg-card);
     }
 
     .author-portrait {
@@ -1264,9 +1260,9 @@ button {
 
     .conversations-section {
         background:
-            linear-gradient(180deg, rgba(255, 247, 237, 0.92), rgba(255, 247, 237, 0.7)),
-            url("../../assets/images/backgrounds/bg-conversations.webp") center / cover no-repeat,
-            var(--color-bg-main);
+            linear-gradient(180deg, rgba(248, 236, 224, 0.90), rgba(248, 236, 224, 0.66)),
+            url("../../assets/images/backgrounds/bg-conversations.webp") 48% center / cover no-repeat,
+            var(--bg-card);
     }
 
     .conversations-section h2 {
@@ -1285,9 +1281,9 @@ button {
 
     .bg-collection-image {
         background:
-            linear-gradient(180deg, rgba(255, 247, 237, 0.9), rgba(255, 247, 237, 0.66)),
-            url("../../assets/images/backgrounds/bg-launches.webp") center / cover no-repeat,
-            var(--color-bg-main);
+            linear-gradient(180deg, rgba(248, 236, 224, 0.88), rgba(248, 236, 224, 0.62)),
+            url("../../assets/images/backgrounds/bg-collection-turquoise.png") 35% center / cover no-repeat,
+            var(--bg-card);
     }
 
     .collection-next-note {
@@ -1297,9 +1293,9 @@ button {
     .product-visual-editorial {
         min-height: 24rem;
         background:
-            linear-gradient(180deg, rgba(255, 247, 237, 0.58), rgba(247, 236, 224, 0.32)),
-            url("../../assets/images/backgrounds/bg-book.webp") center / cover no-repeat,
-            var(--color-beige);
+            linear-gradient(180deg, rgba(248, 236, 224, 0.60), rgba(245, 226, 206, 0.30)),
+            url("../../assets/images/backgrounds/bg-book.webp") 52% center / cover no-repeat,
+            var(--bg-soft);
     }
 
     .product-visual-editorial::after {
@@ -1312,8 +1308,9 @@ button {
 
     .cart-drawer-editorial {
         background:
-            linear-gradient(180deg, rgba(255, 247, 237, 0.96), rgba(247, 236, 224, 0.98)),
-            var(--color-bg-main);
+            linear-gradient(180deg, rgba(248, 236, 224, 0.96), rgba(245, 226, 206, 0.96)),
+            url("../../assets/images/backgrounds/bg-card-pattern.webp") center / cover no-repeat,
+            var(--bg-card);
     }
 
     .cart-drawer-header {
@@ -1356,9 +1353,9 @@ button {
 
     .faq-section {
         background:
-            linear-gradient(180deg, rgba(255, 247, 237, 0.94), rgba(255, 247, 237, 0.74)),
-            url("../../assets/images/backgrounds/bg-faq.webp") center / cover no-repeat,
-            var(--color-bg-main);
+            linear-gradient(180deg, rgba(248, 236, 224, 0.92), rgba(248, 236, 224, 0.72)),
+            url("../../assets/images/backgrounds/bg-faq.webp") 48% center / cover no-repeat,
+            var(--bg-card);
     }
 
     .faq-editorial-item {
@@ -1367,14 +1364,13 @@ button {
 
     .site-footer {
         background:
-            linear-gradient(180deg, rgba(255, 247, 237, 0.94), rgba(238, 216, 192, 0.82)),
-            url("../../assets/images/backgrounds/bg-footer.webp") center / cover no-repeat,
-            var(--color-beige);
+            linear-gradient(180deg, rgba(248, 236, 224, 0.92), rgba(245, 226, 206, 0.74)),
+            url("../../assets/images/backgrounds/bg-footer.webp") 60% center / cover no-repeat,
+            var(--bg-soft);
     }
 
     #legales-view .bg-card-soft,
     #success-view .bg-card-soft {
-        border-radius: 1.35rem;
         padding-left: 1.25rem;
         padding-right: 1.25rem;
     }
@@ -1397,15 +1393,15 @@ html {
     width: 14px;
 }
 ::-webkit-scrollbar-track {
-    background: var(--color-bg-main);
+    background: var(--bg-card);
 }
 ::-webkit-scrollbar-thumb {
-    background: var(--color-beige-dark);
+    background: var(--border-soft-color);
     border-radius: 10px;
-    border: 3px solid var(--color-bg-main);
+    border: 3px solid var(--bg-card);
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-brown-soft);
+    background: var(--text-muted);
 }
 
 /* Scrollbar Finito y Estético */
@@ -1416,16 +1412,16 @@ html {
     background: transparent;
 }
 .thin-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(212, 196, 168, 0.5);
+    background: rgba(221, 190, 161, 0.5);
     border-radius: 20px;
     border: none;
 }
 .thin-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgba(212, 196, 168, 0.8);
+    background: rgba(221, 190, 161, 0.8);
 }
 .thin-scrollbar {
     scrollbar-width: thin;
-    scrollbar-color: rgba(212, 196, 168, 0.5) transparent;
+    scrollbar-color: rgba(221, 190, 161, 0.5) transparent;
 }
 
 /* Animaciones de transición para vistas */
@@ -1484,8 +1480,8 @@ html {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--color-text-main);
-    background: linear-gradient(135deg, var(--color-bg-soft) 0%, var(--color-beige) 52%, var(--color-turquoise-soft) 100%);
+    color: var(--text-main);
+    background: linear-gradient(135deg, var(--white-warm) 0%, var(--bg-soft) 52%, var(--accent-soft) 100%);
     box-shadow: 0 24px 70px rgba(0, 0, 0, 0.26);
 }
 

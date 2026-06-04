@@ -75,8 +75,8 @@ function getMessageStyle(type = 'success') {
 
     return {
         icon: 'check-circle',
-        iconClass: 'text-brand-green',
-        classes: ['bg-white/95', 'border', 'border-gray-100', 'text-gray-800']
+        iconClass: 'text-brand-lilac',
+        classes: ['bg-brand-cream/95', 'border', 'border-brand-lilac/20', 'text-brand-text']
     };
 }
 
@@ -200,7 +200,7 @@ function _closeModal() {
         }
 
         const closeBtn = document.getElementById('modal-close-btn');
-        if (closeBtn) closeBtn.className = 'absolute -top-3 -right-3 md:top-4 md:right-4 bg-white/95 text-gray-600 hover:text-brand-text hover:bg-gray-100 border border-gray-200 transition p-2.5 rounded-full z-20 shadow-md';
+        if (closeBtn) closeBtn.className = 'absolute -top-3 -right-3 md:top-4 md:right-4 bg-brand-cream/95 text-brand-text/70 hover:text-brand-text hover:bg-brand-cream border border-brand-lilac/20 transition p-2.5 rounded-full z-20 shadow-md';
 
         const subsMsg = document.getElementById('subs-msg');
         const subsBtn = document.getElementById('subs-btn');
@@ -208,7 +208,7 @@ function _closeModal() {
         if (subsBtn) {
             subsBtn.disabled = false;
             subsBtn.innerHTML = 'Suscribirse <i data-lucide="send" class="w-4 h-4"></i>';
-            subsBtn.className = 'w-full bg-brand-text text-white py-3.5 rounded-xl font-medium hover:bg-opacity-90 transition shadow-lg flex items-center justify-center gap-2';
+            subsBtn.className = 'w-full bg-brand-lilac text-brand-cream py-3.5 rounded-xl font-medium hover:bg-opacity-90 transition shadow-lg flex items-center justify-center gap-2';
         }
 
         lucide.createIcons();

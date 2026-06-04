@@ -7,24 +7,24 @@ const productInfo = {
 
 const bookContent = {
     cover: `
-        <p class="text-xl font-serif text-center text-gray-700 mb-4">COMUNICAR PARA VIVIR<br>MÁS LIVIANOS</p>
-        <p class="text-lg text-gray-500 text-center">Cecilia Karina Rosso</p>
-        <hr class="my-4 border-gray-200">
-        <p class="text-sm text-gray-600 italic">"Una invitación a observar cómo nos comunicamos en la vida real..."</p>
+        <p class="text-xl font-serif text-center text-brand-text/80 mb-4">COMUNICAR PARA VIVIR<br>MÁS LIVIANOS</p>
+        <p class="text-lg text-brand-text/60 text-center">Cecilia Karina Rosso</p>
+        <hr class="my-4 border-brand-lilac/15">
+        <p class="text-sm text-brand-text/70 italic">"Una invitación a observar cómo nos comunicamos en la vida real..."</p>
     `,
     back: `
-        <p class="text-lg leading-relaxed text-gray-700 mb-4">Sobre este libro:</p>
-        <p class="text-base leading-relaxed text-gray-600 mb-4">Todos nos comunicamos. Desde que nos despertamos hasta que nos dormimos, estamos en contacto con otros: hablamos, escribimos, respondemos, escuchamos, callamos.
+        <p class="text-lg leading-relaxed text-brand-text/80 mb-4">Sobre este libro:</p>
+        <p class="text-base leading-relaxed text-brand-text/70 mb-4">Todos nos comunicamos. Desde que nos despertamos hasta que nos dormimos, estamos en contacto con otros: hablamos, escribimos, respondemos, escuchamos, callamos.
 </p>
-        <p class="text-base leading-relaxed text-gray-600 mb-4">Sin embargo, muchas veces sentimos que no nos entienden, o que nosotros no entendemos a los demás. Que hablamos mucho, pero que conectamos poco o que no conectamos. Que el vínculo se desgasta, aunque las palabras sigan ahí.</p>
-        <p class="text-base leading-relaxed text-gray-600 mb-4">Este libro no pretende ser un manual o una guía técnica. Es una invitación a observar cómo nos comunicamos en la vida real, con nuestra pareja, con nuestros hijos, con amigos, en el trabajo. En situaciones simples y complejas. Nos invita a reconocer los errores más comunes que todos, de una manera u otra, cometemos. Y a descubrir formas más claras y humanas de decir, escuchar y convivir.</p>
-        <p class="text-base leading-relaxed text-gray-600 mb-4">No vas a encontrar definiciones complicadas ni teorías largas. Tampoco estadísticas sacadas de investigaciones de las mejores universidades del mundo. Mucho menos, tecnicismos que estén fuera de nuestro entendimiento. El objetivo de este libro es que puedas lograr tener "conversaciones posibles"; es decir que, al final de una conversación, como mensajero, te hayas sentido escuchado y comprendido. Que puedas sentir que del otro lado hubo atención a tu mensaje.</p>
-        <p class="text-base leading-relaxed text-gray-600 mb-4">Que no fueron solo ruido y palabras sueltas. Y que, como receptor, pudiste escuchar y empatizar con la otra persona. En resumen, que se haya generado un feedback, es decir un ida y vuelta en una charla. Que sientas que pudiste estar presente y en los zapatos del otro, al menos un poquito más.</p>
-        <p class="text-base leading-relaxed text-gray-600 mb-4">Este libro pretende dar ejemplos reales. Preguntas que sirvan para mirar tus vínculos con otros ojos. Porque no se trata de hablar a la perfección, sino de aprender a hablar con honestidad y con la verdad de lo que nos pasa. Con presencia y respeto.</p>
-        <p class="text-base leading-relaxed text-gray-600 mb-4">Si alguna vez te pasó sentir que no te escuchan, que no sabes cómo decir algo sin lastimar, o que callas por miedo a perder un vínculo, este libro es para vos.
+        <p class="text-base leading-relaxed text-brand-text/70 mb-4">Sin embargo, muchas veces sentimos que no nos entienden, o que nosotros no entendemos a los demás. Que hablamos mucho, pero que conectamos poco o que no conectamos. Que el vínculo se desgasta, aunque las palabras sigan ahí.</p>
+        <p class="text-base leading-relaxed text-brand-text/70 mb-4">Este libro no pretende ser un manual o una guía técnica. Es una invitación a observar cómo nos comunicamos en la vida real, con nuestra pareja, con nuestros hijos, con amigos, en el trabajo. En situaciones simples y complejas. Nos invita a reconocer los errores más comunes que todos, de una manera u otra, cometemos. Y a descubrir formas más claras y humanas de decir, escuchar y convivir.</p>
+        <p class="text-base leading-relaxed text-brand-text/70 mb-4">No vas a encontrar definiciones complicadas ni teorías largas. Tampoco estadísticas sacadas de investigaciones de las mejores universidades del mundo. Mucho menos, tecnicismos que estén fuera de nuestro entendimiento. El objetivo de este libro es que puedas lograr tener "conversaciones posibles"; es decir que, al final de una conversación, como mensajero, te hayas sentido escuchado y comprendido. Que puedas sentir que del otro lado hubo atención a tu mensaje.</p>
+        <p class="text-base leading-relaxed text-brand-text/70 mb-4">Que no fueron solo ruido y palabras sueltas. Y que, como receptor, pudiste escuchar y empatizar con la otra persona. En resumen, que se haya generado un feedback, es decir un ida y vuelta en una charla. Que sientas que pudiste estar presente y en los zapatos del otro, al menos un poquito más.</p>
+        <p class="text-base leading-relaxed text-brand-text/70 mb-4">Este libro pretende dar ejemplos reales. Preguntas que sirvan para mirar tus vínculos con otros ojos. Porque no se trata de hablar a la perfección, sino de aprender a hablar con honestidad y con la verdad de lo que nos pasa. Con presencia y respeto.</p>
+        <p class="text-base leading-relaxed text-brand-text/70 mb-4">Si alguna vez te pasó sentir que no te escuchan, que no sabes cómo decir algo sin lastimar, o que callas por miedo a perder un vínculo, este libro es para vos.
 </p>
-        <div class="mt-6 pt-4 border-t border-gray-200">
-            <p class="text-sm text-gray-500">Edición Servicop</p>
+        <div class="mt-6 pt-4 border-t border-brand-lilac/15">
+            <p class="text-sm text-brand-text/60">Edición Servicop</p>
         </div>
     `
 };
@@ -38,43 +38,43 @@ const modalData = {
                 
                 <div class="bg-brand-lilac/10 p-3 rounded-xl border border-brand-lilac/30 mb-6 flex items-center gap-3">
                     <i data-lucide="truck" class="w-5 h-5 text-brand-lilac"></i>
-                    <p class="text-xs text-gray-700 font-medium">Estás realizando una compra con <strong>envío a domicilio</strong> y pago vía <strong>Mercado Pago</strong>.</p>
+                    <p class="text-xs text-brand-text/80 font-medium">Estás realizando una compra con <strong>envío a domicilio</strong> y pago vía <strong>Mercado Pago</strong>.</p>
                 </div>
 
                 <div id="checkout-message" class="hidden"></div>
 
                 <p class="font-medium text-brand-text mb-3 text-sm md:text-base border-b border-brand-lilac/20 pb-2">Completa tus datos de envío:</p>
-                <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-6 shadow-sm">
+                <div class="bg-brand-light/50 border border-brand-lilac/20 rounded-xl p-5 mb-6 shadow-sm">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-2">
                         <div>
-                            <label class="text-xs font-medium text-gray-500 uppercase tracking-wide block mb-1">Nombre completo</label>
-                            <input type="text" id="customer-name" placeholder="Tu nombre" required class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac" oninput="validateInput(this)">
+                            <label class="text-xs font-medium text-brand-text/60 uppercase tracking-wide block mb-1">Nombre completo</label>
+                            <input type="text" id="customer-name" placeholder="Tu nombre" required class="w-full px-4 py-3 bg-brand-cream border border-brand-lilac/15 rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac" oninput="validateInput(this)">
                         </div>
                         <div>
-                            <label class="text-xs font-medium text-gray-500 uppercase tracking-wide block mb-1">DNI (Para el correo)</label>
-                            <input type="number" id="customer-dni" placeholder="Sin puntos" required class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac" oninput="validateInput(this)">
+                            <label class="text-xs font-medium text-brand-text/60 uppercase tracking-wide block mb-1">DNI (Para el correo)</label>
+                            <input type="number" id="customer-dni" placeholder="Sin puntos" required class="w-full px-4 py-3 bg-brand-cream border border-brand-lilac/15 rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac" oninput="validateInput(this)">
                         </div>
                         <div>
-                            <label class="text-xs font-medium text-gray-500 uppercase tracking-wide block mb-1">Teléfono</label>
-                            <input type="tel" id="customer-phone" placeholder="Ej: 11 1234 5678" required class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac" oninput="validateInput(this)">
+                            <label class="text-xs font-medium text-brand-text/60 uppercase tracking-wide block mb-1">Teléfono</label>
+                            <input type="tel" id="customer-phone" placeholder="Ej: 11 1234 5678" required class="w-full px-4 py-3 bg-brand-cream border border-brand-lilac/15 rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac" oninput="validateInput(this)">
                         </div>
                         <div>
-                            <label class="text-xs font-medium text-gray-500 uppercase tracking-wide block mb-1">Email</label>
-                            <input type="email" id="customer-email" placeholder="tu@correo.com" required class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac" oninput="validateInput(this)">
+                            <label class="text-xs font-medium text-brand-text/60 uppercase tracking-wide block mb-1">Email</label>
+                            <input type="email" id="customer-email" placeholder="tu@correo.com" required class="w-full px-4 py-3 bg-brand-cream border border-brand-lilac/15 rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac" oninput="validateInput(this)">
                         </div>
                     </div>
 
-                    <div id="shipping-fields" class="space-y-4 pt-4 mt-2 border-t border-gray-200">
+                    <div id="shipping-fields" class="space-y-4 pt-4 mt-2 border-t border-brand-lilac/15">
                         <p class="text-sm font-semibold text-brand-text">Calculá tu envío</p>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                            <input type="text" id="zip" placeholder="Código postal" class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac text-sm" required oninput="resetShippingQuote(); validateInput(this)">
-                            <input type="text" id="province" placeholder="Provincia" class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac text-sm" required oninput="resetShippingQuote(); validateInput(this)">
-                            <input type="text" id="city" placeholder="Localidad" class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac text-sm" required oninput="resetShippingQuote(); validateInput(this)">
+                            <input type="text" id="zip" placeholder="Código postal" class="w-full px-4 py-3 bg-brand-cream border border-brand-lilac/15 rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac text-sm" required oninput="resetShippingQuote(); validateInput(this)">
+                            <input type="text" id="province" placeholder="Provincia" class="w-full px-4 py-3 bg-brand-cream border border-brand-lilac/15 rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac text-sm" required oninput="resetShippingQuote(); validateInput(this)">
+                            <input type="text" id="city" placeholder="Localidad" class="w-full px-4 py-3 bg-brand-cream border border-brand-lilac/15 rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac text-sm" required oninput="resetShippingQuote(); validateInput(this)">
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
-                            <input type="text" id="street" placeholder="Calle" class="sm:col-span-2 w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac text-sm" required oninput="resetShippingQuote(); validateInput(this)">
-                            <input type="text" id="street-number" placeholder="Número" class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac text-sm" required oninput="resetShippingQuote(); validateInput(this)">
-                            <input type="text" id="apartment" placeholder="Piso/depto opcional" class="w-full px-4 py-3 border border-white bg-white rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac text-sm" oninput="resetShippingQuote(); validateInput(this)">
+                            <input type="text" id="street" placeholder="Calle" class="sm:col-span-2 w-full px-4 py-3 bg-brand-cream border border-brand-lilac/15 rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac text-sm" required oninput="resetShippingQuote(); validateInput(this)">
+                            <input type="text" id="street-number" placeholder="Número" class="w-full px-4 py-3 bg-brand-cream border border-brand-lilac/15 rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac text-sm" required oninput="resetShippingQuote(); validateInput(this)">
+                            <input type="text" id="apartment" placeholder="Piso/depto opcional" class="w-full px-4 py-3 bg-brand-cream border border-brand-lilac/15 rounded-xl shadow-sm outline-none transition focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac text-sm" oninput="resetShippingQuote(); validateInput(this)">
                         </div>
 
                         <div id="shipping-quote-card" class="mt-4 border border-brand-lilac/30 rounded-xl p-4 bg-brand-pink/5 shadow-sm transition">
@@ -83,21 +83,21 @@ const modalData = {
                                     <i data-lucide="truck" class="w-5 h-5 text-brand-lilac"></i>
                                     <span class="text-sm font-semibold text-brand-text">Envío a domicilio</span>
                                 </div>
-                                <button type="button" onclick="calculateShipping(event)" id="btn-calc-shipping" class="bg-white border border-brand-lilac text-brand-lilac px-4 py-2 rounded-lg text-xs md:text-sm font-semibold hover:bg-brand-lilac hover:text-white transition shadow-sm">Calcular envío</button>
+                                <button type="button" onclick="calculateShipping(event)" id="btn-calc-shipping" class="bg-brand-cream border border-brand-lilac text-brand-lilac px-4 py-2 rounded-lg text-xs md:text-sm font-semibold hover:bg-brand-lilac hover:text-brand-cream transition shadow-sm">Calcular envío</button>
                             </div>
-                            <div id="shipping-cost-display" class="mt-3 text-sm text-gray-600">Completá la dirección para calcular el envío.</div>
+                            <div id="shipping-cost-display" class="mt-3 text-sm text-brand-text/70">Completá la dirección para calcular el envío.</div>
                         </div>
 
-                        <div class="bg-white border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
+                        <div class="bg-brand-cream/70 border border-brand-lilac/15 rounded-xl p-4 space-y-2 text-sm">
                             <div class="flex items-center justify-between gap-3">
-                                <span class="text-gray-500">Subtotal libros</span>
+                                <span class="text-brand-text/60">Subtotal libros</span>
                                 <span id="checkout-subtotal" class="font-semibold text-brand-text">$0</span>
                             </div>
                             <div class="flex items-center justify-between gap-3">
-                                <span class="text-gray-500">Envío</span>
+                                <span class="text-brand-text/60">Envío</span>
                                 <span id="checkout-shipping" class="font-semibold text-brand-text">Por calcular</span>
                             </div>
-                            <div class="flex items-center justify-between gap-3 border-t border-gray-100 pt-2">
+                            <div class="flex items-center justify-between gap-3 border-t border-brand-lilac/10 pt-2">
                                 <span class="font-semibold text-brand-text">Total</span>
                                 <span id="checkout-total" class="font-bold text-brand-lilac">$0</span>
                             </div>
@@ -115,18 +115,18 @@ const modalData = {
                         <div class="mt-0.5">
                             <input type="checkbox" id="privacy-policy" required class="w-5 h-5 accent-brand-lilac cursor-pointer">
                         </div>
-                        <span class="text-xs text-gray-600 leading-snug">
+                        <span class="text-xs text-brand-text/70 leading-snug">
                             He leído y acepto las <a href="#legales" onclick="closeModal(); showPage('legales-view');" class="text-brand-lilac font-bold hover:underline">Políticas de Privacidad</a> y autorizo el tratamiento de mis datos de envío.
                         </span>
                     </label>
                 </div>
 
-                <button type="submit" class="w-full bg-brand-text text-white py-4 rounded-xl font-medium hover:bg-opacity-90 transition shadow-lg flex items-center justify-center gap-2">
+                <button type="submit" class="w-full bg-brand-lilac text-brand-cream py-4 rounded-xl font-medium hover:bg-opacity-90 transition shadow-lg flex items-center justify-center gap-2">
                     Ir a pagar en Mercado Pago <i data-lucide="external-link" class="w-4 h-4"></i>
                 </button>
 
                 <div class="mt-4 text-center">
-                    <button type="button" onclick="closeModal()" class="text-gray-500 hover:text-brand-text text-sm font-medium transition flex items-center justify-center gap-1 mx-auto">
+                    <button type="button" onclick="closeModal()" class="text-brand-text/60 hover:text-brand-text text-sm font-medium transition flex items-center justify-center gap-1 mx-auto">
                         <i data-lucide="arrow-left" class="w-4 h-4"></i> Volver a la tienda
                     </button>
                 </div>
@@ -151,35 +151,35 @@ const modalData = {
             <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
             
             <form action="https://c4dbfde8.sibforms.com/serve/MUIFAFucGxlLSVVMIyWGX25m6RxpThHoNAjjAN4gTElQ2c-Dnp8MvJFxBORy6b3jC3bIEckj3y3YW0MWybSKcpROinDoqtvtG5ouMRk69_ar2o7VrH_IczOx-FpHkjniFVuzm8grGU-14n3LzBlZdF5XUvGJXkzFQJ5je-MBjDMxE2S7IF7xjHNWFPgslhlJRih4zqJBRiwk74SBAg==" method="POST" target="hidden_iframe" onsubmit="handleSubscribeSubmit(event)" novalidate>
-                <p class="mb-5 text-gray-600 text-sm md:text-base">Déjanos tu email para enterarte cuando el próximo volumen esté disponible y recibir novedades exclusivas.</p>
-                <div class="bg-brand-pink/10 border border-brand-pink/30 p-3 rounded-lg flex items-start gap-3 mb-5">
-                    <i data-lucide="alert-circle" class="w-5 h-5 text-brand-pink flex-shrink-0 mt-0.5"></i>
-                    <p class="text-xs text-gray-700">Importante: Es muy probable que tu confirmación llegue a la <strong>bandeja de Spam o Correo no deseado</strong>. ¡No olvides revisarla!</p>
+                <p class="mb-5 text-brand-text/70 text-sm md:text-base">Déjanos tu email para enterarte cuando el próximo volumen esté disponible y recibir novedades exclusivas.</p>
+                <div class="bg-brand-lilac/10 border border-brand-lilac/20 p-3 rounded-lg flex items-start gap-3 mb-5">
+                    <i data-lucide="alert-circle" class="w-5 h-5 text-brand-lilac flex-shrink-0 mt-0.5"></i>
+                    <p class="text-xs text-brand-text/80">Importante: Es muy probable que tu confirmación llegue a la <strong>bandeja de Spam o Correo no deseado</strong>. ¡No olvides revisarla!</p>
                 </div>
                 
                 <div class="space-y-4">
-                    <input type="email" id="EMAIL" name="EMAIL" placeholder="Tu correo electrónico" required class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac transition" oninput="clearFieldError(this)">
+                    <input type="email" id="EMAIL" name="EMAIL" placeholder="Tu correo electrónico" required class="w-full px-4 py-3 bg-brand-cream border border-brand-lilac/15 rounded-xl focus:outline-none focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac transition" oninput="clearFieldError(this)">
                     
                     <input type="text" name="email_address_check" value="" class="hidden">
                     <input type="hidden" name="locale" value="es">
                     
-                    <button type="submit" id="subs-btn" class="w-full bg-brand-text text-white py-3.5 rounded-xl font-medium hover:bg-opacity-90 transition shadow-lg flex items-center justify-center gap-2">
+                    <button type="submit" id="subs-btn" class="w-full bg-brand-lilac text-brand-cream py-3.5 rounded-xl font-medium hover:bg-opacity-90 transition shadow-lg flex items-center justify-center gap-2">
                         Suscribirse <i data-lucide="send" class="w-4 h-4"></i>
                     </button>
                 </div>
                 
-                <div id="subs-msg" class="mt-4 hidden bg-brand-green/10 p-4 rounded-xl border border-brand-green/30 transition-all">
+                <div id="subs-msg" class="mt-4 hidden bg-brand-lilac/10 p-4 rounded-xl border border-brand-lilac/20 transition-all">
                     <div class="flex flex-col items-center gap-2 text-center">
-                        <p class="text-sm text-brand-green font-bold flex items-center justify-center gap-2">
+                        <p class="text-sm text-brand-lilac font-bold flex items-center justify-center gap-2">
                             <i data-lucide="mail-check" class="w-5 h-5"></i> ¡Casi listo!
                         </p>
-                        <p class="text-sm text-gray-700 font-medium leading-relaxed">
+                        <p class="text-sm text-brand-text/80 font-medium leading-relaxed">
                             Te enviamos un correo. Por favor, <strong class="text-brand-text">revisa tu bandeja de entrada (o Spam)</strong> para confirmar tu suscripción.
                         </p>
                     </div>
                 </div>
                 
-                <p class="text-xs text-gray-400 mt-4 text-center">Tus datos están protegidos. No enviamos spam.</p>
+                <p class="text-xs text-brand-text/50 mt-4 text-center">Tus datos están protegidos. No enviamos spam.</p>
             </form>
         `
     }
