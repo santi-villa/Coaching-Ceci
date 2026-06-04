@@ -6,18 +6,17 @@ function updateNavbar() {
     const brandSurname = document.getElementById('brand-surname');
 
     if (currentView !== 'home-view' || scrolled) {
-        mainNav.classList.remove('text-white', 'bg-transparent');
-        mainNav.classList.add('text-brand-text', 'bg-white/95', 'backdrop-blur-md', 'shadow-sm');
+        mainNav.classList.remove('nav-at-top');
+        mainNav.classList.add('nav-scrolled');
         if (brandSurname) {
-            brandSurname.classList.remove('text-white');
+            brandSurname.classList.remove('text-brand-cream');
             brandSurname.classList.add('text-brand-pink');
         }
     } else {
-        mainNav.classList.add('text-white', 'bg-transparent');
-        mainNav.classList.remove('text-brand-text', 'bg-white/95', 'backdrop-blur-md', 'shadow-sm');
+        mainNav.classList.add('nav-at-top');
+        mainNav.classList.remove('nav-scrolled');
         if (brandSurname) {
-            brandSurname.classList.remove('text-brand-pink');
-            brandSurname.classList.add('text-white');
+            brandSurname.classList.add('text-brand-pink');
         }
     }
 }
@@ -86,7 +85,7 @@ function showToast(message, type = 'success') {
     if (!container) {
         container = document.createElement('div');
         container.id = 'toast-container';
-        container.className = 'fixed bottom-6 left-1/2 transform -translate-x-1/2 z-[100] flex flex-col gap-3 pointer-events-none w-[90%] max-w-sm';
+        container.className = 'fixed top-24 bottom-auto md:top-auto md:bottom-6 left-1/2 transform -translate-x-1/2 z-[100] flex flex-col gap-3 pointer-events-none w-[90%] max-w-sm';
         document.body.appendChild(container);
     }
 
