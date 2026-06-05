@@ -857,10 +857,16 @@ button {
         var(--bg-card);
 }
 
-.author-portrait {
+.author-portrait-wrap {
     max-width: 28rem;
     width: 100%;
     justify-self: center;
+    margin-top: 4.75rem;
+}
+
+.author-portrait {
+    max-width: 100%;
+    width: 100%;
     padding: 0.75rem;
     border-radius: 999px 999px 4.5rem 4.5rem;
     background: var(--bg-card);
@@ -896,7 +902,7 @@ button {
     background: transparent;
     border: 0;
     box-shadow: none;
-    transform: translate(-50%, -6px);
+    transform: translate(-50%, calc(-100% - 0.75rem));
     z-index: 2;
 }
 
@@ -1650,13 +1656,23 @@ button {
             radial-gradient(circle at 88% 84%, rgba(74, 56, 43, 0.06), transparent 12rem);
     }
 
-    .author-portrait {
+    .author-portrait-wrap {
         max-width: min(22rem, 88vw);
+        margin-top: 4.25rem;
+    }
+
+    .author-portrait {
         padding: 0.55rem;
     }
 
     .author-photo {
         height: 23rem;
+    }
+
+    input,
+    select,
+    textarea {
+        font-size: 16px !important;
     }
 
     .author-copy > .relative {
