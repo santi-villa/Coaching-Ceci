@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@theme {
+    --color-brand-lilac: #7DC8C4;
+    --color-brand-pink: #7DC8C4;
+    --color-brand-peach: #DDBEA1;
+    --color-brand-text: #4A382B;
+    --color-brand-light: #F8ECE0;
+    --color-brand-green: #D5F5F2;
+    --color-brand-sky: #D5F5F2;
+    --color-brand-ink: #4A382B;
+    --color-brand-cream: #FCFAF6;
+    --font-family-sans: "Inter", "sans-serif";
+    --font-family-serif: "Playfair Display", "serif";
+    --background-image-brand-gradient: linear-gradient(135deg, #8CD5D0 0%, #D5F5F2 48%, #EED8C0 100%);
+    --background-image-book-cover-gradient: linear-gradient(180deg, #8CD5D0 0%, #D5F5F2 42%, #EED8C0 100%);
+}
+
+@import "./styles.css";

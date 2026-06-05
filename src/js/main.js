@@ -1,5 +1,38 @@
 const mainNav = document.getElementById('main-nav');
 
+function isElementOpen(id, closedClasses = ['hidden', 'pointer-events-none']) {
+    const element = document.getElementById(id);
+    if (!element) return false;
+    return !closedClasses.some(className => element.classList.contains(className));
+}
+
+function hasOpenOverlay() {
+    return (
+        isElementOpen('mobile-menu', ['pointer-events-none']) ||
+        isElementOpen('action-modal', ['pointer-events-none']) ||
+        isElementOpen('product-view', ['pointer-events-none']) ||
+        isElementOpen('cart-overlay', ['hidden']) ||
+        isElementOpen('mp-redirect-overlay', ['hidden'])
+    );
+}
+
+function lockPageScroll() {
+    document.documentElement.classList.add('page-scroll-locked');
+    document.body.classList.add('page-scroll-locked');
+}
+
+function unlockPageScrollIfNoOverlay() {
+    requestAnimationFrame(() => {
+        if (!hasOpenOverlay()) {
+            document.documentElement.classList.remove('page-scroll-locked');
+            document.body.classList.remove('page-scroll-locked');
+        }
+    });
+}
+
+window.lockPageScroll = lockPageScroll;
+window.unlockPageScrollIfNoOverlay = unlockPageScrollIfNoOverlay;
+
 function updateNavbar() {
     const currentView = document.querySelector('.view-section.block')?.id || 'home-view';
     const scrolled = window.scrollY > 50;
@@ -35,10 +68,16 @@ function toggleMenu() {
         mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
         mobileMenu.classList.add('opacity-100', 'pointer-events-auto');
         mobileMenuBtn.innerHTML = '<i data-lucide="x" class="w-8 h-8 drop-shadow-md"></i>';
+        mobileMenuBtn.setAttribute('aria-expanded', 'true');
+        mobileMenuBtn.setAttribute('aria-label', 'Cerrar menú de navegación');
+        lockPageScroll();
     } else {
         mobileMenu.classList.remove('opacity-100', 'pointer-events-auto');
         mobileMenu.classList.add('opacity-0', 'pointer-events-none');
         mobileMenuBtn.innerHTML = '<i data-lucide="menu" class="w-8 h-8 drop-shadow-md"></i>';
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        mobileMenuBtn.setAttribute('aria-label', 'Abrir menú de navegación');
+        unlockPageScrollIfNoOverlay();
     }
     lucide.createIcons();
 }
@@ -169,7 +208,7 @@ function openModal(type) {
     modal.classList.remove('opacity-0', 'pointer-events-none');
     modal.classList.add('opacity-100', 'pointer-events-auto');
     setTimeout(() => { modalCard.classList.remove('scale-95'); modalCard.classList.add('scale-100'); }, 10);
-    document.body.style.overflow = 'hidden';
+    lockPageScroll();
 }
 
 function closeModal(forceState = null) {
@@ -195,9 +234,7 @@ function _closeModal() {
         modal.classList.remove('opacity-100', 'pointer-events-auto');
         modal.classList.add('opacity-0', 'pointer-events-none');
         
-        if (typeof isCartOpen === 'undefined' || !isCartOpen) {
-            document.body.style.overflow = 'auto';
-        }
+        unlockPageScrollIfNoOverlay();
 
         const closeBtn = document.getElementById('modal-close-btn');
         if (closeBtn) closeBtn.className = 'absolute -top-3 -right-3 md:top-4 md:right-4 bg-brand-cream/95 text-brand-text/70 hover:text-brand-text hover:bg-brand-cream border border-brand-lilac/20 transition p-2.5 rounded-full z-20 shadow-md';
@@ -233,7 +270,7 @@ function openProductModal() {
     view.classList.remove('opacity-0', 'pointer-events-none');
     view.classList.add('opacity-100', 'pointer-events-auto');
     setTimeout(() => { card.classList.remove('scale-95'); card.classList.add('scale-100'); }, 10);
-    document.body.style.overflow = 'hidden';
+    lockPageScroll();
 }
 
 function closeProductModal(forceState = null) {
@@ -262,11 +299,7 @@ function _closeProductModal() {
     setTimeout(() => {
         view.classList.remove('opacity-100', 'pointer-events-auto');
         view.classList.add('opacity-0', 'pointer-events-none');
-        if (!document.getElementById('action-modal') || document.getElementById('action-modal').classList.contains('pointer-events-none')) {
-            if (typeof isCartOpen === 'undefined' || !isCartOpen) {
-                document.body.style.overflow = 'auto';
-            }
-        }
+        unlockPageScrollIfNoOverlay();
     }, 200);
 }
 
@@ -325,7 +358,7 @@ function openBookDetails() {
     modal.classList.remove('opacity-0', 'pointer-events-none');
     modal.classList.add('opacity-100', 'pointer-events-auto');
     setTimeout(() => { modalCard.classList.remove('scale-95'); modalCard.classList.add('scale-100'); }, 10);
-    document.body.style.overflow = 'hidden';
+    lockPageScroll();
     lucide.createIcons({ root: modalIcon });
 }
 

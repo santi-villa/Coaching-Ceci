@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,33 +10,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            lilac: '#51ABB1',
-                            text: '#4A382B',
-                            light: '#F8ECE0',
-                            peach: '#DDBEA1',
-                            cream: '#FCFAF6'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif'],
-                    }
-                }
-            }
-        }
-    </script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="stylesheet" href="src/css/styles.css?v=15">
+    <script src="https://unpkg.com/lucide@1.17.0"></script>
+    <link rel="stylesheet" href="src/css/tailwind.css?v=2">
 </head>
 <body class="text-brand-text font-sans antialiased min-h-screen">
-    <main class="relative overflow-hidden min-h-screen py-12 px-6 bg-section-plain">
+    <a href="#legales-main" class="skip-link">Saltar al contenido principal</a>
+    <main id="legales-main" class="relative overflow-hidden min-h-screen py-12 px-6 bg-section-plain">
 
 
 
@@ -155,7 +134,7 @@
                     <p>Este acuerdo se rige por las leyes de la República Argentina. Ante cualquier controversia, las partes se someten a los tribunales ordinarios de la Provincia de Buenos Aires.</p>
                 </section>
 
-                <p class="mt-12 pt-6 border-t border-brand-lilac/20 text-sm text-brand-text/55 text-center">© 2026 Cecilia Karina Rosso. Todos los derechos reservados.</p>
+                <p class="mt-12 pt-6 border-t border-brand-lilac/20 text-sm text-brand-text/65 text-center">© 2026 Cecilia Karina Rosso. Todos los derechos reservados.</p>
             </div>
         </article>
     </main>

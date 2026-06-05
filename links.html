@@ -12,37 +12,14 @@
     <meta property="og:image" content="https://ceciliarosso.netlify.app/assets/images/libro.png">
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            lilac: '#51ABB1',
-                            text: '#4A382B',
-                            light: '#F8ECE0',
-                            peach: '#DDBEA1',
-                            pink: '#51ABB1',
-                            cream: '#FCFAF6'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif'],
-                    }
-                }
-            }
-        }
-    </script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="stylesheet" href="src/css/styles.css?v=15">
+    <script src="https://unpkg.com/lucide@1.17.0"></script>
+    <link rel="stylesheet" href="src/css/tailwind.css?v=2">
     <style>
         .link-pattern {
             background:
                 radial-gradient(circle at 50% 8%, rgba(81, 171, 177, 0.30), transparent 18rem),
                 linear-gradient(180deg, rgba(248, 236, 224, 0.82), rgba(252, 250, 246, 0.92)),
-                url("assets/images/backgrounds/bg-links-legal.png") center / cover no-repeat,
+                url("assets/images/backgrounds/bg-links-legal.webp") center / cover no-repeat,
                 #F8ECE0;
         }
         @keyframes slideUp {
@@ -65,6 +42,7 @@
     </style>
 </head>
 <body class="link-pattern min-h-screen flex flex-col items-center py-12 px-6 font-sans relative overflow-hidden">
+    <a href="#links-content" class="skip-link">Saltar al contenido principal</a>
 
 
 
@@ -81,7 +59,7 @@
     </div>
 
     <!-- Links Container -->
-    <div class="w-full max-w-sm flex flex-col gap-4 relative z-10">
+    <div id="links-content" class="w-full max-w-sm flex flex-col gap-4 relative z-10">
         
         <!-- Primary Action -->
         <a href="/index.html#coleccion" class="w-full btn-primary-soft p-4 rounded-2xl font-semibold flex items-center justify-between hover:scale-[1.02] active:scale-[0.98] transition-transform group primary-action-anim delay-200">
@@ -109,7 +87,7 @@
 
     <!-- Footer -->
     <footer class="mt-16 text-center animate-slide-up delay-500 relative z-10">
-        <p class="text-xs text-brand-text/50">© 2026 Cecilia Karina Rosso</p>
+        <p class="text-xs text-brand-text/65">© 2026 Cecilia Karina Rosso</p>
     </footer>
 
     <script>

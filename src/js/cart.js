@@ -48,7 +48,7 @@ function _openCart() {
         cartOverlay.classList.add('opacity-100');
         cartDrawer.classList.remove('translate-x-full');
     }, 10);
-    document.body.style.overflow = 'hidden';
+    if (typeof lockPageScroll === 'function') lockPageScroll();
 }
 
 function _closeCart() {
@@ -58,11 +58,8 @@ function _closeCart() {
     cartOverlay.classList.add('opacity-0');
     setTimeout(() => {
         cartOverlay.classList.add('hidden');
+        if (typeof unlockPageScrollIfNoOverlay === 'function') unlockPageScrollIfNoOverlay();
     }, 200);
-    // Solo devolvemos a auto si el modal tampoco lo está usando
-    if (!document.getElementById('action-modal') || document.getElementById('action-modal').classList.contains('pointer-events-none')) {
-        document.body.style.overflow = 'auto';
-    }
 }
 
 function addToCart() {
@@ -255,7 +252,7 @@ function showMercadoPagoRedirect() {
     const overlay = document.getElementById('mp-redirect-overlay');
     if (!overlay) return;
     overlay.classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
+    if (typeof lockPageScroll === 'function') lockPageScroll();
     if (typeof lucide !== 'undefined') lucide.createIcons({ root: overlay });
 }
 
@@ -263,9 +260,7 @@ function hideMercadoPagoRedirect() {
     const overlay = document.getElementById('mp-redirect-overlay');
     if (!overlay) return;
     overlay.classList.add('hidden');
-    if (typeof isCartOpen === 'undefined' || !isCartOpen) {
-        document.body.style.overflow = 'auto';
-    }
+    if (typeof unlockPageScrollIfNoOverlay === 'function') unlockPageScrollIfNoOverlay();
 }
 
 function updateCartUI() {

@@ -10,10 +10,16 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "netlify dev",
-    "start": "netlify dev"
+    "start": "netlify dev",
+    "build:css": "npx @tailwindcss/cli -i src/css/input.css -o src/css/tailwind.css --minify"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs"
+  "type": "commonjs",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.0",
+    "sharp": "^0.34.5",
+    "tailwindcss": "^4.3.0"
+  }
 }
