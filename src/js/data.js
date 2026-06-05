@@ -83,7 +83,7 @@ const modalData = {
                                     <i data-lucide="truck" class="w-5 h-5 text-brand-lilac"></i>
                                     <span class="text-sm font-semibold text-brand-text">Envío a domicilio</span>
                                 </div>
-                                <button type="button" onclick="calculateShipping(event)" id="btn-calc-shipping" class="bg-brand-cream border border-brand-lilac text-brand-lilac px-4 py-2 rounded-lg text-xs md:text-sm font-semibold hover:bg-brand-lilac hover:text-brand-cream transition shadow-sm">Calcular envío</button>
+                                <button type="button" onclick="calculateShipping(event)" id="btn-calc-shipping" class="bg-brand-cream border border-brand-lilac text-brand-lilac px-4 py-2 rounded-xl text-xs md:text-sm font-semibold hover:bg-brand-lilac hover:text-brand-cream transition shadow-sm">Calcular envío</button>
                             </div>
                             <div id="shipping-cost-display" class="mt-3 text-sm text-brand-text/70">Completá la dirección para calcular el envío.</div>
                         </div>

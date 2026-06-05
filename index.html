@@ -161,7 +161,7 @@
                 </span>
             </div>
             <button onclick="toggleCart()"
-                class="cart-close-button absolute top-5 right-5 bg-brand-cream text-brand-text/60 hover:text-brand-text transition p-2 rounded-full hover:bg-brand-cream border border-brand-lilac/15 shadow-md">
+                class="cart-close-button absolute top-5 right-5 bg-brand-cream text-brand-text/60 hover:text-brand-text transition p-2 rounded-xl hover:bg-brand-cream border border-brand-lilac/15 shadow-md">
                 <i data-lucide="x" class="w-6 h-6"></i>
             </button>
         </div>
@@ -179,7 +179,7 @@
                 <p class="font-serif text-2xl font-bold text-brand-text mb-2">Tu carrito está vacío</p>
                 <p class="text-sm max-w-[15rem] leading-relaxed">Sumá el libro y continuá la compra desde acá.</p>
                 <button onclick="toggleCart(); openProductModal();"
-                    class="mt-5 btn-secondary-soft px-5 py-2.5 rounded-full font-semibold shadow-sm">Ir a la tienda</button>
+                    class="mt-5 btn-secondary-soft px-5 py-2.5 rounded-xl font-semibold shadow-sm">Ir a la tienda</button>
             </div>
         </div>
 
@@ -208,8 +208,8 @@
             id="modal-card">
             <!-- Botón X más grande y resaltado -->
             <button id="modal-close-btn" onclick="closeModal()"
-                class="absolute -top-3 -right-3 md:top-4 md:right-4 bg-brand-cream/95 text-brand-text/70 hover:text-brand-text hover:bg-brand-cream border border-brand-lilac/20 transition p-2.5 rounded-full z-20 shadow-md">
-                <i data-lucide="x" class="w-7 h-7"></i>
+                class="absolute -top-3 -right-3 md:top-4 md:right-4 bg-brand-cream/95 text-brand-text/70 hover:text-brand-text hover:bg-brand-cream border border-brand-lilac/20 transition p-2.5 rounded-xl z-20 shadow-md">
+                    <i data-lucide="x" class="w-7 h-7"></i>
             </button>
             <div class="overflow-y-auto no-scrollbar pr-2 flex-grow">
                 <div id="modal-icon"
@@ -365,7 +365,7 @@
                         </div>
                         <img src="assets/images/cecilia.png" alt="Autora" loading="lazy"
                             class="author-photo relative rounded-t-full rounded-b-[4rem] object-cover h-[450px] w-full">
-                        <div class="author-mark absolute -bottom-4 -right-4 bg-brand-cream p-2.5 rounded-full shadow-md text-brand-lilac">
+                        <div class="author-mark absolute -bottom-4 -right-4 text-brand-lilac">
                             <img src="assets/images/iconoweb.png" alt="Logo web" class="w-10 h-10 object-contain">
                         </div>
                     </div>
@@ -383,16 +383,15 @@
                                 <p>Cautivada y motivada por la escritura, la comunicación asertiva y el lenguaje en
                                     general, pero sobre todo por el lenguaje ontológico: el más empático, el del Ser.
                                 </p>
-                                <p>Atracción fatal desde muy joven por el género literario de la autoayuda y del
-                                    autoconocimiento. ¿Sirven? Sí, y mucho! ¿Cuándo? Cuando el lector está dispuesto a
-                                    encontrarse con ellos; de lo contrario, solo será una lectura más.</p>
-
                                 <!-- Degradado sutil para indicar que hay más contenido -->
                                 <div id="bio-gradient"
                                     class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-[#F7ECE0] via-[#F7ECE0]/80 to-transparent z-10 pointer-events-none">
                                 </div>
 
                                 <div id="author-bio-more" class="hidden space-y-4 pt-4">
+                                    <p>Atracción fatal desde muy joven por el género literario de la autoayuda y del
+                                        autoconocimiento. ¿Sirven? Sí, y mucho! ¿Cuándo? Cuando el lector está dispuesto a
+                                        encontrarse con ellos; de lo contrario, solo será una lectura más.</p>
                                     <p>Mi primer libro de autoayuda leído “Usted puede sanar su vida” (1984) de la
                                         genial e inspiradora autora Louise Hay.</p>
                                     <p>Coach ontológico (de vida y del Ser) y coach vocacional. Una carrera y profesión
@@ -429,7 +428,7 @@
 
                         <div class="relative z-20">
                             <button id="toggle-bio-btn" onclick="toggleBio()"
-                                class="mt-4 inline-flex items-center gap-2 btn-primary-soft px-8 py-3 rounded-full font-bold hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 group">
+                                class="mt-4 inline-flex items-center gap-2 btn-primary-soft px-8 py-3 rounded-xl font-bold hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 group">
                                 <span>Leer biografía completa</span>
                                 <i data-lucide="chevron-down"
                                     class="w-5 h-5 group-hover:translate-y-1 transition-transform"></i>
@@ -437,7 +436,7 @@
                         </div>
                         <div class="mt-8 flex gap-4">
                             <a href="https://instagram.com/ceciliarosso.coach" target="_blank"
-                                class="inline-flex items-center gap-3 btn-secondary-soft px-8 py-4 rounded-full font-medium shadow-sm hover:shadow-lg transform hover:-translate-y-1 transition duration-300 group">
+                                class="inline-flex items-center gap-3 btn-secondary-soft px-8 py-4 rounded-xl font-medium shadow-sm hover:shadow-lg transform hover:-translate-y-1 transition duration-300 group">
                                 <svg role="img" viewBox="0 0 24 24" fill="currentColor"
                                     class="w-6 h-6 text-brand-text transition duration-300"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -463,7 +462,7 @@
                             <p class="text-brand-text/80">"Comunicar para vivir más livianos" es el primer paso.</p>
                         </div>
                         <button onclick="openModal('subscribe')"
-                            class="mt-4 md:mt-0 btn-secondary-soft px-6 py-3 rounded-full hover:shadow-lg transition font-medium">
+                            class="mt-4 md:mt-0 btn-secondary-soft px-6 py-3 rounded-xl hover:shadow-lg transition font-medium">
                             Suscribirme a novedades
                         </button>
                     </div>
@@ -511,7 +510,6 @@
                             </div>
                             <h3 class="font-serif text-2xl font-bold text-brand-text mb-2">Próximo volumen
                             </h3>
-                            <p class="text-brand-text/60 text-sm leading-relaxed">La colección continúa con nuevas miradas para conversar, escuchar y vincularnos mejor.</p>
                             <span class="inline-block mt-5 text-brand-text/65 text-sm italic">En preparación</span>
                         </div>
                     </div>
@@ -607,13 +605,13 @@
 
                 <!-- Botón de volver unificado (PC y Mobile) -->
                 <button onclick="closeProductModal()"
-                    class="absolute top-4 left-4 bg-brand-cream/90 text-brand-text/80 hover:text-brand-text transition px-4 py-2 rounded-full z-20 shadow-md backdrop-blur-md flex items-center gap-2 text-sm font-bold border border-brand-lilac/15 transform hover:scale-105 active:scale-95">
+                    class="absolute top-4 left-4 bg-brand-cream/90 text-brand-text/80 hover:text-brand-text transition px-4 py-2 rounded-xl z-20 shadow-md backdrop-blur-md flex items-center gap-2 text-sm font-bold border border-brand-lilac/15 transform hover:scale-105 active:scale-95">
                     <i data-lucide="arrow-left" class="w-5 h-5"></i> Volver a la tienda
                 </button>
 
                 <!-- Botón X reincorporado (dentro de la caja para que no se corte) -->
                 <button onclick="closeProductModal()"
-                    class="absolute top-4 right-4 bg-brand-cream/95 text-brand-text/70 hover:text-brand-text hover:bg-brand-cream border border-brand-lilac/20 transition p-2 rounded-full z-20 shadow-md">
+                    class="absolute top-4 right-4 bg-brand-cream/95 text-brand-text/70 hover:text-brand-text hover:bg-brand-cream border border-brand-lilac/20 transition p-2 rounded-xl z-20 shadow-md">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
 
@@ -630,7 +628,7 @@
                             </div>
                             <div class="flex gap-4 mt-10 md:mt-10">
                                 <button onclick="openBookDetails()"
-                                    class="btn-secondary-soft px-4 py-1.5 md:px-4 md:py-1.5 rounded-full font-semibold hover:bg-brand-cream shadow-md transform hover:-translate-y-1 transition duration-300 flex items-center gap-2 text-sm md:text-sm">
+                                    class="btn-secondary-soft px-4 py-1.5 md:px-4 md:py-1.5 rounded-xl font-semibold hover:bg-brand-cream shadow-md transform hover:-translate-y-1 transition duration-300 flex items-center gap-2 text-sm md:text-sm">
                                     <i data-lucide="file-text" class="w-4 h-4"></i> Acerca del libro
                                 </button>
                             </div>
@@ -680,12 +678,12 @@
                                 <div class="inline-flex items-center gap-3 rounded-full bg-brand-cream/80 border border-brand-lilac/15 p-1.5">
                                     <button
                                         onclick="document.getElementById('product-qty').textContent = Math.max(1, parseInt(document.getElementById('product-qty').textContent) - 1)"
-                                        class="w-9 h-9 rounded-full surface-muted text-brand-text hover:bg-brand-lilac/20 flex items-center justify-center transition text-lg font-bold">-</button>
+                                        class="w-9 h-9 rounded-xl surface-muted text-brand-text hover:bg-brand-lilac/20 flex items-center justify-center transition text-lg font-bold">-</button>
                                     <span id="product-qty"
                                         class="w-8 text-center font-bold text-base text-brand-text">1</span>
                                     <button
                                         onclick="document.getElementById('product-qty').textContent = parseInt(document.getElementById('product-qty').textContent) + 1"
-                                        class="w-9 h-9 rounded-full surface-muted text-brand-text hover:bg-brand-lilac/20 flex items-center justify-center transition text-lg font-bold">+</button>
+                                        class="w-9 h-9 rounded-xl surface-muted text-brand-text hover:bg-brand-lilac/20 flex items-center justify-center transition text-lg font-bold">+</button>
                                 </div>
                             </div>
 
@@ -730,7 +728,7 @@
                         </div>
 
                         <button onclick="showPage('home-view')"
-                            class="btn-primary-soft px-8 py-4 rounded-full font-semibold transition shadow-lg flex items-center justify-center gap-2 mx-auto">
+                            class="btn-primary-soft px-8 py-4 rounded-xl font-semibold transition shadow-lg flex items-center justify-center gap-2 mx-auto">
                             <i data-lucide="home" class="w-5 h-5"></i> Volver a la página principal
                         </button>
                     </div>
@@ -746,7 +744,7 @@
                     <div class="absolute inset-0 bg-brand-cream/75 mix-blend-overlay"></div>
                     <div class="relative z-10">
                         <button onclick="showPage('home-view')"
-                            class="flex items-center gap-2 text-brand-text/70 hover:text-brand-text transition mb-8 font-medium surface-muted px-5 py-2.5 rounded-full shadow-sm w-max">
+                            class="flex items-center gap-2 text-brand-text/70 hover:text-brand-text transition mb-8 font-medium surface-muted px-5 py-2.5 rounded-xl shadow-sm w-max">
                             <i data-lucide="arrow-left" class="w-5 h-5"></i> Volver al inicio
                         </button>
 
@@ -887,10 +885,10 @@
 
         <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-4 gap-10 md:gap-8 relative z-10">
             <div class="col-span-2">
-                <div class="font-serif text-2xl font-bold text-brand-text tracking-wide mb-4 flex items-center gap-3">
+                <div class="footer-brand font-serif text-2xl font-bold text-brand-text tracking-wide mb-4 flex items-center gap-3">
                     <img src="assets/images/iconoweb.png" alt="CR Logo"
-                        class="w-10 h-10 rounded-xl object-contain bg-brand-cream/80 p-1 border border-brand-lilac/20">
-                    <span>Cecilia <span class="font-light italic text-brand-lilac">Rosso</span></span>
+                        class="w-10 h-10 object-contain">
+                    <span>Cecilia <span class="font-light italic">Rosso</span></span>
                 </div>
                 <p class="max-w-xs text-sm mb-6 text-brand-text/70 leading-relaxed">
                     Acompañando tu crecimiento personal a través de lecturas que nutren el alma y sanan los vínculos.
@@ -898,7 +896,7 @@
                 </p>
                 <div class="flex gap-4">
                     <a href="https://instagram.com/ceciliarosso.coach" target="_blank"
-                        class="footer-social-link w-11 h-11 rounded-full flex items-center justify-center transition">
+                        class="footer-social-link w-11 h-11 rounded-xl flex items-center justify-center transition">
                         <svg role="img" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"
                             xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -906,7 +904,7 @@
                         </svg>
                     </a>
                     <a href="mailto:rossoceci@gmail.com"
-                        class="footer-social-link w-11 h-11 rounded-full flex items-center justify-center transition">
+                        class="footer-social-link w-11 h-11 rounded-xl flex items-center justify-center transition">
                         <i data-lucide="mail" class="w-5 h-5"></i>
                     </a>
                 </div>

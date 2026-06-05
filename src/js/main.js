@@ -237,7 +237,7 @@ function _closeModal() {
         unlockPageScrollIfNoOverlay();
 
         const closeBtn = document.getElementById('modal-close-btn');
-        if (closeBtn) closeBtn.className = 'absolute -top-3 -right-3 md:top-4 md:right-4 bg-brand-cream/95 text-brand-text/70 hover:text-brand-text hover:bg-brand-cream border border-brand-lilac/20 transition p-2.5 rounded-full z-20 shadow-md';
+        if (closeBtn) closeBtn.className = 'absolute -top-3 -right-3 md:top-4 md:right-4 bg-brand-cream/95 text-brand-text/70 hover:text-brand-text hover:bg-brand-cream border border-brand-lilac/20 transition p-2.5 rounded-xl z-20 shadow-md';
 
         const subsMsg = document.getElementById('subs-msg');
         const subsBtn = document.getElementById('subs-btn');

@@ -882,7 +882,9 @@ button {
 }
 
 .author-mark {
-    border: 1px solid rgba(81, 171, 177, 0.30);
+    background: transparent;
+    border: 0;
+    box-shadow: none;
 }
 
 .author-copy {
@@ -1141,8 +1143,9 @@ button {
     color: rgba(58, 45, 35, 0.96) !important;
 }
 
-.site-footer .text-brand-lilac {
-    color: var(--accent-dark) !important;
+.site-footer .footer-brand,
+.site-footer .footer-brand span {
+    color: var(--text-main) !important;
 }
 
 .site-footer a:hover {
@@ -1163,8 +1166,8 @@ button {
 }
 
 .site-footer img[alt="CR Logo"] {
-    background: rgba(252, 250, 246, 0.68) !important;
-    border-color: rgba(60, 140, 144, 0.32) !important;
+    background: transparent !important;
+    border-color: transparent !important;
 }
 
 .site-footer img[alt="Mercado Pago"] {

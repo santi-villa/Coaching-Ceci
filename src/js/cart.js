@@ -304,9 +304,9 @@ function updateCartUI() {
                         </div>
                         <div class="flex items-end justify-between gap-3 mt-4">
                             <div class="inline-flex items-center gap-2 rounded-full bg-brand-cream/70 border border-brand-lilac/15 p-1">
-                                <button onclick="updateItemQuantity('${item.id}', -1)" class="cart-qty-btn w-7 h-7 rounded-full flex items-center justify-center transition text-lg font-bold">-</button>
+                                <button onclick="updateItemQuantity('${item.id}', -1)" class="cart-qty-btn w-7 h-7 rounded-xl flex items-center justify-center transition text-lg font-bold">-</button>
                                 <span class="text-sm font-bold w-7 text-center text-brand-text">${item.quantity}</span>
-                                <button onclick="updateItemQuantity('${item.id}', 1)" class="cart-qty-btn w-7 h-7 rounded-full flex items-center justify-center transition text-lg font-bold">+</button>
+                                <button onclick="updateItemQuantity('${item.id}', 1)" class="cart-qty-btn w-7 h-7 rounded-xl flex items-center justify-center transition text-lg font-bold">+</button>
                             </div>
                             <div class="text-right">
                                 <p class="text-[10px] uppercase tracking-[0.16em] font-bold text-brand-text/45">Total</p>
