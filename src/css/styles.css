@@ -681,6 +681,7 @@ button {
     background: radial-gradient(ellipse at center, rgba(74, 56, 43, 0.24), rgba(74, 56, 43, 0));
     filter: blur(16px);
     opacity: 0.5;
+    pointer-events: none;
 }
 
 .bg-card-soft {
@@ -709,16 +710,16 @@ button {
 
 .btn-secondary-soft {
     background: transparent;
-    color: var(--accent-dark);
-    border: 1px solid var(--accent-dark);
+    color: #5BA8A4;
+    border: 1px solid #5BA8A4;
     border-radius: var(--radius-pill);
     transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
 }
 
 .btn-secondary-soft:hover {
-    background: rgba(81, 171, 177, 0.08);
-    border-color: var(--accent-dark);
-    box-shadow: 0 12px 28px rgba(60, 140, 144, 0.12);
+    background: rgba(91, 168, 164, 0.08);
+    border-color: #4A9E9A;
+    box-shadow: 0 12px 28px rgba(74, 158, 154, 0.15);
     transform: translateY(-1px);
 }
 
