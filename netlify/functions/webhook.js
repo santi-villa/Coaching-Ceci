@@ -373,9 +373,14 @@ function buildNotificationPreviews({ metadata, shippingRecord = {} }) {
 
 function getSellerRecipients(sellerEmail) {
     const recipients = [
-        { email: sellerEmail, name: 'Cecilia Rosso' },
-        { email: 'snvillamonte@gmail.com', name: 'Santiago Villamonte' }
+        { email: sellerEmail, name: 'Cecilia Rosso' }
     ];
+    const copyEmail = (process.env.SELLER_COPY_EMAIL || '').trim();
+    const copyName = (process.env.SELLER_COPY_NAME || '').trim();
+
+    if (copyEmail) {
+        recipients.push({ email: copyEmail, name: copyName || copyEmail });
+    }
     const seen = new Set();
 
     return recipients.filter(recipient => {
