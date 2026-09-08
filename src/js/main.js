@@ -57,6 +57,322 @@ function updateNavbar() {
 window.addEventListener('scroll', updateNavbar);
 updateNavbar();
 
+const heroBookCarousel = document.getElementById('hero-book-carousel');
+const heroBookCards = Array.from(document.querySelectorAll('[data-book-id]'));
+const heroBookDots = Array.from(document.querySelectorAll('[data-book-dot]'));
+const heroPrimaryButtons = Array.from(document.querySelectorAll('[data-hero-primary]'));
+const heroAboutButtons = Array.from(document.querySelectorAll('[data-hero-about]'));
+const heroCarouselStatus = document.getElementById('book-carousel-status');
+const heroCopy = document.querySelector('.hero-copy');
+const heroHeading = document.querySelector('.hero-heading');
+let heroCopyAnimationTimer = null;
+let activeProductCoverSide = 'front';
+let productCoverLightboxOpen = false;
+let productCoverLightboxReturnFocus = null;
+let productModalShouldGoBack = false;
+let productModalCloseTimer = null;
+
+function renderHeroBook(book, announce = true) {
+    const bookIndex = bookCatalog.findIndex(item => item.id === book.id);
+    const eyebrow = document.getElementById('hero-eyebrow');
+    const title = document.getElementById('hero-title');
+    const kicker = document.getElementById('hero-kicker');
+    const description = document.getElementById('hero-lede');
+
+    if (eyebrow) eyebrow.textContent = book.heroEyebrow;
+    if (title) title.innerHTML = book.heroTitleHtml;
+    if (kicker) kicker.textContent = book.heroKicker;
+    if (description) description.textContent = book.heroDescription;
+
+    if (announce) {
+        window.clearTimeout(heroCopyAnimationTimer);
+        [heroCopy, heroHeading].forEach(el => {
+            if (!el) return;
+            el.classList.remove('is-book-changing');
+            void el.offsetWidth;
+            el.classList.add('is-book-changing');
+        });
+        heroCopyAnimationTimer = window.setTimeout(() => {
+            heroCopy?.classList.remove('is-book-changing');
+            heroHeading?.classList.remove('is-book-changing');
+        }, 500);
+    }
+
+    const activeIndex = bookCatalog.findIndex(item => item.id === book.id);
+    heroBookCards.forEach(card => {
+        const cardIndex = bookCatalog.findIndex(item => item.id === card.dataset.bookId);
+        const isActive = card.dataset.bookId === book.id;
+        card.classList.toggle('is-active', isActive);
+        card.classList.toggle('is-behind', !isActive);
+        card.classList.toggle('is-behind-left', !isActive && cardIndex < activeIndex);
+        card.classList.toggle('is-behind-right', !isActive && cardIndex > activeIndex);
+        card.setAttribute('aria-current', String(isActive));
+        card.setAttribute('aria-pressed', String(isActive));
+    });
+
+    heroBookDots.forEach(dot => {
+        const isActive = dot.dataset.bookDot === book.id;
+        dot.classList.toggle('is-active', isActive);
+        dot.setAttribute('aria-selected', String(isActive));
+    });
+
+    const previousButton = document.querySelector('[data-book-prev]');
+    const nextButton = document.querySelector('[data-book-next]');
+    previousButton?.toggleAttribute('hidden', bookIndex <= 0);
+    nextButton?.toggleAttribute('hidden', bookIndex >= bookCatalog.length - 1);
+
+    heroPrimaryButtons.forEach(button => {
+        button.innerHTML = book.available
+            ? '<i data-lucide="shopping-bag" class="w-5 h-5"></i> Comprar libro físico'
+            : '<i data-lucide="book-open" class="w-5 h-5"></i> Conocer libro';
+        button.setAttribute('aria-label', book.available
+            ? `Comprar ${book.title}`
+            : `Ver detalles de ${book.title}`);
+    });
+    document.getElementById('mobile-book-title').textContent = book.title;
+    document.getElementById('mobile-book-price').textContent = `${book.priceLabel} ${book.currency} · ${book.available ? 'Disponible' : 'Próximamente'}`;
+    document.querySelector('[data-mobile-book-detail]').textContent = book.available ? 'Comprar' : 'Ver libro';
+
+    if (announce && heroCarouselStatus) {
+        heroCarouselStatus.textContent = `Libro ${bookIndex + 1} de ${bookCatalog.length}: ${book.title}`;
+    }
+
+    lucide.createIcons();
+}
+
+function renderProductModal(book = getSelectedBook()) {
+    const image = document.getElementById('book-front-img');
+    const zoomImage = document.getElementById('product-cover-lightbox-image');
+    const zoomBackTitle = document.getElementById('product-cover-lightbox-title');
+    const zoomBackCopy = document.getElementById('product-cover-lightbox-copy');
+    const headerTitle = document.getElementById('product-header-title');
+    const backTitle = document.getElementById('product-back-title');
+    const backCopy = document.getElementById('product-back-copy');
+    const highlights = document.getElementById('product-highlights-list');
+    const kicker = document.getElementById('product-kicker');
+    const title = document.getElementById('product-title');
+    const author = document.getElementById('product-author');
+    const description = document.getElementById('product-description');
+    const format = document.getElementById('product-format');
+    const pages = document.getElementById('product-pages');
+    const size = document.getElementById('product-size');
+    const binding = document.getElementById('product-binding');
+    const paper = document.getElementById('product-paper');
+    const language = document.getElementById('product-language');
+    const price = document.getElementById('product-price');
+    const currency = document.getElementById('product-currency');
+    const stock = document.getElementById('product-stock-pill');
+    const quantityRow = document.getElementById('product-quantity-row');
+    const purchaseCard = document.getElementById('product-purchase-card');
+    const bookContainer = document.querySelector('#product-modal-card .book-container');
+    const action = document.querySelector('.product-add-button');
+
+    if (image) {
+        image.classList.toggle('hidden', !book.image);
+        if (book.image) {
+            image.src = book.image;
+            image.alt = book.imageAlt;
+        } else {
+            image.removeAttribute('src');
+            image.alt = '';
+        }
+    }
+    if (zoomImage) {
+        zoomImage.classList.toggle('hidden', !book.image);
+        if (book.image) {
+            zoomImage.src = book.image;
+            zoomImage.alt = `Portada ampliada de ${book.title}`;
+        } else {
+            zoomImage.removeAttribute('src');
+            zoomImage.alt = '';
+        }
+    }
+    if (kicker) kicker.textContent = book.productKicker;
+    if (headerTitle) headerTitle.textContent = book.title;
+    if (backTitle) backTitle.textContent = book.title;
+    if (backCopy) backCopy.textContent = book.backCopy || book.productDescription;
+    if (zoomBackTitle) zoomBackTitle.textContent = book.title;
+    if (zoomBackCopy) zoomBackCopy.textContent = book.backCopy || book.productDescription;
+    if (highlights) highlights.innerHTML = (book.highlights || []).slice(0, 3).map(item => `<li>${item}</li>`).join('');
+    if (title) title.textContent = book.title;
+    if (author) author.textContent = 'Por Cecilia Karina Rosso';
+    if (description) description.textContent = book.productDescription;
+    if (format) format.textContent = book.meta.format;
+    if (pages) pages.textContent = book.meta.pages;
+    if (size) size.textContent = book.meta.size;
+    if (binding) binding.textContent = book.meta.binding || 'Con solapas';
+    if (paper) paper.textContent = book.meta.paper || 'Bookcel ahuesado';
+    if (language) language.textContent = book.meta.language || 'Español';
+    if (price) price.textContent = book.priceLabel;
+    if (currency) {
+        currency.textContent = book.currency;
+        currency.classList.toggle('hidden', !book.currency);
+    }
+    if (stock) {
+        stock.textContent = book.statusLabel;
+        stock.classList.toggle('is-upcoming', !book.available);
+    }
+    if (quantityRow) quantityRow.classList.toggle('hidden', !book.available);
+    if (purchaseCard) purchaseCard.classList.toggle('is-upcoming', !book.available);
+    if (bookContainer) bookContainer.classList.toggle('is-upcoming-book', !book.available);
+    if (action) {
+        action.innerHTML = book.available
+            ? '<i data-lucide="shopping-cart" class="w-5 h-5"></i> Agregar al carrito'
+            : '<i data-lucide="bell" class="w-5 h-5"></i> Avisarme cuando esté disponible';
+    }
+
+    switchProductCover('front');
+
+    const qty = document.getElementById('product-qty');
+    if (qty) qty.textContent = '1';
+    lucide.createIcons();
+}
+
+function switchProductCover(side = 'front') {
+    const wrapper = document.querySelector('#product-modal-card .book-3d-wrapper');
+    const isBack = side === 'back';
+    const zoomTrigger = document.querySelector('[data-product-cover-zoom]');
+    const book = getSelectedBook();
+    activeProductCoverSide = isBack ? 'back' : 'front';
+    wrapper?.classList.toggle('is-showing-back', isBack);
+
+    if (zoomTrigger) {
+        zoomTrigger.setAttribute('aria-label', `Ampliar ${isBack ? 'contratapa' : 'portada'} de ${book.title}`);
+    }
+
+    document.querySelectorAll('[data-product-cover-tab]').forEach(tab => {
+        const isActive = tab.dataset.productCoverTab === side;
+        tab.classList.toggle('is-active', isActive);
+        tab.setAttribute('aria-selected', String(isActive));
+    });
+}
+
+function openProductCoverLightbox() {
+    const lightbox = document.getElementById('product-cover-lightbox');
+    const image = document.getElementById('product-cover-lightbox-image');
+    const back = document.getElementById('product-cover-lightbox-back');
+    const caption = document.getElementById('product-cover-lightbox-heading');
+    const closeButton = document.getElementById('product-cover-lightbox-close');
+    const isBack = activeProductCoverSide === 'back';
+    if (!lightbox || !image || !back) return;
+
+    productCoverLightboxReturnFocus = document.querySelector('[data-product-cover-zoom]');
+    productCoverLightboxOpen = true;
+    const modalCard = document.getElementById('product-modal-card');
+    if (modalCard) modalCard.inert = true;
+    image.hidden = isBack;
+    back.hidden = !isBack;
+    if (caption) caption.textContent = isBack ? 'Contratapa ampliada' : 'Portada ampliada';
+    lightbox.setAttribute('aria-hidden', 'false');
+    lightbox.classList.add('is-open');
+    requestAnimationFrame(() => closeButton?.focus());
+}
+
+function closeProductCoverLightbox({ restoreFocus = true } = {}) {
+    const lightbox = document.getElementById('product-cover-lightbox');
+    if (!lightbox || !productCoverLightboxOpen) return;
+    const returnFocus = productCoverLightboxReturnFocus;
+
+    productCoverLightboxOpen = false;
+    const modalCard = document.getElementById('product-modal-card');
+    if (modalCard) modalCard.inert = false;
+    lightbox.setAttribute('aria-hidden', 'true');
+    lightbox.classList.remove('is-open');
+    if (restoreFocus && returnFocus instanceof HTMLElement) {
+        requestAnimationFrame(() => returnFocus.focus());
+    }
+    productCoverLightboxReturnFocus = null;
+}
+
+window.openProductCoverLightbox = openProductCoverLightbox;
+window.closeProductCoverLightbox = closeProductCoverLightbox;
+
+function selectBook(bookId, { announce = true } = {}) {
+    const book = getBookById(bookId);
+    if (!book) return;
+    selectedBookId = book.id;
+    syncProductInfo(book);
+    renderHeroBook(book, announce);
+    renderProductModal(book);
+}
+
+function moveBookSelection(direction) {
+    const currentIndex = bookCatalog.findIndex(book => book.id === selectedBookId);
+    const nextIndex = currentIndex + direction;
+    if (nextIndex < 0 || nextIndex >= bookCatalog.length) return;
+    selectBook(bookCatalog[nextIndex].id);
+}
+
+heroBookCards.forEach(card => {
+    card.addEventListener('click', event => {
+        if (heroBookCarousel?.dataset.swiped === 'true') {
+            heroBookCarousel.dataset.swiped = 'false';
+            event.preventDefault();
+            return;
+        }
+        selectBook(card.dataset.bookId);
+    });
+});
+
+heroBookDots.forEach(dot => dot.addEventListener('click', () => selectBook(dot.dataset.bookDot)));
+document.querySelector('[data-book-prev]')?.addEventListener('click', () => moveBookSelection(-1));
+document.querySelector('[data-book-next]')?.addEventListener('click', () => moveBookSelection(1));
+
+heroPrimaryButtons.forEach(button => button.addEventListener('click', () => {
+    const book = getSelectedBook();
+    if (book.available) addToCart(book.id);
+    else openProductModal();
+}));
+document.querySelectorAll('[data-hero-details]').forEach(button => button.addEventListener('click', () => {
+    openProductModal();
+}));
+document.querySelector('[data-mobile-book-detail]')?.addEventListener('click', () => openProductModal());
+heroAboutButtons.forEach(button => button.addEventListener('click', () => openModal('read')));
+
+heroBookCarousel?.addEventListener('keydown', event => {
+    if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        moveBookSelection(-1);
+    } else if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        moveBookSelection(1);
+    } else if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openProductModal();
+    }
+});
+
+let carouselPointerStart = null;
+heroBookCarousel?.addEventListener('pointerdown', event => {
+    if (event.pointerType === 'mouse') return;
+    carouselPointerStart = { x: event.clientX, y: event.clientY };
+});
+heroBookCarousel?.addEventListener('pointerup', event => {
+    if (!carouselPointerStart) return;
+    const deltaX = event.clientX - carouselPointerStart.x;
+    const deltaY = event.clientY - carouselPointerStart.y;
+    carouselPointerStart = null;
+    if (Math.abs(deltaX) > 44 && Math.abs(deltaX) > Math.abs(deltaY)) {
+        heroBookCarousel.dataset.swiped = 'true';
+        moveBookSelection(deltaX < 0 ? 1 : -1);
+    }
+});
+heroBookCarousel?.addEventListener('pointercancel', () => { carouselPointerStart = null; });
+
+function handleProductPrimaryAction() {
+    const book = getSelectedBook();
+    if (book.available) {
+        addToCartWithQty(book.id);
+        return;
+    }
+    closeProductModal(true);
+    setTimeout(() => openModal('subscribe'), 230);
+}
+
+window.selectBook = selectBook;
+window.handleProductPrimaryAction = handleProductPrimaryAction;
+selectBook(selectedBookId, { announce: false });
+
 const mobileMenuBtn = document.getElementById('mobile-menu-btn');
 const mobileMenu = document.getElementById('mobile-menu');
 const mobileLinks = document.querySelectorAll('.mobile-link');
@@ -85,6 +401,18 @@ function toggleMenu() {
 mobileMenuBtn.addEventListener('click', toggleMenu);
 mobileLinks.forEach(link => {
     link.addEventListener('click', () => { if (menuOpen) toggleMenu(); });
+});
+document.addEventListener('keydown', event => {
+    if (event.key !== 'Escape') return;
+    if (productCoverLightboxOpen) closeProductCoverLightbox();
+    else if (menuOpen) toggleMenu();
+    else if (isProductModalOpen) closeProductModal();
+});
+document.querySelectorAll('[data-product-cover-tab]').forEach(tab => {
+    tab.addEventListener('click', () => switchProductCover(tab.dataset.productCoverTab));
+});
+document.getElementById('product-cover-lightbox')?.addEventListener('click', event => {
+    if (event.target.id === 'product-cover-lightbox') closeProductCoverLightbox();
 });
 
 function escapeHtml(value) {
@@ -186,30 +514,60 @@ const modalContent = document.getElementById('modal-content');
 const modalIcon = document.getElementById('modal-icon');
 
 function openModal(type) {
-    const data = modalData[type];
+    const selectedBook = getSelectedBook();
+    const data = type === 'read'
+        ? {
+            title: selectedBook.previewTitle,
+            icon: 'book-open',
+            content: `${selectedBook.previewHtml}
+                <button onclick="closeModal(true); setTimeout(() => { openProductModal(); setTimeout(openBookDetails, 300); }, 300);" class="mt-4 w-full bg-brand-lilac text-white py-3 rounded-xl font-medium hover:bg-opacity-90 transition shadow-sm flex items-center justify-center gap-2">
+                    Ver detalles del libro
+                </button>`
+        }
+        : modalData[type];
+    if (!data) return;
     modalTitle.textContent = data.title;
     modalContent.innerHTML = data.content;
     modalIcon.innerHTML = `<i data-lucide="${data.icon}" class="w-8 h-8"></i>`;
     lucide.createIcons({ root: modalIcon });
     lucide.createIcons({ root: modalContent });
 
-    if (type === 'checkout') {
-        modalCard.classList.remove('max-w-lg');
-        modalCard.classList.add('max-w-xl');
-    } else {
-        modalCard.classList.remove('max-w-2xl');
-        modalCard.classList.add('max-w-lg');
-    }
+    modalCard.classList.remove('max-w-lg', 'max-w-xl', 'max-w-2xl', 'is-checkout-modal');
+    modalCard.classList.add('max-w-lg');
 
-    if (window.location.hash !== `#${type}`) {
-        window.history.pushState(null, '', `#${type}`);
-    }
+    goToLayer(`#${type}`);
 
     modal.classList.remove('opacity-0', 'pointer-events-none');
     modal.classList.add('opacity-100', 'pointer-events-auto');
     setTimeout(() => { modalCard.classList.remove('scale-95'); modalCard.classList.add('scale-100'); }, 10);
     lockPageScroll();
 }
+
+function isLayerHash(hash = window.location.hash) {
+    return ['#producto', '#carrito', '#checkout', '#detalles', '#read', '#subscribe'].includes(hash);
+}
+
+function goToLayer(hash) {
+    if (!hash) {
+        window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        return;
+    }
+    if (window.location.hash === hash) return;
+    if (isLayerHash()) {
+        window.history.replaceState(null, '', hash);
+        return;
+    }
+    window.history.pushState(null, '', hash);
+}
+
+function dismissAllOverlays({ keepCart = false } = {}) {
+    if (isProductModalOpen) _closeProductModal();
+    if (!modal.classList.contains('pointer-events-none')) _closeModal();
+    if (!keepCart && typeof closeCartLayer === 'function') closeCartLayer();
+}
+
+window.goToLayer = goToLayer;
+window.dismissAllOverlays = dismissAllOverlays;
 
 function closeModal(forceState = null) {
     if (typeof forceState !== 'boolean' && forceState !== null) {
@@ -218,21 +576,24 @@ function closeModal(forceState = null) {
 
     if (forceState === true) {
         _closeModal();
-    } else {
-        if (window.location.hash) {
-            window.history.back(); // Popstate hará el forceState = true
-        } else {
-            _closeModal();
-        }
+        return;
     }
+
+    const hash = window.location.hash;
+    if (hash === '#detalles' || hash === '#read' || hash === '#subscribe') {
+        window.history.back();
+        return;
+    }
+    _closeModal();
 }
 
 function _closeModal() {
+    modal.classList.add('pointer-events-none');
     modalCard.classList.remove('scale-100');
     modalCard.classList.add('scale-95');
     setTimeout(() => {
         modal.classList.remove('opacity-100', 'pointer-events-auto');
-        modal.classList.add('opacity-0', 'pointer-events-none');
+        modal.classList.add('opacity-0');
         
         unlockPageScrollIfNoOverlay();
 
@@ -258,20 +619,27 @@ modal.addEventListener('click', (e) => {
 
 let isProductModalOpen = false;
 
-function openProductModal() {
+function openProductModal(bookId = null) {
+    if (bookId) selectBook(bookId, { announce: false });
+    renderProductModal(getSelectedBook());
+    dismissAllOverlays({ keepCart: false });
+    productModalShouldGoBack = !isLayerHash(window.location.hash);
     isProductModalOpen = true;
     const view = document.getElementById('product-view');
     const card = document.getElementById('product-modal-card');
-    
-    if (window.location.hash !== '#producto') {
-        window.history.pushState(null, '', '#producto');
-    }
+    window.clearTimeout(productModalCloseTimer);
+    goToLayer('#producto');
 
     view.classList.remove('opacity-0', 'pointer-events-none');
     view.classList.add('opacity-100', 'pointer-events-auto');
+    view.setAttribute('aria-hidden', 'false');
     setTimeout(() => { card.classList.remove('scale-95'); card.classList.add('scale-100'); }, 10);
     lockPageScroll();
 }
+
+document.getElementById('product-view')?.addEventListener('click', event => {
+    if (event.target.id === 'product-view') closeProductModal();
+});
 
 function closeProductModal(forceState = null) {
     if (typeof forceState !== 'boolean' && forceState !== null) {
@@ -280,25 +648,36 @@ function closeProductModal(forceState = null) {
 
     if (forceState === true) {
         _closeProductModal();
-    } else {
-        if (window.location.hash) {
-            window.history.back(); // Popstate hará el forceState = true
-        } else {
-            _closeProductModal();
-        }
+        return;
+    }
+
+    if (!isProductModalOpen) return;
+
+    const hasProductHash = window.location.hash === '#producto';
+    const shouldGoBack = hasProductHash && productModalShouldGoBack;
+    _closeProductModal();
+    productModalShouldGoBack = false;
+
+    if (shouldGoBack) {
+        window.history.back();
+    } else if (hasProductHash) {
+        window.history.replaceState(null, '', window.location.pathname + window.location.search);
     }
 }
 
 function _closeProductModal() {
+    closeProductCoverLightbox({ restoreFocus: false });
     isProductModalOpen = false;
     const view = document.getElementById('product-view');
     const card = document.getElementById('product-modal-card');
-    
+    view.classList.add('pointer-events-none');
+    view.setAttribute('aria-hidden', 'true');
     card.classList.remove('scale-100');
     card.classList.add('scale-95');
-    setTimeout(() => {
+    window.clearTimeout(productModalCloseTimer);
+    productModalCloseTimer = window.setTimeout(() => {
         view.classList.remove('opacity-100', 'pointer-events-auto');
-        view.classList.add('opacity-0', 'pointer-events-none');
+        view.classList.add('opacity-0');
         unlockPageScrollIfNoOverlay();
     }, 200);
 }
@@ -306,6 +685,8 @@ function _closeProductModal() {
 function showPage(pageId) {
     const currentView = document.querySelector('.view-section.block') || document.querySelector('.view-section:not(.hidden)');
     const targetView = document.getElementById(pageId);
+
+    document.body.classList.toggle('checkout-active', pageId === 'checkout-view');
 
     if (currentView === targetView) return;
 
@@ -344,16 +725,15 @@ function showPage(pageId) {
 }
 
 function openBookDetails() {
-    const title = 'Contraportada';
-    const content = bookContent.back;
+    const selectedBook = getSelectedBook();
+    const title = selectedBook.aboutTitle;
+    const content = selectedBook.aboutHtml;
 
     modalTitle.textContent = title;
     modalContent.innerHTML = content;
     modalIcon.innerHTML = '<i data-lucide="book-open" class="w-8 h-8"></i>';
 
-    if (window.location.hash !== '#detalles') {
-        window.history.pushState(null, '', '#detalles');
-    }
+    goToLayer('#detalles');
 
     modal.classList.remove('opacity-0', 'pointer-events-none');
     modal.classList.add('opacity-100', 'pointer-events-auto');
@@ -368,11 +748,20 @@ window.addEventListener('DOMContentLoaded', () => {
     // Leemos los parámetros que Mercado Pago pone en la URL al volver
     const urlParams = new URLSearchParams(window.location.search);
 
-    if (urlParams.get('status') === 'approved') {
-        // Usamos la vista completa en lugar de modal para evitar scrolls y dobles barras
+    const paymentStatus = urlParams.get('status');
+    if (paymentStatus === 'approved') {
         setTimeout(() => {
             showPage('success-view');
-            // Reemplazamos la url base sacando param
+            history.replaceState(null, '', window.location.pathname);
+        }, 100);
+    } else if (paymentStatus === 'failure' || paymentStatus === 'rejected') {
+        setTimeout(() => {
+            showToast('El pago no se completó. Podés intentar de nuevo cuando quieras.', 'error');
+            history.replaceState(null, '', window.location.pathname);
+        }, 100);
+    } else if (paymentStatus === 'pending') {
+        setTimeout(() => {
+            showToast('Tu pago quedó pendiente. Te avisamos cuando se acredite.', 'warning');
             history.replaceState(null, '', window.location.pathname);
         }, 100);
     } else {
@@ -385,6 +774,19 @@ window.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 if (typeof toggleCart !== 'undefined') toggleCart(true);
             }, 100);
+        } else if (hash === '#checkout') {
+            setTimeout(() => {
+                if (typeof openCheckoutPage === 'function') {
+                    if (!cart.length) {
+                        history.replaceState(null, '', window.location.pathname);
+                        showToast('Agregá un libro al carrito para continuar el pago.', 'warning');
+                    } else {
+                        openCheckoutPage({ pushState: false });
+                    }
+                }
+            }, 100);
+        } else if (hash === '#legales') {
+            setTimeout(() => showPage('legales-view'), 100);
         }
     }
 });
@@ -392,70 +794,97 @@ window.addEventListener('DOMContentLoaded', () => {
 // Listener global para el botón "Atrás" del celular/navegador y cierre cruzado
 window.addEventListener('popstate', () => {
     const hash = window.location.hash;
-    
-    if (!hash || hash === '') {
-        // Cierra todo al volver al principio
-        if (!modal.classList.contains('pointer-events-none')) closeModal(true);
-        if (typeof isCartOpen !== 'undefined' && isCartOpen) toggleCart(false);
-        if (typeof isProductModalOpen !== 'undefined' && isProductModalOpen) closeProductModal(true);
-    } else if (hash === '#carrito') {
-        // Si retrocedemos desde el checkout al carrito, cerramos solo el checkout
-        if (!modal.classList.contains('pointer-events-none')) closeModal(true);
-        // Y por si no estaba abierto, lo forzamos abiertamente
-        if (typeof isCartOpen !== 'undefined' && !isCartOpen) toggleCart(true);
-        // Cerramos el de producto para que no quede abajo
-        if (typeof isProductModalOpen !== 'undefined' && isProductModalOpen) closeProductModal(true);
-    } else if (hash === '#producto') {
-        if (!modal.classList.contains('pointer-events-none')) closeModal(true);
-        if (typeof isCartOpen !== 'undefined' && isCartOpen) toggleCart(false);
-        if (typeof isProductModalOpen === 'undefined' || !isProductModalOpen) openProductModal();
+
+    if (!hash) {
+        dismissAllOverlays();
+        if (document.getElementById('checkout-view')?.classList.contains('block')) showPage('home-view');
+        return;
+    }
+
+    if (hash === '#carrito') {
+        if (document.getElementById('checkout-view')?.classList.contains('block')) showPage('home-view');
+        if (!modal.classList.contains('pointer-events-none')) _closeModal();
+        if (isProductModalOpen) _closeProductModal();
+        if (typeof toggleCart === 'function' && !isCartOpen) toggleCart(true);
+        return;
+    }
+
+    if (hash === '#producto') {
+        if (!modal.classList.contains('pointer-events-none')) _closeModal();
+        if (typeof closeCartLayer === 'function') closeCartLayer();
+        if (document.getElementById('checkout-view')?.classList.contains('block')) showPage('home-view');
+        if (!isProductModalOpen) openProductModal();
+        return;
+    }
+
+    if (hash === '#checkout') {
+        if (typeof openCheckoutPage === 'function') openCheckoutPage({ pushState: false });
     }
 });
 
 function toggleFaq(btn) {
     const content = btn.nextElementSibling;
-    const icon = btn.querySelector('i');
+    const chevron = btn.querySelector('.faq-chevron');
+    const isOpen = Boolean(content.style.maxHeight && content.style.maxHeight !== '0px');
     
-    if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+    if (isOpen) {
         content.style.maxHeight = '0px';
-        icon.style.transform = 'rotate(0deg)';
+        if (chevron) chevron.style.transform = 'rotate(0deg)';
+        btn.setAttribute('aria-expanded', 'false');
     } else {
         content.style.maxHeight = content.scrollHeight + 'px';
+        if (chevron) chevron.style.transform = 'rotate(180deg)';
+        btn.setAttribute('aria-expanded', 'true');
     }
 }
+
+function handleInlineSubscribeSubmit(event) {
+    const form = event.currentTarget;
+    const input = form.querySelector('input[type="email"]');
+    const button = form.querySelector('button[type="submit"]');
+    const message = form.querySelector('.newsletter-message');
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    form.classList.remove('has-error');
+    if (!input || !emailRegex.test(input.value.trim())) {
+        event.preventDefault();
+        form.classList.add('has-error');
+        if (message) message.textContent = 'Ingresá un correo electrónico válido.';
+        input?.focus();
+        return;
+    }
+
+    button.disabled = true;
+    button.textContent = 'Enviando…';
+    if (message) message.textContent = '';
+
+    window.setTimeout(() => {
+        button.textContent = '¡Gracias!';
+        if (message) message.textContent = 'Revisá tu correo para confirmar la suscripción.';
+        form.reset();
+    }, 1200);
+}
+
+window.handleInlineSubscribeSubmit = handleInlineSubscribeSubmit;
 
 function toggleBio() {
-    const moreText = document.getElementById('author-bio-more');
-    const btn = document.getElementById('toggle-bio-btn');
-    const gradient = document.getElementById('bio-gradient');
-
-    if (moreText.classList.contains('hidden')) {
-        moreText.classList.remove('hidden');
-        moreText.classList.add('block');
-        if (gradient) gradient.classList.add('hidden');
-        btn.classList.remove('mt-4');
-        btn.classList.add('mt-8');
-        btn.innerHTML = `
-            <span>Leer menos</span>
-            <i data-lucide="chevron-up" class="w-5 h-5 group-hover:-translate-y-1 transition-transform"></i>
-        `;
-    } else {
-        moreText.classList.add('hidden');
-        moreText.classList.remove('block');
-        if (gradient) gradient.classList.remove('hidden');
-        btn.classList.remove('mt-8');
-        btn.classList.add('mt-4');
-        btn.innerHTML = `
-            <span>Leer biografía completa</span>
-            <i data-lucide="chevron-down" class="w-5 h-5 group-hover:translate-y-1 transition-transform"></i>
-        `;
-        
-        // Scroll back to the top of the bio section if we are collapsing
-        document.getElementById('autora').scrollIntoView({ behavior: 'smooth' });
-    }
-    
-    // Update icon manually if lucide is available
-    if (typeof lucide !== 'undefined') {
-        lucide.createIcons({ root: btn });
-    }
+    openAuthorBiography();
 }
+
+function openAuthorBiography() {
+    const dialog = document.getElementById('author-dialog');
+    const copy = document.querySelector('.author-bio-story').cloneNode(true);
+    const more = copy.querySelector('#author-bio-more');
+    more.removeAttribute('id');
+    more.classList.remove('hidden');
+    document.getElementById('author-dialog-content').replaceChildren(...copy.childNodes);
+    document.getElementById('toggle-bio-btn').setAttribute('aria-expanded', 'true');
+    dialog.showModal();
+    lockPageScroll();
+}
+
+document.getElementById('author-dialog').addEventListener('close', () => {
+    document.getElementById('toggle-bio-btn').setAttribute('aria-expanded', 'false');
+    unlockPageScrollIfNoOverlay();
+    document.getElementById('toggle-bio-btn').focus();
+});

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1350" role="img" aria-labelledby="title desc">
+  <title id="title">Portada provisoria de Escuchar para comprendernos mejor</title>
+  <desc id="desc">Portada editorial en tonos crema y turquesa con ramas ilustradas.</desc>
+  <defs>
+    <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fbf3e8"/>
+      <stop offset="0.55" stop-color="#f2e5d4"/>
+      <stop offset="1" stop-color="#c8e1dc"/>
+    </linearGradient>
+    <radialGradient id="wash" cx="75%" cy="76%" r="62%">
+      <stop offset="0" stop-color="#65aaa5" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#65aaa5" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="3" seed="7" result="noise"/>
+      <feColorMatrix in="noise" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 .045 0"/>
+    </filter>
+  </defs>
+  <rect width="900" height="1350" rx="10" fill="url(#paper)"/>
+  <rect width="900" height="1350" rx="10" fill="url(#wash)"/>
+  <rect width="900" height="1350" rx="10" filter="url(#grain)" opacity=".5"/>
+  <path d="M80 1175C250 1090 294 920 390 735" fill="none" stroke="#4f8e8b" stroke-width="10" stroke-linecap="round"/>
+  <g fill="#72aaa5" opacity=".8">
+    <ellipse cx="179" cy="1063" rx="38" ry="92" transform="rotate(-49 179 1063)"/>
+    <ellipse cx="285" cy="977" rx="34" ry="83" transform="rotate(42 285 977)"/>
+    <ellipse cx="314" cy="856" rx="31" ry="76" transform="rotate(-38 314 856)"/>
+    <ellipse cx="385" cy="757" rx="26" ry="66" transform="rotate(35 385 757)"/>
+  </g>
+  <path d="M700 130C645 230 664 337 602 425" fill="none" stroke="#be9876" stroke-width="6" stroke-linecap="round" opacity=".65"/>
+  <g fill="#d8b998" opacity=".72">
+    <ellipse cx="673" cy="218" rx="24" ry="59" transform="rotate(-46 673 218)"/>
+    <ellipse cx="670" cy="310" rx="22" ry="54" transform="rotate(42 670 310)"/>
+    <ellipse cx="612" cy="405" rx="20" ry="50" transform="rotate(-40 612 405)"/>
+  </g>
+  <text x="450" y="380" text-anchor="middle" fill="#40362e" font-family="Georgia, serif" font-size="84" font-weight="600">Escuchar</text>
+  <text x="450" y="462" text-anchor="middle" fill="#40362e" font-family="Georgia, serif" font-size="51">para comprender</text>
+  <text x="450" y="525" text-anchor="middle" fill="#40362e" font-family="Georgia, serif" font-size="51">(nos) mejor</text>
+  <line x1="350" y1="590" x2="550" y2="590" stroke="#5ba8a4" stroke-width="5" stroke-linecap="round"/>
+  <text x="450" y="658" text-anchor="middle" fill="#4f8e8b" font-family="Georgia, serif" font-size="33" font-style="italic">La otra mitad de la comunicación</text>
+  <text x="450" y="1235" text-anchor="middle" fill="#40362e" font-family="Georgia, serif" font-size="31">Cecilia Karina Rosso</text>
+</svg>

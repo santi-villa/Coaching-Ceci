@@ -117,6 +117,7 @@ exports.handler = async (event) => {
                     customer_phone: cleanString(customerData.phone),
                     customer_email: cleanString(customerData.email),
                     customer_dni: cleanString(customerData.dni),
+                    newsletter: customerData.newsletter ? 'si' : 'no',
                     delivery_type: 'shipping',
                     shipping_postal_code: address.postalCode,
                     shipping_province: address.province,
