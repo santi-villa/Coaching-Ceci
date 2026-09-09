@@ -1,4 +1,3 @@
-const CART_STORAGE_KEY = 'cecilia-rosso-cart';
 let cart = [];
 let isCartOpen = false;
 let quotedShippingCost = 0;
@@ -21,7 +20,6 @@ function toggleCart(forceState = null) {
     }
 
     if (forceState === true) {
-        if (typeof goToLayer === 'function') goToLayer('#carrito');
         if (!isCartOpen) _openCart();
     } else if (forceState === false) {
         if (isCartOpen) _closeCart();
@@ -29,13 +27,12 @@ function toggleCart(forceState = null) {
         // Toggle manual
         if (isCartOpen) {
             if (window.location.hash === '#carrito') {
-                window.history.back();
+                window.history.back(); // Disparador para popstate
             } else {
                 _closeCart();
             }
         } else {
-            if (typeof goToLayer === 'function') goToLayer('#carrito');
-            else if (window.location.hash !== '#carrito') {
+            if (window.location.hash !== '#carrito') {
                 window.history.pushState(null, '', '#carrito');
             }
             _openCart();
@@ -43,16 +40,9 @@ function toggleCart(forceState = null) {
     }
 }
 
-function closeCartLayer() {
-    if (isCartOpen) _closeCart();
-}
-
-window.closeCartLayer = closeCartLayer;
-
 function _openCart() {
-    if (typeof dismissAllOverlays === 'function') dismissAllOverlays({ keepCart: true });
     isCartOpen = true;
-    cartOverlay.classList.remove('hidden', 'pointer-events-none');
+    cartOverlay.classList.remove('hidden');
     setTimeout(() => {
         cartOverlay.classList.remove('opacity-0');
         cartOverlay.classList.add('opacity-100');
@@ -63,7 +53,6 @@ function _openCart() {
 
 function _closeCart() {
     isCartOpen = false;
-    cartOverlay.classList.add('pointer-events-none');
     cartDrawer.classList.add('translate-x-full');
     cartOverlay.classList.remove('opacity-100');
     cartOverlay.classList.add('opacity-0');
@@ -73,27 +62,12 @@ function _closeCart() {
     }, 200);
 }
 
-function addToCart(bookId = null) {
-    const selectedProduct = (bookId && typeof getBookById === 'function' ? getBookById(bookId) : null)
-        || (typeof getSelectedBook === 'function' ? getSelectedBook() : productInfo);
-    if (!selectedProduct?.available && selectedProduct?.available !== undefined) {
-        showToast('Este libro estará disponible próximamente.');
-        return;
-    }
-    const cartProduct = {
-        id: selectedProduct.id,
-        title: selectedProduct.title,
-        price: selectedProduct.price,
-        image: selectedProduct.image,
-        volume: selectedProduct.productKicker?.split('·').pop().trim() || 'Libro',
-        format: selectedProduct.meta?.format || 'Libro físico',
-        pages: selectedProduct.meta?.pages || ''
-    };
-    const existingItem = cart.find(item => item.id === cartProduct.id);
+function addToCart() {
+    const existingItem = cart.find(item => item.id === productInfo.id);
     if (existingItem) {
         existingItem.quantity += 1;
     } else {
-        cart.push({ ...cartProduct, quantity: 1 });
+        cart.push({ ...productInfo, quantity: 1 });
     }
 
     resetShippingQuote();
@@ -102,29 +76,15 @@ function addToCart(bookId = null) {
     toggleCart(true);
 }
 
-function addToCartWithQty(bookId = null) {
+function addToCartWithQty() {
     const qtyEl = document.getElementById('product-qty');
     const qty = qtyEl ? parseInt(qtyEl.textContent) : 1;
-    const selectedProduct = (bookId && typeof getBookById === 'function' ? getBookById(bookId) : null)
-        || (typeof getSelectedBook === 'function' ? getSelectedBook() : productInfo);
-    if (!selectedProduct?.available && selectedProduct?.available !== undefined) {
-        showToast('Este libro estará disponible próximamente.');
-        return;
-    }
-    const cartProduct = {
-        id: selectedProduct.id,
-        title: selectedProduct.title,
-        price: selectedProduct.price,
-        image: selectedProduct.image,
-        volume: selectedProduct.productKicker?.split('·').pop().trim() || 'Libro',
-        format: selectedProduct.meta?.format || 'Libro físico',
-        pages: selectedProduct.meta?.pages || ''
-    };
-    const existingItem = cart.find(item => item.id === cartProduct.id);
+
+    const existingItem = cart.find(item => item.id === productInfo.id);
     if (existingItem) {
         existingItem.quantity += qty;
     } else {
-        cart.push({ ...cartProduct, quantity: qty });
+        cart.push({ ...productInfo, quantity: qty });
     }
 
     resetShippingQuote();
@@ -135,46 +95,9 @@ function addToCartWithQty(bookId = null) {
 }
 
 // Validación visual en tiempo real
-function loadStoredCart() {
-    try {
-        const parsed = JSON.parse(localStorage.getItem(CART_STORAGE_KEY) || '[]');
-        if (!Array.isArray(parsed)) return;
-        cart = parsed
-            .map(item => ({
-                id: String(item.id || ''),
-                title: String(item.title || 'Libro'),
-                price: Number(item.price) || 0,
-                image: String(item.image || ''),
-                volume: String(item.volume || 'Libro'),
-                format: String(item.format || 'Tapa blanda'),
-                pages: String(item.pages || ''),
-                quantity: Math.max(1, Math.trunc(Number(item.quantity) || 1))
-            }))
-            .filter(item => item.id && item.price > 0);
-    } catch (error) {
-        cart = [];
-    }
-}
-
-function persistCart() {
-    try {
-        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
-    } catch (error) {
-        // Modo privado o cuota llena: el carrito sigue en memoria.
-    }
-}
-
 function validateInput(el) {
     clearCheckoutMessage();
     clearFieldError(el);
-    const inCheckout = Boolean(el.closest('#checkout-form'));
-    if (inCheckout) {
-        el.classList.remove('border-green-400', 'bg-green-50/30', 'border-red-400', 'bg-red-50/30', 'border-white');
-        if (el.value.trim() !== '' && !el.checkValidity()) {
-            el.classList.add('border-red-400');
-        }
-        return;
-    }
     if (el.value.trim() === '') {
         el.classList.remove('border-green-400', 'bg-green-50/30', 'border-red-400', 'bg-red-50/30');
         el.classList.add('border-white', 'bg-white');
@@ -257,8 +180,7 @@ function highlightShippingCard() {
 
 function getCheckoutRequiredFields() {
     return [
-        { id: 'customer-name', label: 'nombre' },
-        { id: 'customer-lastname', label: 'apellido' },
+        { id: 'customer-name', label: 'nombre completo' },
         { id: 'customer-dni', label: 'DNI' },
         { id: 'customer-phone', label: 'telefono' },
         { id: 'customer-email', label: 'email' },
@@ -284,22 +206,6 @@ function getCartSubtotal() {
 function formatMoney(value) {
     return '$' + Number(value || 0).toLocaleString('es-AR');
 }
-
-function formatCheckoutMoney(value) {
-    return '$ ' + Number(value || 0).toLocaleString('es-AR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    });
-}
-
-function selectCheckoutPayment(method) {
-    const box = document.querySelector('.checkout-payment-box');
-    const input = document.getElementById('payment-method-input');
-    if (box) box.dataset.method = method === 'transfer' ? 'transfer' : 'mp';
-    if (input) input.value = 'mp';
-}
-
-window.selectCheckoutPayment = selectCheckoutPayment;
 
 function getShippingAddress() {
     return {
@@ -334,45 +240,12 @@ function updateCheckoutSummary() {
     const subtotalEl = document.getElementById('checkout-subtotal');
     const shippingEl = document.getElementById('checkout-shipping');
     const totalEl = document.getElementById('checkout-total');
-    const itemsEl = document.getElementById('checkout-items');
-    const itemCountEl = document.getElementById('checkout-item-count');
-    const headerCountEl = document.getElementById('checkout-header-cart-count');
     if (!subtotalEl || !shippingEl || !totalEl) return;
 
     const subtotal = getCartSubtotal();
-    const totalItems = cart.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
-    subtotalEl.textContent = formatCheckoutMoney(subtotal);
-    shippingEl.classList.remove('is-free');
-    if (quotedShippingCost > 0) {
-        shippingEl.textContent = formatCheckoutMoney(quotedShippingCost);
-    } else {
-        shippingEl.textContent = 'Por calcular';
-    }
-    totalEl.textContent = formatCheckoutMoney(subtotal + quotedShippingCost);
-
-    if (itemCountEl) {
-        itemCountEl.textContent = `${totalItems} ${totalItems === 1 ? 'artículo' : 'artículos'}`;
-    }
-    if (headerCountEl) headerCountEl.textContent = totalItems;
-
-    if (itemsEl) {
-        itemsEl.innerHTML = cart.map(item => `
-            <div class="checkout-summary-item">
-                <div class="checkout-summary-thumb">
-                    <img src="${item.image}" alt="" loading="lazy">
-                    <span>${item.quantity}</span>
-                </div>
-                <div class="checkout-summary-item-copy">
-                    <strong>${item.title}</strong>
-                    <span>${item.volume || 'Libro físico'}</span>
-                    <span>${item.format || 'Tapa blanda'}${item.pages ? ` · ${item.pages} páginas` : ''}</span>
-                </div>
-                <div class="checkout-summary-price-col">
-                    <strong class="checkout-summary-price">${formatCheckoutMoney(item.price * item.quantity)}</strong>
-                </div>
-            </div>
-        `).join('');
-    }
+    subtotalEl.textContent = formatMoney(subtotal);
+    shippingEl.textContent = quotedShippingCost > 0 ? formatMoney(quotedShippingCost) : 'Por calcular';
+    totalEl.textContent = formatMoney(subtotal + quotedShippingCost);
 }
 
 function showMercadoPagoRedirect() {
@@ -425,9 +298,9 @@ function updateCartUI() {
                     </div>
                     <div class="min-w-0 pr-5 flex flex-col justify-between">
                         <div>
-                            <span class="text-[10px] uppercase tracking-[0.18em] font-bold text-brand-lilac">${item.volume || 'Libro'}</span>
+                            <span class="text-[10px] uppercase tracking-[0.18em] font-bold text-brand-lilac">Vol. 1</span>
                             <h4 class="font-serif font-bold text-brand-text text-lg leading-tight mt-1">${item.title}</h4>
-                            <p class="text-brand-text/55 text-xs mt-1">${item.format || 'Libro físico'}${item.pages ? ` · ${item.pages} páginas` : ''}</p>
+                            <p class="text-brand-text/55 text-xs mt-1">Tapa blanda · 104 páginas</p>
                         </div>
                         <div class="flex items-end justify-between gap-3 mt-4">
                             <div class="inline-flex items-center gap-2 rounded-full bg-brand-cream/70 border border-brand-lilac/15 p-1">
@@ -453,61 +326,17 @@ function updateCartUI() {
         lucide.createIcons();
     }
 
-    persistCart();
     updateCheckoutSummary();
-
-    const checkoutOpen = document.body.classList.contains('checkout-active');
-    if (checkoutOpen && cart.length === 0 && typeof leaveCheckoutPage === 'function') {
-        leaveCheckoutPage();
-        showToast('El carrito quedó vacío. Agregá un libro para pagar.', 'warning');
-    }
-}
-
-function renderCheckoutPage() {
-    const container = document.getElementById('checkout-page-content');
-    if (!container || typeof modalData === 'undefined') return false;
-    container.innerHTML = modalData.checkout.content;
-    resetShippingQuote();
-    updateCheckoutSummary();
-    if (typeof lucide !== 'undefined') lucide.createIcons({ root: container });
-    return true;
-}
-
-function openCheckoutPage({ pushState = true } = {}) {
-    if (!cart.length || !renderCheckoutPage()) return;
-    const toastContainer = document.getElementById('toast-container');
-    if (toastContainer) toastContainer.replaceChildren();
-    if (typeof dismissAllOverlays === 'function') dismissAllOverlays();
-    else closeCartLayer();
-    if (pushState) {
-        if (typeof goToLayer === 'function') goToLayer('#checkout');
-        else if (window.location.hash !== '#checkout') window.history.pushState(null, '', '#checkout');
-    }
-    showPage('checkout-view');
-}
-
-function leaveCheckoutPage() {
-    if (typeof dismissAllOverlays === 'function') dismissAllOverlays();
-    else closeCartLayer();
-    const toastContainer = document.getElementById('toast-container');
-    if (toastContainer) toastContainer.replaceChildren();
-    if (typeof goToLayer === 'function') goToLayer('');
-    else window.history.replaceState(null, '', window.location.pathname + window.location.search);
-    showPage('home-view');
-}
-
-function focusCheckoutSummary() {
-    const summary = document.querySelector('#checkout-form .checkout-summary');
-    if (summary) summary.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function openCheckoutModal() {
-    openCheckoutPage();
+    toggleCart();
+    setTimeout(() => {
+        openModal('checkout');
+        resetShippingQuote();
+        updateCheckoutSummary();
+    }, 300);
 }
-
-window.openCheckoutPage = openCheckoutPage;
-window.leaveCheckoutPage = leaveCheckoutPage;
-window.focusCheckoutSummary = focusCheckoutSummary;
 
 function toggleShippingFields(show) {
     // Ya no es necesario el toggle complejo ya que solo existe Envío
@@ -612,9 +441,7 @@ async function calculateShipping(e) {
 async function handleCheckout(e) {
     if (e) e.preventDefault();
 
-    const customerFirstName = document.getElementById('customer-name').value;
-    const customerLastName = document.getElementById('customer-lastname').value;
-    const customerName = `${customerFirstName} ${customerLastName}`.trim();
+    const customerName = document.getElementById('customer-name').value;
     const customerPhone = document.getElementById('customer-phone').value;
     const customerEmail = document.getElementById('customer-email').value;
     const customerDni = document.getElementById('customer-dni').value;
@@ -642,13 +469,6 @@ async function handleCheckout(e) {
     if (!phoneRegex.test(customerPhone.replace(/\s/g, ""))) {
         markFieldError(document.getElementById('customer-phone'));
         showCheckoutMessage('Revisá el teléfono: usá solo números, con código de área, sin 0 ni 15.', 'warning');
-        return;
-    }
-
-    const dniDigits = String(customerDni || '').replace(/\D/g, '');
-    if (!/^\d{7,8}$/.test(dniDigits)) {
-        markFieldError(document.getElementById('customer-dni'));
-        showCheckoutMessage('Revisá el DNI: usá 7 u 8 números, sin puntos.', 'warning');
         return;
     }
 
@@ -693,8 +513,7 @@ async function handleCheckout(e) {
                     name: customerName,
                     phone: customerPhone,
                     email: customerEmail,
-                    dni: dniDigits,
-                    newsletter: Boolean(document.getElementById('checkout-newsletter')?.checked),
+                    dni: customerDni,
                     postalCode: address.postalCode,
                     province: address.province,
                     city: address.city,
@@ -754,6 +573,3 @@ function handleSubscribeSubmit(e) {
         if (window.lucide) lucide.createIcons();
     }, 1500);
 }
-
-loadStoredCart();
-updateCartUI();
