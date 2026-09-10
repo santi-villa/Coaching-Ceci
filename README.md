@@ -15,11 +15,50 @@ Sitio estatico con funciones serverless de Netlify para checkout, Mercado Pago y
 
 ## Comandos
 
+Instalar las dependencias la primera vez:
+
+```bash
+npm install
+```
+
+### Ver la app en esta PC
+
 ```bash
 npm run dev
 ```
 
-Inicia el entorno local de Netlify.
+Inicia el entorno local de Netlify. La app queda disponible normalmente en
+`http://localhost:8888`.
+
+### Ver la app desde un celular
+
+1. Conectar el celular y esta PC a la misma red Wi-Fi.
+2. Desde la carpeta del proyecto, iniciar Netlify en el puerto `8888`:
+
+   ```bash
+   npm run dev -- --port 8888 --no-open
+   ```
+
+3. En otra terminal, consultar la IP local de esta PC:
+
+   ```bash
+   hostname -I
+   ```
+
+4. Usar la primera IP de la red local que aparezca (normalmente comienza con
+   `192.168.` o `10.`) y abrir esta dirección en el navegador del celular:
+
+   ```text
+   http://IP_DE_ESTA_PC:8888
+   ```
+
+   Por ejemplo, si la IP es `192.168.1.25`, abrir
+   `http://192.168.1.25:8888`.
+
+Mantener la terminal con Netlify abierta mientras se usa la app. Si el celular
+no puede conectarse, comprobar que el firewall de la PC permita conexiones al
+puerto `8888` y que la red Wi-Fi no tenga activado el aislamiento de
+dispositivos.
 
 ## Variables de entorno
 

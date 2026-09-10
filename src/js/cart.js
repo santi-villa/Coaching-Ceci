@@ -28,10 +28,10 @@ function toggleCart(forceState = null) {
     } else {
         // Toggle manual
         if (isCartOpen) {
-            if (window.location.hash === '#carrito') {
-                window.history.back();
-            } else {
-                _closeCart();
+            _closeCart();
+            if (typeof goToLayer === 'function') goToLayer('');
+            else if (window.location.hash === '#carrito') {
+                window.history.replaceState(null, '', window.location.pathname + window.location.search);
             }
         } else {
             if (typeof goToLayer === 'function') goToLayer('#carrito');
@@ -52,6 +52,7 @@ window.closeCartLayer = closeCartLayer;
 function _openCart() {
     if (typeof dismissAllOverlays === 'function') dismissAllOverlays({ keepCart: true });
     isCartOpen = true;
+    document.body.classList.add('cart-open');
     cartOverlay.classList.remove('hidden', 'pointer-events-none');
     setTimeout(() => {
         cartOverlay.classList.remove('opacity-0');
@@ -63,6 +64,7 @@ function _openCart() {
 
 function _closeCart() {
     isCartOpen = false;
+    document.body.classList.remove('cart-open');
     cartOverlay.classList.add('pointer-events-none');
     cartDrawer.classList.add('translate-x-full');
     cartOverlay.classList.remove('opacity-100');
@@ -85,7 +87,7 @@ function addToCart(bookId = null) {
         title: selectedProduct.title,
         price: selectedProduct.price,
         image: selectedProduct.image,
-        volume: selectedProduct.productKicker?.split('·').pop().trim() || 'Libro',
+        volume: 'Libro físico',
         format: selectedProduct.meta?.format || 'Libro físico',
         pages: selectedProduct.meta?.pages || ''
     };
@@ -116,7 +118,7 @@ function addToCartWithQty(bookId = null) {
         title: selectedProduct.title,
         price: selectedProduct.price,
         image: selectedProduct.image,
-        volume: selectedProduct.productKicker?.split('·').pop().trim() || 'Libro',
+        volume: 'Libro físico',
         format: selectedProduct.meta?.format || 'Libro físico',
         pages: selectedProduct.meta?.pages || ''
     };
@@ -145,7 +147,9 @@ function loadStoredCart() {
                 title: String(item.title || 'Libro'),
                 price: Number(item.price) || 0,
                 image: String(item.image || ''),
-                volume: String(item.volume || 'Libro'),
+                volume: /^vol(?:umen)?\.?\s*\d+/i.test(String(item.volume || ''))
+                    ? 'Libro físico'
+                    : String(item.volume || 'Libro físico'),
                 format: String(item.format || 'Tapa blanda'),
                 pages: String(item.pages || ''),
                 quantity: Math.max(1, Math.trunc(Number(item.quantity) || 1))
@@ -428,6 +432,9 @@ function updateCartUI() {
                             <span class="text-[10px] uppercase tracking-[0.18em] font-bold text-brand-lilac">${item.volume || 'Libro'}</span>
                             <h4 class="font-serif font-bold text-brand-text text-lg leading-tight mt-1">${item.title}</h4>
                             <p class="text-brand-text/55 text-xs mt-1">${item.format || 'Libro físico'}${item.pages ? ` · ${item.pages} páginas` : ''}</p>
+                            ${typeof getBookById === 'function' && getBookById(item.id)?.listPrice > item.price
+                                ? '<p class="price-web-note">Precio exclusivo web</p>'
+                                : ''}
                         </div>
                         <div class="flex items-end justify-between gap-3 mt-4">
                             <div class="inline-flex items-center gap-2 rounded-full bg-brand-cream/70 border border-brand-lilac/15 p-1">

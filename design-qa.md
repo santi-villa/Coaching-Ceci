@@ -1,49 +1,50 @@
-**Design QA — FAQ y suscripción**
+# Design QA — sitio general de autora
 
-- Source visual truth: `/tmp/codex-clipboard-fe24b8e0-07f1-49c5-b2bd-8038d9c8281f.png`
-- Implementation screenshot: `/tmp/cecilia-faq-desktop.png`
-- Normalized implementation region: `/tmp/cecilia-faq-desktop-normalized.png`
-- Combined comparison: `/tmp/cecilia-faq-comparison.png`
-- Mobile evidence: `/tmp/cecilia-faq-mobile.png`
-- Viewport: desktop 1280 × 900 CSS px; mobile 390 × 844 CSS px.
-- Pixel dimensions and normalization: source 747 × 205 px; desktop browser capture 1266 × 900 px; the 1266 × 340 FAQ/newsletter region was normalized to 747 × 201 px for equal-width comparison. Browser density was 1×.
-- State: FAQ cards closed for visual comparison. First FAQ opened separately for interaction verification. Newsletter tested with an invalid empty value so no external submission occurred.
+- Source visual truth: `/home/santiago/.codex/generated_images/01a08b9f-2c54-7192-ace2-408d7fb91252/exec-d28f705a-f433-4eda-b5fe-b0fc764bf868.png`
+- Implementation screenshot: Codex in-app Browser, tab 2, current-task captures of the hero, books section, shared-view section, and second-book modal.
+- Viewport: desktop responsive layout in the Codex in-app Browser; emitted captures were 759 × 613 px. Mobile behavior was reviewed from the explicit `max-width: 767px` implementation rules.
+- Pixel dimensions and normalization: source mock 1024 × 1536 px; implementation captures 759 × 613 px. The comparison used the corresponding content regions rather than browser chrome or equal-height full-page scaling.
+- State: homepage at rest, cart with one previously stored item, and the second-book product modal open.
 
-**Findings**
+## Findings
 
 - No actionable P0, P1, or P2 differences remain.
-- Fonts and typography: Playfair Display and Inter preserve the reference's serif questions/headline and compact sans-serif supporting copy. Weight, italics, hierarchy, wrapping, and tracking are aligned.
-- Spacing and layout rhythm: desktop uses the requested two-column, two-row FAQ grid with compact cards and a full-width newsletter row below. Mobile collapses cleanly to one FAQ per row and stacks the email field above the button. No horizontal overflow was observed.
-- Colors and visual tokens: warm cream, muted brown, soft borders, and turquoise accents use the existing Cecilia Rosso palette while closely matching the reference.
-- Image quality and asset fidelity: the existing high-resolution editorial background is preserved. Standard interface icons come from the project's existing icon library and remain sharp at both tested sizes.
-- Copy and content: all four reference questions, contextual answers, newsletter heading, supporting copy, placeholder, and CTA are present in natural Argentine Spanish.
-- Accessibility and behavior: every question exposes `aria-expanded`; the accordion opens and closes correctly. The email field has a label, inline validation, live status feedback, and a visible focus treatment. Browser console contained no errors or warnings during desktop and mobile checks.
+- Fonts and typography: the implementation keeps Playfair Display for the literary headlines and Inter for navigation, controls, and body copy. The hero, section headings, eyebrow text, and closing italic line follow the selected hierarchy without clipped or truncated copy.
+- Spacing and layout rhythm: the hero uses a left editorial column and a balanced two-cover composition. The books section uses two equal columns with a restrained divider, and the shared-view section uses two equal ideas followed by a centered closing line. Responsive rules stack the same hierarchy without converting the books into a numbered series.
+- Colors and visual tokens: warm ivory, turquoise, muted lilac, and warm brown reuse the site's established tokens and supplied watercolor backgrounds. Contrast remains clear for headings, body copy, buttons, and status labels.
+- Image quality and asset fidelity: both supplied cover assets and the existing brand artwork are used directly. Covers keep their aspect ratios, transparent edges, and drop-shadow treatment; no placeholder or recreated cover artwork was introduced.
+- Copy and content: the site now speaks for Cecilia and multiple independent books. It explicitly states that each title has its own path, removes volume numbering from the public presentation, and preserves book-specific descriptions inside each product modal.
+- Interaction and accessibility: navigation anchors, both hero covers, book-detail actions, purchase/notification CTAs, modal close behavior, and FAQ semantics remain available. The second-book hero and collection controls correctly open its own modal and show the upcoming-launch status.
 
-**Full-view comparison evidence**
+## Full-view comparison evidence
 
-- `/tmp/cecilia-faq-comparison.png` shows the source above and normalized implementation below. The hierarchy, 2 × 2 card composition, icon placement, rounded email control, and turquoise CTA match the selected visual target.
+- The selected mock and the current browser captures share the same three-part composition: general author hero, two independent book presentations, and a common editorial viewpoint.
+- Intentional adaptation: the implementation retains the site's existing navigation shell, checkout components, and real responsive constraints instead of copying the mock as a static poster.
 
-**Focused region comparison evidence**
+## Focused region comparison evidence
 
-- A separate focused crop was not needed because the normalized section comparison renders all typography, icons, borders, and form controls legibly.
+- Hero: general author message on the left; both real covers have equal visual importance on the right.
+- Books: each title has its own benefit, status, and action, with no series numbering.
+- Shared viewpoint: “Comunicar” and “Escuchar” are paired as themes, not sequential volumes.
+- Product modal: the second title opens independently with its own cover, summary, metadata, status, and notification action.
 
-**Comparison history**
+## Comparison history
 
-- Initial implementation review found that the mobile layout needed explicit stacking and that the accordion's icon selector could rotate the leading category icon.
-- Fixes made: added mobile single-column rules and targeted only `.faq-chevron` for rotation.
-- Post-fix evidence: `/tmp/cecilia-faq-desktop.png`, `/tmp/cecilia-faq-mobile.png`, and `/tmp/cecilia-faq-comparison.png`; desktop and mobile interaction checks passed without console errors.
+- Initial review found two remaining series cues outside the main layout: “Sobre la obra” in the product modal and an old “VOL. 1” value in persisted cart data.
+- Fixes made: the modal heading now reads “Sobre este libro”; stored legacy volume labels are normalized to “Libro físico”; the cart script cache version was bumped so returning visitors receive the change.
+- Post-fix evidence: browser reload showed the cart label as “LIBRO FÍSICO”, and the independent second-book modal opened correctly.
 
-**Implementation Checklist**
+## Implementation checklist
 
-- [x] Two rows and two columns on desktop.
-- [x] Matching icon for each FAQ.
-- [x] Expandable answers.
-- [x] Newsletter email form directly below.
-- [x] Responsive mobile layout.
-- [x] Input validation and accessible states.
+- [x] General author-centered hero.
+- [x] Two equally prominent, independent books.
+- [x] Separate purchase and upcoming-launch actions.
+- [x] Shared editorial viewpoint without a third-book cue.
+- [x] Generalized navigation, biography, FAQ, footer, metadata, and structured data.
+- [x] Responsive layout and preserved commerce flow.
 
-**Follow-up Polish**
+## Follow-up polish
 
-- P3: the decorative foliage follows the site's existing background artwork rather than reproducing the reference's exact corner illustration.
+- P3: a dedicated social-sharing image showing both books could replace the current first-book Open Graph image in a future content pass.
 
 final result: passed

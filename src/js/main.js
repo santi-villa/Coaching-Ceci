@@ -57,9 +57,45 @@ function updateNavbar() {
 window.addEventListener('scroll', updateNavbar);
 updateNavbar();
 
-const heroBookCarousel = document.getElementById('hero-book-carousel');
-const heroBookCards = Array.from(document.querySelectorAll('[data-book-id]'));
-const heroBookDots = Array.from(document.querySelectorAll('[data-book-dot]'));
+const authorBookSelector = document.getElementById('author-book-selector');
+const heroBookCarousel = authorBookSelector?.querySelector('.author-hero__books') || null;
+
+function hydrateAuthorBookSelector() {
+    if (!heroBookCarousel) return;
+
+    bookCatalog.forEach((book, index) => {
+        let card = heroBookCarousel.querySelector(`[data-hero-book-id="${book.id}"]`);
+        if (!card) {
+            card = document.createElement('button');
+            card.type = 'button';
+            card.className = 'author-hero__book author-hero__book--catalog';
+            card.dataset.heroBookId = book.id;
+            card.setAttribute('role', 'tab');
+            card.innerHTML = `<img src="${book.image}" alt="${book.imageAlt}" decoding="async" loading="lazy">`;
+            heroBookCarousel.appendChild(card);
+        }
+        card.style.setProperty('--book-index', index);
+        card.setAttribute('aria-label', `Seleccionar ${book.title}`);
+    });
+
+    const dots = authorBookSelector.querySelector('.author-book-selector__dots');
+    if (dots) {
+        dots.replaceChildren(...bookCatalog.map((book, index) => {
+            const dot = document.createElement('button');
+            dot.type = 'button';
+            dot.className = 'author-book-selector__dot';
+            dot.dataset.authorBookDot = book.id;
+            dot.setAttribute('role', 'tab');
+            dot.setAttribute('aria-label', `Elegir libro ${index + 1}: ${book.title}`);
+            return dot;
+        }));
+    }
+}
+
+hydrateAuthorBookSelector();
+
+const heroBookCards = Array.from(document.querySelectorAll('[data-hero-book-id]'));
+const heroBookDots = Array.from(document.querySelectorAll('[data-author-book-dot]'));
 const heroPrimaryButtons = Array.from(document.querySelectorAll('[data-hero-primary]'));
 const heroAboutButtons = Array.from(document.querySelectorAll('[data-hero-about]'));
 const heroCarouselStatus = document.getElementById('book-carousel-status');
@@ -69,8 +105,9 @@ let heroCopyAnimationTimer = null;
 let activeProductCoverSide = 'front';
 let productCoverLightboxOpen = false;
 let productCoverLightboxReturnFocus = null;
-let productModalShouldGoBack = false;
 let productModalCloseTimer = null;
+let productModalReturnFocus = null;
+let bookSelectorScrollFrame = null;
 
 function renderHeroBook(book, announce = true) {
     const bookIndex = bookCatalog.findIndex(item => item.id === book.id);
@@ -100,20 +137,23 @@ function renderHeroBook(book, announce = true) {
 
     const activeIndex = bookCatalog.findIndex(item => item.id === book.id);
     heroBookCards.forEach(card => {
-        const cardIndex = bookCatalog.findIndex(item => item.id === card.dataset.bookId);
-        const isActive = card.dataset.bookId === book.id;
+        const cardIndex = bookCatalog.findIndex(item => item.id === card.dataset.heroBookId);
+        const isActive = card.dataset.heroBookId === book.id;
         card.classList.toggle('is-active', isActive);
+        card.classList.toggle('is-selected', isActive);
         card.classList.toggle('is-behind', !isActive);
         card.classList.toggle('is-behind-left', !isActive && cardIndex < activeIndex);
         card.classList.toggle('is-behind-right', !isActive && cardIndex > activeIndex);
-        card.setAttribute('aria-current', String(isActive));
+        card.setAttribute('aria-selected', String(isActive));
         card.setAttribute('aria-pressed', String(isActive));
+        card.tabIndex = isActive ? 0 : -1;
     });
 
     heroBookDots.forEach(dot => {
-        const isActive = dot.dataset.bookDot === book.id;
+        const isActive = dot.dataset.authorBookDot === book.id;
         dot.classList.toggle('is-active', isActive);
         dot.setAttribute('aria-selected', String(isActive));
+        dot.tabIndex = isActive ? 0 : -1;
     });
 
     const previousButton = document.querySelector('[data-book-prev]');
@@ -129,9 +169,48 @@ function renderHeroBook(book, announce = true) {
             ? `Comprar ${book.title}`
             : `Ver detalles de ${book.title}`);
     });
-    document.getElementById('mobile-book-title').textContent = book.title;
-    document.getElementById('mobile-book-price').textContent = `${book.priceLabel} ${book.currency} · ${book.available ? 'Disponible' : 'Próximamente'}`;
-    document.querySelector('[data-mobile-book-detail]').textContent = book.available ? 'Comprar' : 'Ver libro';
+    const selectedTitle = document.getElementById('author-book-selected-title');
+    const selectedSubtitle = document.getElementById('author-book-selected-subtitle');
+    const selectedPosition = document.getElementById('author-book-position');
+    const selectedDetails = document.querySelector('[data-selected-book-detail]');
+    if (selectedTitle) selectedTitle.textContent = book.title;
+    if (selectedSubtitle) {
+        selectedSubtitle.textContent = book.subtitle || '';
+        selectedSubtitle.hidden = !book.subtitle;
+    }
+    if (selectedPosition) selectedPosition.textContent = `Libro ${bookIndex + 1} de ${bookCatalog.length}`;
+    if (selectedDetails) selectedDetails.setAttribute('aria-label', `Ver detalles de ${book.title}`);
+
+    const mobileBookTitle = document.getElementById('mobile-book-title');
+    const mobileBookImage = document.getElementById('mobile-book-image');
+    if (mobileBookTitle) mobileBookTitle.textContent = book.title;
+    if (mobileBookImage) mobileBookImage.src = book.image;
+    const mobilePrice = document.getElementById('mobile-book-price');
+    const hasListedPrice = bookHasListedPrice(book);
+    if (mobilePrice) {
+        if (!hasListedPrice) {
+            mobilePrice.innerHTML = '';
+            mobilePrice.hidden = true;
+        } else {
+            const hasWebDiscount = Boolean(book.available && book.listPrice && book.listPrice > book.price);
+            mobilePrice.hidden = false;
+            mobilePrice.innerHTML = hasWebDiscount
+                ? `<s>${book.listPriceLabel}</s> <strong>${book.priceLabel} ${book.currency}</strong>`
+                : `<strong>${book.priceLabel} ${book.currency}</strong>`;
+        }
+    }
+    const mobileBookStatus = document.getElementById('mobile-book-status');
+    const mobileBookAvailability = document.querySelector('.mobile-book-availability');
+    const mobileBookOpen = document.querySelector('[data-mobile-book-open]');
+    const mobileBookAction = document.querySelector('[data-mobile-book-detail]');
+    if (mobileBookStatus) mobileBookStatus.textContent = book.available ? '' : 'Próximamente';
+    mobileBookAvailability?.classList.toggle('is-upcoming', !book.available);
+    mobileBookAvailability?.classList.toggle('hidden', book.available);
+    mobileBookOpen?.setAttribute('aria-label', `Ver detalles de ${book.title}`);
+    if (mobileBookAction) {
+        mobileBookAction.innerHTML = `<span>${book.available ? 'Comprar' : 'Ver detalles'}</span><i data-lucide="chevron-right" aria-hidden="true"></i>`;
+        mobileBookAction.setAttribute('aria-label', book.available ? `Comprar ${book.title}` : `Ver ${book.title}`);
+    }
 
     if (announce && heroCarouselStatus) {
         heroCarouselStatus.textContent = `Libro ${bookIndex + 1} de ${bookCatalog.length}: ${book.title}`;
@@ -142,13 +221,16 @@ function renderHeroBook(book, announce = true) {
 
 function renderProductModal(book = getSelectedBook()) {
     const image = document.getElementById('book-front-img');
+    const backImage = document.getElementById('book-back-img');
+    const backCover = document.querySelector('#product-modal-card .book-back-cover');
     const zoomImage = document.getElementById('product-cover-lightbox-image');
+    const zoomBackImage = document.getElementById('product-cover-lightbox-back-image');
+    const zoomBackCover = document.getElementById('product-cover-lightbox-back');
     const zoomBackTitle = document.getElementById('product-cover-lightbox-title');
     const zoomBackCopy = document.getElementById('product-cover-lightbox-copy');
     const headerTitle = document.getElementById('product-header-title');
     const backTitle = document.getElementById('product-back-title');
     const backCopy = document.getElementById('product-back-copy');
-    const highlights = document.getElementById('product-highlights-list');
     const kicker = document.getElementById('product-kicker');
     const title = document.getElementById('product-title');
     const author = document.getElementById('product-author');
@@ -160,6 +242,8 @@ function renderProductModal(book = getSelectedBook()) {
     const paper = document.getElementById('product-paper');
     const language = document.getElementById('product-language');
     const price = document.getElementById('product-price');
+    const listPrice = document.getElementById('product-list-price');
+    const webBadge = document.getElementById('product-web-badge');
     const currency = document.getElementById('product-currency');
     const stock = document.getElementById('product-stock-pill');
     const quantityRow = document.getElementById('product-quantity-row');
@@ -187,29 +271,84 @@ function renderProductModal(book = getSelectedBook()) {
             zoomImage.alt = '';
         }
     }
+    if (backImage) {
+        backImage.classList.toggle('hidden', !book.backImage);
+        if (book.backImage) {
+            backImage.src = book.backImage;
+            backImage.alt = book.backImageAlt || `Contratapa de ${book.title}`;
+        } else {
+            backImage.removeAttribute('src');
+            backImage.alt = '';
+        }
+    }
+    backCover?.classList.toggle('has-back-image', Boolean(book.backImage));
+    if (zoomBackImage) {
+        zoomBackImage.classList.toggle('hidden', !book.backImage);
+        if (book.backImage) {
+            zoomBackImage.src = book.backImage;
+            zoomBackImage.alt = book.backImageAlt || `Contratapa ampliada de ${book.title}`;
+        } else {
+            zoomBackImage.removeAttribute('src');
+            zoomBackImage.alt = '';
+        }
+    }
+    zoomBackCover?.classList.toggle('has-back-image', Boolean(book.backImage));
     if (kicker) kicker.textContent = book.productKicker;
     if (headerTitle) headerTitle.textContent = book.title;
     if (backTitle) backTitle.textContent = book.title;
     if (backCopy) backCopy.textContent = book.backCopy || book.productDescription;
     if (zoomBackTitle) zoomBackTitle.textContent = book.title;
     if (zoomBackCopy) zoomBackCopy.textContent = book.backCopy || book.productDescription;
-    if (highlights) highlights.innerHTML = (book.highlights || []).slice(0, 3).map(item => `<li>${item}</li>`).join('');
     if (title) title.textContent = book.title;
+    const subtitle = document.getElementById('product-subtitle');
+    if (subtitle) {
+        subtitle.textContent = book.subtitle || '';
+        subtitle.hidden = !book.subtitle;
+    }
     if (author) author.textContent = 'Por Cecilia Karina Rosso';
-    if (description) description.textContent = book.productDescription;
-    if (format) format.textContent = book.meta.format;
+    if (description) {
+        if (book.productDescriptionHtml) description.innerHTML = book.productDescriptionHtml;
+        else description.innerHTML = book.productDescription ? `<p>${book.productDescription}</p>` : '';
+    }
+    const formatLabel = document.getElementById('product-format-label');
+    if (formatLabel) formatLabel.textContent = book.meta.label || 'Formato';
+    if (format) format.textContent = book.meta.value || book.meta.format || '';
     if (pages) pages.textContent = book.meta.pages;
     if (size) size.textContent = book.meta.size;
-    if (binding) binding.textContent = book.meta.binding || 'Con solapas';
-    if (paper) paper.textContent = book.meta.paper || 'Bookcel ahuesado';
-    if (language) language.textContent = book.meta.language || 'Español';
-    if (price) price.textContent = book.priceLabel;
+    if (binding) {
+        binding.textContent = book.meta.binding || '';
+        binding.closest('.product-meta-grid > div')?.toggleAttribute('hidden', !book.meta.binding);
+    }
+    if (paper) {
+        paper.textContent = book.meta.paper || '';
+        paper.closest('.product-meta-grid > div')?.toggleAttribute('hidden', !book.meta.paper);
+    }
+    if (language) {
+        language.textContent = book.meta.language || '';
+        language.closest('.product-meta-grid > div')?.toggleAttribute('hidden', !book.meta.language);
+    }
+    const hasListedPrice = bookHasListedPrice(book);
+    document.getElementById('product-modal-card')?.classList.toggle('is-unpriced', !hasListedPrice);
+    const priceBlock = document.querySelector('#product-modal-card .product-modal-price');
+    if (priceBlock) priceBlock.hidden = !hasListedPrice;
+    if (price) price.textContent = hasListedPrice ? book.priceLabel : '';
+    const hasWebDiscount = Boolean(hasListedPrice && book.available && book.listPrice && book.listPrice > book.price);
+    if (listPrice) {
+        listPrice.textContent = hasWebDiscount ? (book.listPriceLabel || '') : '';
+        listPrice.hidden = !hasWebDiscount;
+    }
+    if (webBadge) {
+        webBadge.textContent = book.webDiscountLabel || 'Precio exclusivo web';
+        webBadge.hidden = !hasWebDiscount;
+    }
     if (currency) {
-        currency.textContent = book.currency;
-        currency.classList.toggle('hidden', !book.currency);
+        currency.textContent = hasListedPrice ? (book.currency || '') : '';
+        currency.classList.toggle('hidden', !hasListedPrice || !book.currency);
+        currency.hidden = !hasListedPrice;
     }
     if (stock) {
-        stock.textContent = book.statusLabel;
+        stock.hidden = book.available;
+        stock.textContent = book.available ? '' : book.statusLabel;
         stock.classList.toggle('is-upcoming', !book.available);
     }
     if (quantityRow) quantityRow.classList.toggle('hidden', !book.available);
@@ -305,16 +444,27 @@ function moveBookSelection(direction) {
 
 heroBookCards.forEach(card => {
     card.addEventListener('click', event => {
-        if (heroBookCarousel?.dataset.swiped === 'true') {
-            heroBookCarousel.dataset.swiped = 'false';
-            event.preventDefault();
+        const bookId = card.dataset.heroBookId;
+        const isMobile = window.matchMedia('(max-width: 767px)').matches;
+        if (bookId === selectedBookId) {
+            openProductModal(bookId);
             return;
         }
-        selectBook(card.dataset.bookId);
+        if (isMobile) {
+            selectBook(bookId);
+            card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            return;
+        }
+        openProductModal(bookId);
     });
 });
 
-heroBookDots.forEach(dot => dot.addEventListener('click', () => selectBook(dot.dataset.bookDot)));
+heroBookDots.forEach(dot => dot.addEventListener('click', () => {
+    const bookId = dot.dataset.authorBookDot;
+    selectBook(bookId);
+    heroBookCards.find(card => card.dataset.heroBookId === bookId)
+        ?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+}));
 document.querySelector('[data-book-prev]')?.addEventListener('click', () => moveBookSelection(-1));
 document.querySelector('[data-book-next]')?.addEventListener('click', () => moveBookSelection(1));
 
@@ -326,7 +476,17 @@ heroPrimaryButtons.forEach(button => button.addEventListener('click', () => {
 document.querySelectorAll('[data-hero-details]').forEach(button => button.addEventListener('click', () => {
     openProductModal();
 }));
-document.querySelector('[data-mobile-book-detail]')?.addEventListener('click', () => openProductModal());
+document.querySelector('[data-selected-book-detail]')?.addEventListener('click', () => openProductModal());
+document.querySelector('[data-mobile-book-open]')?.addEventListener('click', () => openProductModal());
+document.querySelector('[data-mobile-book-detail]')?.addEventListener('click', () => {
+    const book = getSelectedBook();
+    if (book.available) addToCart(book.id);
+    else openProductModal();
+});
+document.querySelector('.mobile-book-bar')?.addEventListener('click', event => {
+    if (event.target.closest('button')) return;
+    openProductModal();
+});
 heroAboutButtons.forEach(button => button.addEventListener('click', () => openModal('read')));
 
 heroBookCarousel?.addEventListener('keydown', event => {
@@ -336,28 +496,31 @@ heroBookCarousel?.addEventListener('keydown', event => {
     } else if (event.key === 'ArrowRight') {
         event.preventDefault();
         moveBookSelection(1);
-    } else if (event.key === 'Enter' || event.key === ' ') {
+    } else if (event.key === 'Enter') {
         event.preventDefault();
         openProductModal();
     }
 });
 
-let carouselPointerStart = null;
-heroBookCarousel?.addEventListener('pointerdown', event => {
-    if (event.pointerType === 'mouse') return;
-    carouselPointerStart = { x: event.clientX, y: event.clientY };
-});
-heroBookCarousel?.addEventListener('pointerup', event => {
-    if (!carouselPointerStart) return;
-    const deltaX = event.clientX - carouselPointerStart.x;
-    const deltaY = event.clientY - carouselPointerStart.y;
-    carouselPointerStart = null;
-    if (Math.abs(deltaX) > 44 && Math.abs(deltaX) > Math.abs(deltaY)) {
-        heroBookCarousel.dataset.swiped = 'true';
-        moveBookSelection(deltaX < 0 ? 1 : -1);
+function syncBookSelectionFromScroll() {
+    bookSelectorScrollFrame = null;
+    const selectorRect = heroBookCarousel.getBoundingClientRect();
+    const selectorCenter = selectorRect.left + selectorRect.width / 2;
+    const closestCard = heroBookCards.reduce((closest, card) => {
+        const rect = card.getBoundingClientRect();
+        const distance = Math.abs(rect.left + rect.width / 2 - selectorCenter);
+        return !closest || distance < closest.distance ? { card, distance } : closest;
+    }, null)?.card;
+
+    if (closestCard && closestCard.dataset.heroBookId !== selectedBookId) {
+        selectBook(closestCard.dataset.heroBookId);
     }
-});
-heroBookCarousel?.addEventListener('pointercancel', () => { carouselPointerStart = null; });
+}
+
+heroBookCarousel?.addEventListener('scroll', () => {
+    if (!window.matchMedia('(max-width: 767px)').matches || bookSelectorScrollFrame !== null) return;
+    bookSelectorScrollFrame = window.requestAnimationFrame(syncBookSelectionFromScroll);
+}, { passive: true });
 
 function handleProductPrimaryAction() {
     const book = getSelectedBook();
@@ -403,6 +566,24 @@ mobileLinks.forEach(link => {
     link.addEventListener('click', () => { if (menuOpen) toggleMenu(); });
 });
 document.addEventListener('keydown', event => {
+    if (event.key === 'Tab' && isProductModalOpen && !productCoverLightboxOpen) {
+        const card = document.getElementById('product-modal-card');
+        const focusable = Array.from(card?.querySelectorAll(
+            'button:not([disabled]):not([hidden]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        ) || []).filter(element => element.offsetParent !== null);
+        if (focusable.length) {
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+            if (event.shiftKey && document.activeElement === first) {
+                event.preventDefault();
+                last.focus();
+            } else if (!event.shiftKey && document.activeElement === last) {
+                event.preventDefault();
+                first.focus();
+            }
+        }
+        return;
+    }
     if (event.key !== 'Escape') return;
     if (productCoverLightboxOpen) closeProductCoverLightbox();
     else if (menuOpen) toggleMenu();
@@ -543,13 +724,25 @@ function openModal(type) {
     lockPageScroll();
 }
 
+const LAYER_HASHES = ['#producto', '#carrito', '#checkout', '#detalles', '#read', '#subscribe'];
+const SECTION_IDS = ['los-libros', 'coleccion', 'libro', 'autora', 'preguntas-frecuentes', 'newsletter', 'contacto'];
+
 function isLayerHash(hash = window.location.hash) {
-    return ['#producto', '#carrito', '#checkout', '#detalles', '#read', '#subscribe'].includes(hash);
+    return LAYER_HASHES.includes(hash);
+}
+
+function locationWithoutHash() {
+    return window.location.pathname + window.location.search;
+}
+
+function stripLayerHash() {
+    if (!isLayerHash()) return;
+    window.history.replaceState(null, '', locationWithoutHash());
 }
 
 function goToLayer(hash) {
     if (!hash) {
-        window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        window.history.replaceState(null, '', locationWithoutHash());
         return;
     }
     if (window.location.hash === hash) return;
@@ -558,6 +751,37 @@ function goToLayer(hash) {
         return;
     }
     window.history.pushState(null, '', hash);
+}
+
+function scrollToSection(id) {
+    const el = document.getElementById(id);
+    if (!el) return false;
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return true;
+}
+
+function handleSectionNavClick(event) {
+    const link = event.target.closest('a[href^="#"]');
+    if (!link) return;
+    const id = (link.getAttribute('href') || '').slice(1);
+    if (id === 'legales') {
+        event.preventDefault();
+        dismissAllOverlays();
+        showPage('legales-view');
+        window.history.replaceState(null, '', locationWithoutHash());
+        return;
+    }
+    if (!SECTION_IDS.includes(id)) return;
+    event.preventDefault();
+    dismissAllOverlays();
+    const go = () => {
+        scrollToSection(id);
+        window.history.replaceState(null, '', locationWithoutHash());
+    };
+    const home = document.getElementById('home-view');
+    const alreadyHome = home && home.classList.contains('block') && !home.classList.contains('hidden');
+    if (alreadyHome) go();
+    else window.setTimeout(go, 320);
 }
 
 function dismissAllOverlays({ keepCart = false } = {}) {
@@ -574,17 +798,8 @@ function closeModal(forceState = null) {
         forceState = null;
     }
 
-    if (forceState === true) {
-        _closeModal();
-        return;
-    }
-
-    const hash = window.location.hash;
-    if (hash === '#detalles' || hash === '#read' || hash === '#subscribe') {
-        window.history.back();
-        return;
-    }
     _closeModal();
+    if (forceState !== true) stripLayerHash();
 }
 
 function _closeModal() {
@@ -623,7 +838,9 @@ function openProductModal(bookId = null) {
     if (bookId) selectBook(bookId, { announce: false });
     renderProductModal(getSelectedBook());
     dismissAllOverlays({ keepCart: false });
-    productModalShouldGoBack = !isLayerHash(window.location.hash);
+    if (!isProductModalOpen && document.activeElement instanceof HTMLElement) {
+        productModalReturnFocus = document.activeElement;
+    }
     isProductModalOpen = true;
     const view = document.getElementById('product-view');
     const card = document.getElementById('product-modal-card');
@@ -633,7 +850,12 @@ function openProductModal(bookId = null) {
     view.classList.remove('opacity-0', 'pointer-events-none');
     view.classList.add('opacity-100', 'pointer-events-auto');
     view.setAttribute('aria-hidden', 'false');
-    setTimeout(() => { card.classList.remove('scale-95'); card.classList.add('scale-100'); }, 10);
+    document.body.classList.add('product-detail-open');
+    setTimeout(() => {
+        card.classList.remove('scale-95');
+        card.classList.add('scale-100');
+        card.querySelector('.product-modal-close')?.focus({ preventScroll: true });
+    }, 10);
     lockPageScroll();
 }
 
@@ -646,32 +868,21 @@ function closeProductModal(forceState = null) {
         forceState = null;
     }
 
-    if (forceState === true) {
-        _closeProductModal();
-        return;
-    }
+    if (!isProductModalOpen && forceState !== true) return;
 
-    if (!isProductModalOpen) return;
-
-    const hasProductHash = window.location.hash === '#producto';
-    const shouldGoBack = hasProductHash && productModalShouldGoBack;
     _closeProductModal();
-    productModalShouldGoBack = false;
-
-    if (shouldGoBack) {
-        window.history.back();
-    } else if (hasProductHash) {
-        window.history.replaceState(null, '', window.location.pathname + window.location.search);
-    }
+    if (forceState !== true) stripLayerHash();
 }
 
 function _closeProductModal() {
     closeProductCoverLightbox({ restoreFocus: false });
     isProductModalOpen = false;
+    const returnFocus = productModalReturnFocus;
     const view = document.getElementById('product-view');
     const card = document.getElementById('product-modal-card');
     view.classList.add('pointer-events-none');
     view.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('product-detail-open');
     card.classList.remove('scale-100');
     card.classList.add('scale-95');
     window.clearTimeout(productModalCloseTimer);
@@ -679,6 +890,10 @@ function _closeProductModal() {
         view.classList.remove('opacity-100', 'pointer-events-auto');
         view.classList.add('opacity-0');
         unlockPageScrollIfNoOverlay();
+        if (returnFocus instanceof HTMLElement && returnFocus.isConnected) {
+            returnFocus.focus({ preventScroll: true });
+        }
+        productModalReturnFocus = null;
     }, 200);
 }
 
@@ -786,18 +1001,33 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
             }, 100);
         } else if (hash === '#legales') {
-            setTimeout(() => showPage('legales-view'), 100);
+            setTimeout(() => {
+                showPage('legales-view');
+                history.replaceState(null, '', locationWithoutHash());
+            }, 100);
+        } else if (SECTION_IDS.includes(hash.slice(1))) {
+            setTimeout(() => {
+                scrollToSection(hash.slice(1));
+                history.replaceState(null, '', locationWithoutHash());
+            }, 100);
         }
     }
 });
+
+document.addEventListener('click', handleSectionNavClick);
 
 // Listener global para el botón "Atrás" del celular/navegador y cierre cruzado
 window.addEventListener('popstate', () => {
     const hash = window.location.hash;
 
-    if (!hash) {
+    if (!isLayerHash(hash)) {
         dismissAllOverlays();
         if (document.getElementById('checkout-view')?.classList.contains('block')) showPage('home-view');
+        const sectionId = hash.slice(1);
+        if (sectionId && SECTION_IDS.includes(sectionId)) {
+            scrollToSection(sectionId);
+            window.history.replaceState(null, '', locationWithoutHash());
+        }
         return;
     }
 
@@ -819,7 +1049,10 @@ window.addEventListener('popstate', () => {
 
     if (hash === '#checkout') {
         if (typeof openCheckoutPage === 'function') openCheckoutPage({ pushState: false });
+        return;
     }
+
+    dismissAllOverlays();
 });
 
 function toggleFaq(btn) {

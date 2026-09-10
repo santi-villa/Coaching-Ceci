@@ -2,7 +2,7 @@ let productInfo = {
     id: 'libro_vol1',
     title: 'Comunicar para vivir más livianos',
     price: 25000,
-    image: 'assets/images/libro-cover.webp'
+    image: 'assets/images/libro-comunicar-portada.webp'
 };
 
 const bookContent = {
@@ -35,18 +35,25 @@ const bookCatalog = [
         title: 'Comunicar para vivir más livianos',
         price: 25000,
         priceLabel: '$25.000',
+        listPrice: 30000,
+        listPriceLabel: '$30.000',
+        webDiscountLabel: 'Precio web · 17% off',
         currency: 'ARS',
-        image: 'assets/images/libro-cover.webp',
-        imageAlt: 'Portada del libro Comunicar para vivir más livianos',
+        image: 'assets/images/libro-comunicar-portada.webp',
+        backImage: 'assets/images/libro-comunicar-contraportada.webp',
+        imageAlt: 'Fotografía de la portada del libro Comunicar para vivir más livianos',
+        backImageAlt: 'Fotografía de la contratapa del libro Comunicar para vivir más livianos',
         available: true,
         statusLabel: 'Disponible',
         heroEyebrow: 'Nuevo lanzamiento',
         heroTitleHtml: '<span class="hero-title-line">Comunicar para vivir</span><span class="hero-title-line hero-title-line--secondary">más livianos</span>',
         heroKicker: '¡Vive más liviano, comunica mejor!',
         heroDescription: 'Una invitación a observar cómo nos comunicamos en la vida real. Descubrí formas más claras y humanas de decir, escuchar y convivir para tener "conversaciones posibles".',
-        productKicker: 'Libro físico · Vol. 1',
+        productKicker: 'Libro físico',
         productDescription: 'Una invitación a observar cómo nos comunicamos en la vida real y a encontrar formas más claras, humanas y posibles de decir, escuchar y convivir.',
         meta: {
+            label: 'Formato',
+            value: 'Tapa blanda',
             format: 'Tapa blanda',
             pages: '104',
             size: '15x21 cm',
@@ -72,48 +79,42 @@ const bookCatalog = [
     },
     {
         id: 'proximo_libro',
-        title: 'Escuchar para comprender(nos) mejor',
-        price: 27000,
-        priceLabel: '$27.000',
-        currency: 'ARS',
-        image: 'assets/images/libro-escuchar-demo.svg',
-        imageAlt: 'Portada del libro Escuchar para comprendernos mejor',
+        title: 'Propósito',
+        subtitle: 'Un viaje profundo hacia el sentido de la vida',
+        image: 'assets/images/libro-proposito-portada.webp?v=2',
+        backImage: 'assets/images/libro-proposito-contraportada.webp?v=2',
+        imageAlt: 'Portada provisional del libro Propósito, de Cecilia Karina Rosso',
+        backImageAlt: 'Contratapa provisional del libro Propósito, de Cecilia Karina Rosso',
         available: false,
         statusLabel: 'Próximo lanzamiento',
         heroEyebrow: 'Próximo lanzamiento',
-        heroTitleHtml: '<span class="hero-title-line">Escuchar para</span><span class="hero-title-line hero-title-line--secondary">comprender(nos) mejor</span>',
-        heroKicker: 'La otra mitad de la comunicación.',
-        heroDescription: 'Una invitación a escuchar con presencia, comprender antes de responder y transformar nuestros vínculos desde una mirada más humana.',
-        productKicker: 'Libro físico · Vol. 2',
-        productDescription: 'Un recorrido práctico y sensible para descubrir cómo la escucha puede abrir conversaciones más honestas, cercanas y posibles.',
+        heroTitleHtml: '<span class="hero-title-line">Propósito</span><span class="hero-title-line hero-title-line--secondary">Un viaje profundo hacia el sentido de la vida</span>',
+        heroKicker: 'Un viaje profundo hacia el sentido de la vida',
+        heroDescription: 'Una invitación a mirar hacia adentro, descubrir una brújula propia y acercarnos a aquello que da sentido a nuestra vida.',
+        productKicker: 'Próximo lanzamiento',
+        productDescription: 'Una invitación a mirar hacia adentro, descubrir una brújula propia y acercarnos a aquello que da sentido a nuestra vida.',
+        productDescriptionHtml: `
+            <p>Todos queremos encontrar nuestro propósito, pero no siempre sabemos dónde buscarlo. Muchas veces aprendimos a perseguir metas, éxitos y reconocimiento afuera, mientras dejamos en segundo plano aquello que verdaderamente nos hace bien, nos apasiona y da sentido a nuestra vida.</p>
+            <p><cite>Propósito</cite> es una invitación a mirar hacia adentro y descubrir una brújula propia. A través de sus páginas, Cecilia Karina Rosso acompaña un recorrido de preguntas y reflexión para reconocer qué te mueve, qué lugar querés ocupar en el mundo y qué puede hacer que cada mañana tenga un para qué.</p>
+        `,
         meta: {
-            format: 'Tapa blanda',
-            pages: '112',
-            size: '15x21 cm',
-            binding: 'Con solapas',
-            paper: 'Bookcel ahuesado',
-            language: 'Español'
+            label: 'Editorial',
+            value: 'Servicop',
+            pages: '168',
+            size: '15 × 21 cm'
         },
-        backCopy: 'Un recorrido sensible para hacer lugar a la voz del otro, comprender antes de responder y construir vínculos más conscientes.',
-        highlights: [
-            '<strong>Escuchar con presencia:</strong> herramientas para volver al aquí y ahora.',
-            '<strong>Comprender antes de responder:</strong> una pausa que transforma el diálogo.',
-            '<strong>Empatía cotidiana:</strong> nuevas formas de acercarnos al mundo del otro.',
-            '<strong>Prácticas guiadas:</strong> preguntas para llevar la escucha a tus vínculos.'
-        ],
+        backCopy: 'Una invitación a mirar hacia adentro y descubrir una brújula propia.',
         previewTitle: 'Primer vistazo',
         previewHtml: `
-            <p class="mb-3 font-serif text-xl italic">Escuchar también es una forma de cuidar.</p>
-            <p class="mb-3">El segundo volumen propone detenernos antes de responder y aprender a reconocer lo que el otro intenta decir.</p>
-            <p class="mb-3">Una lectura sobre presencia, empatía y vínculos más conscientes.</p>
+            <p class="mb-3">Todos queremos encontrar nuestro propósito, pero no siempre sabemos dónde buscarlo. Muchas veces aprendimos a perseguir metas, éxitos y reconocimiento afuera, mientras dejamos en segundo plano aquello que verdaderamente nos hace bien, nos apasiona y da sentido a nuestra vida.</p>
+            <p class="mb-3"><cite>Propósito</cite> es una invitación a mirar hacia adentro y descubrir una brújula propia.</p>
         `,
-        aboutTitle: 'Acerca del volumen 2',
+        aboutTitle: 'Sobre este libro',
         aboutHtml: `
-            <p class="text-lg leading-relaxed text-brand-text/80 mb-4">La otra mitad de toda conversación empieza cuando hacemos lugar para escuchar.</p>
-            <p class="text-base leading-relaxed text-brand-text/70 mb-4">El libro recorre situaciones cotidianas en las que comprender al otro puede cambiar el rumbo de un vínculo.</p>
-            <p class="text-base leading-relaxed text-brand-text/70 mb-4">Una invitación a escuchar con presencia y a transformar la conversación desde una mirada más humana.</p>
+            <p class="text-base leading-relaxed text-brand-text/70 mb-4">Todos queremos encontrar nuestro propósito, pero no siempre sabemos dónde buscarlo. Muchas veces aprendimos a perseguir metas, éxitos y reconocimiento afuera, mientras dejamos en segundo plano aquello que verdaderamente nos hace bien, nos apasiona y da sentido a nuestra vida.</p>
+            <p class="text-base leading-relaxed text-brand-text/70 mb-4"><cite>Propósito</cite> es una invitación a mirar hacia adentro y descubrir una brújula propia. A través de sus páginas, Cecilia Karina Rosso acompaña un recorrido de preguntas y reflexión para reconocer qué te mueve, qué lugar querés ocupar en el mundo y qué puede hacer que cada mañana tenga un para qué.</p>
             <div class="mt-6 pt-4 border-t border-brand-lilac/15">
-                <p class="text-sm text-brand-text/60">Libro físico · Tapa blanda</p>
+                <p class="text-sm text-brand-text/60">Editorial Servicop</p>
             </div>
         `
     }
@@ -127,6 +128,10 @@ function getBookById(bookId) {
 
 function getSelectedBook() {
     return getBookById(selectedBookId) || bookCatalog[0];
+}
+
+function bookHasListedPrice(book) {
+    return Boolean(book?.priceLabel) && typeof book?.price === 'number' && book.price > 0;
 }
 
 function syncProductInfo(book = getSelectedBook()) {
@@ -191,11 +196,10 @@ const modalData = {
                         <div class="checkout-payment-box" data-method="mp">
                             <div class="checkout-payment-option">
                                 <span class="checkout-payment-radio" aria-hidden="true"></span>
-                                <strong>Mercado Pago</strong>
+                                <strong class="checkout-mp-name">
+                                    <img src="assets/images/mercado-pago-logo.png" alt="Mercado Pago">
+                                </strong>
                                 <div class="checkout-card-brands" aria-label="Tarjetas aceptadas por Mercado Pago">
-                                    <span class="payment-brand payment-brand-mp" title="Mercado Pago">
-                                        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#009EE3" d="M5.372 0C2.362 0 0 2.366 0 5.368c0 1.4.534 2.612 1.56 3.548L5.372 12.72l3.81-3.804c1.03-.936 1.56-2.148 1.56-3.548C10.742 2.366 8.382 0 5.372 0zm13.256 0c-3.01 0-5.37 2.366-5.37 5.368 0 1.4.534 2.612 1.56 3.548l3.81 3.804 3.81-3.804C23.466 7.98 24 6.768 24 5.368 24 2.366 21.638 0 18.628 0zM5.372 11.28L1.562 15.084C.534 16.02 0 17.232 0 18.632 0 21.634 2.362 24 5.372 24c3.01 0 5.368-2.366 5.368-5.368 0-1.4-.53-2.612-1.56-3.548zm13.256 0l-3.81 3.804c-1.026.936-1.56 2.148-1.56 3.548 0 3.002 2.36 5.368 5.37 5.368 3.01 0 5.372-2.366 5.372-5.368 0-1.4-.534-2.612-1.56-3.548z"/></svg>
-                                    </span>
                                     <span class="payment-brand payment-brand-visa" title="Visa">VISA</span>
                                     <span class="payment-brand payment-brand-mastercard" title="Mastercard"><i></i><i></i></span>
                                     <span class="payment-more-wrap">
@@ -335,7 +339,7 @@ const modalData = {
             <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
             
             <form action="https://c4dbfde8.sibforms.com/serve/MUIFAFucGxlLSVVMIyWGX25m6RxpThHoNAjjAN4gTElQ2c-Dnp8MvJFxBORy6b3jC3bIEckj3y3YW0MWybSKcpROinDoqtvtG5ouMRk69_ar2o7VrH_IczOx-FpHkjniFVuzm8grGU-14n3LzBlZdF5XUvGJXkzFQJ5je-MBjDMxE2S7IF7xjHNWFPgslhlJRih4zqJBRiwk74SBAg==" method="POST" target="hidden_iframe" onsubmit="handleSubscribeSubmit(event)" novalidate>
-                <p class="mb-5 text-brand-text/70 text-sm md:text-base">Déjanos tu email para enterarte cuando el próximo volumen esté disponible y recibir novedades exclusivas.</p>
+                <p class="mb-5 text-brand-text/70 text-sm md:text-base">Déjanos tu email para enterarte cuando el próximo libro esté disponible y recibir novedades exclusivas.</p>
                 <div class="bg-brand-lilac/10 border border-brand-lilac/20 p-3 rounded-lg flex items-start gap-3 mb-5">
                     <i data-lucide="alert-circle" class="w-5 h-5 text-brand-lilac flex-shrink-0 mt-0.5"></i>
                     <p class="text-xs text-brand-text/80">Importante: Es muy probable que tu confirmación llegue a la <strong>bandeja de Spam o Correo no deseado</strong>. ¡No olvides revisarla!</p>
