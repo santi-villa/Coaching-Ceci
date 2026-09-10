@@ -35,7 +35,7 @@
         })(window, document, "clarity", "script", "yfpp7r5940");
     </script>
 
-    <link rel="stylesheet" href="src/css/tailwind.css?v=48">
+    <link rel="stylesheet" href="src/css/tailwind.css?v=51">
 
     <script type="application/ld+json">
     {
@@ -267,6 +267,7 @@
                     </div>
 
                     <div id="author-book-selector" class="author-book-selector">
+                        <div class="author-hero__stage">
                         <div class="author-hero__books" role="tablist" aria-label="Elegir un libro de Cecilia Karina Rosso" tabindex="0">
                         <button type="button" class="author-hero__book author-hero__book--communicate is-selected"
                             data-hero-book-id="libro_vol1" role="tab" aria-selected="true"
@@ -280,6 +281,17 @@
                             aria-label="Seleccionar Propósito">
                             <img src="assets/images/libro-proposito-portada.webp?v=2"
                                 alt="Portada provisional del libro Propósito, de Cecilia Karina Rosso" decoding="async">
+                        </button>
+                        </div>
+                        <button type="button" class="author-hero__peek author-hero__peek--prev" data-book-prev hidden aria-label="Ver el libro anterior">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M15 5l-7 7 7 7"></path>
+                            </svg>
+                        </button>
+                        <button type="button" class="author-hero__peek author-hero__peek--next" data-book-next aria-label="Deslizá para ver el siguiente libro">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M9 5l7 7-7 7"></path>
+                            </svg>
                         </button>
                         </div>
                         <div class="author-book-selector__controls">
@@ -893,7 +905,7 @@
     </footer>
 
     <script src="src/js/data.js?v=33" defer></script>
-    <script src="src/js/main.js?v=38" defer></script>
+    <script src="src/js/main.js?v=40" defer></script>
     <script src="src/js/cart.js?v=20" defer></script>
 </body>
 </html>

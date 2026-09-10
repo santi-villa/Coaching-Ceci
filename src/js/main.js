@@ -108,6 +108,7 @@ let productCoverLightboxReturnFocus = null;
 let productModalCloseTimer = null;
 let productModalReturnFocus = null;
 let bookSelectorScrollFrame = null;
+let heroBookSettleTimer = null;
 
 function renderHeroBook(book, announce = true) {
     const bookIndex = bookCatalog.findIndex(item => item.id === book.id);
@@ -435,11 +436,40 @@ function selectBook(bookId, { announce = true } = {}) {
     renderProductModal(book);
 }
 
+function markCarouselSwiped() {
+    authorBookSelector?.classList.add('has-swiped');
+}
+
+function scrollHeroBookIntoView(card) {
+    if (!heroBookCarousel || !card) return false;
+    const carouselRect = heroBookCarousel.getBoundingClientRect();
+    const cardRect = card.getBoundingClientRect();
+    const delta = (cardRect.left + cardRect.width / 2) - (carouselRect.left + carouselRect.width / 2);
+    if (Math.abs(delta) < 4) return false;
+    heroBookCarousel.scrollBy({ left: delta, behavior: 'smooth' });
+    return true;
+}
+
+function revealHeroBook(bookId) {
+    const card = heroBookCards.find(item => item.dataset.heroBookId === bookId);
+    if (!card) return;
+    markCarouselSwiped();
+    const isMobile = window.matchMedia('(max-width: 767px)').matches;
+    if (isMobile && scrollHeroBookIntoView(card)) {
+        window.clearTimeout(heroBookSettleTimer);
+        heroBookSettleTimer = window.setTimeout(() => {
+            if (selectedBookId !== bookId) selectBook(bookId);
+        }, 640);
+        return;
+    }
+    selectBook(bookId);
+}
+
 function moveBookSelection(direction) {
     const currentIndex = bookCatalog.findIndex(book => book.id === selectedBookId);
     const nextIndex = currentIndex + direction;
     if (nextIndex < 0 || nextIndex >= bookCatalog.length) return;
-    selectBook(bookCatalog[nextIndex].id);
+    revealHeroBook(bookCatalog[nextIndex].id);
 }
 
 heroBookCards.forEach(card => {
@@ -451,8 +481,7 @@ heroBookCards.forEach(card => {
             return;
         }
         if (isMobile) {
-            selectBook(bookId);
-            card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            revealHeroBook(bookId);
             return;
         }
         openProductModal(bookId);
@@ -460,10 +489,7 @@ heroBookCards.forEach(card => {
 });
 
 heroBookDots.forEach(dot => dot.addEventListener('click', () => {
-    const bookId = dot.dataset.authorBookDot;
-    selectBook(bookId);
-    heroBookCards.find(card => card.dataset.heroBookId === bookId)
-        ?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    revealHeroBook(dot.dataset.authorBookDot);
 }));
 document.querySelector('[data-book-prev]')?.addEventListener('click', () => moveBookSelection(-1));
 document.querySelector('[data-book-next]')?.addEventListener('click', () => moveBookSelection(1));
@@ -518,6 +544,7 @@ function syncBookSelectionFromScroll() {
 }
 
 heroBookCarousel?.addEventListener('scroll', () => {
+    markCarouselSwiped();
     if (!window.matchMedia('(max-width: 767px)').matches || bookSelectorScrollFrame !== null) return;
     bookSelectorScrollFrame = window.requestAnimationFrame(syncBookSelectionFromScroll);
 }, { passive: true });
