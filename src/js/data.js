@@ -181,7 +181,7 @@ const modalData = {
                             <h2>Contacto</h2>
                         </div>
                         <div class="checkout-input-icon-wrap">
-                            <input type="email" id="customer-email" autocomplete="email" placeholder="Correo electrónico" required oninput="validateInput(this)">
+                            <input type="email" id="customer-email" autocomplete="email" inputmode="email" enterkeyhint="next" aria-label="Correo electrónico" placeholder="Correo electrónico" required oninput="validateInput(this)">
                             <i data-lucide="mail"></i>
                         </div>
                         <label class="checkout-checkbox-line">
@@ -190,56 +190,28 @@ const modalData = {
                         </label>
                     </section>
 
-                    <section class="checkout-block checkout-payment-block">
-                        <h2>Pago</h2>
-                        <p class="checkout-security-copy"><i data-lucide="lock"></i> Todas las transacciones son seguras y están encriptadas.</p>
-                        <div class="checkout-payment-box" data-method="mp">
-                            <div class="checkout-payment-option">
-                                <span class="checkout-payment-radio" aria-hidden="true"></span>
-                                <strong class="checkout-mp-name">
-                                    <img src="assets/images/mercado-pago-logo.png" alt="Mercado Pago">
-                                </strong>
-                                <div class="checkout-card-brands" aria-label="Tarjetas aceptadas por Mercado Pago">
-                                    <span class="payment-brand payment-brand-visa" title="Visa">VISA</span>
-                                    <span class="payment-brand payment-brand-mastercard" title="Mastercard"><i></i><i></i></span>
-                                    <span class="payment-more-wrap">
-                                        <span class="payment-brand payment-brand-more" title="American Express, Cabal y Naranja">+3</span>
-                                        <div class="payment-more-popover" role="tooltip">
-                                            <span class="payment-brand payment-brand-amex">AMEX</span>
-                                            <span class="payment-brand payment-brand-cabal">cabal</span>
-                                            <span class="payment-brand payment-brand-naranja">naranja</span>
-                                        </div>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="checkout-payment-explainer checkout-payment-explainer-mp">
-                                <i data-lucide="shield-check"></i>
-                                <span>Se te redirigirá a Mercado Pago. Ahí podés pagar con tarjeta, dinero en cuenta o transferencia.</span>
-                            </div>
-                        </div>
-                    </section>
-
                     <section class="checkout-block checkout-address-block">
-                        <h2>Dirección de facturación</h2>
+                        <h2>Dirección de entrega</h2>
                         <div class="checkout-country-field"><span>País / Región</span><strong>Argentina</strong></div>
                         <div class="checkout-field-grid checkout-field-grid--two">
-                            <input type="text" id="customer-name" autocomplete="given-name" placeholder="Nombre" required oninput="validateInput(this)">
-                            <input type="text" id="customer-lastname" autocomplete="family-name" placeholder="Apellidos" required oninput="validateInput(this)">
+                            <input type="text" id="customer-name" autocomplete="given-name" enterkeyhint="next" aria-label="Nombre" placeholder="Nombre" required oninput="validateInput(this)">
+                            <input type="text" id="customer-lastname" autocomplete="family-name" enterkeyhint="next" aria-label="Apellido" placeholder="Apellidos" required oninput="validateInput(this)">
                         </div>
                         <div class="checkout-field-grid checkout-field-grid--two">
-                            <input type="text" id="customer-dni" inputmode="numeric" autocomplete="off" placeholder="DNI sin puntos" required oninput="validateInput(this)">
-                            <input type="tel" id="customer-phone" autocomplete="tel" placeholder="Teléfono" required oninput="validateInput(this)">
+                            <input type="text" id="customer-dni" inputmode="numeric" maxlength="11" autocomplete="off" enterkeyhint="next" aria-label="DNI sin puntos" placeholder="DNI sin puntos" required oninput="validateInput(this)">
+                            <input type="tel" id="customer-phone" autocomplete="tel" enterkeyhint="next" aria-label="Teléfono con código de área" placeholder="Teléfono" required oninput="validateInput(this)">
                         </div>
-                        <input type="text" id="street" class="checkout-full-field" autocomplete="address-line1" placeholder="Dirección" required oninput="resetShippingQuote(); validateInput(this)">
+                        <p class="checkout-field-hint">El correo pide el DNI y el teléfono (con código de área, por ejemplo 1155551234) para poder entregarte el paquete. No los usamos para nada más.</p>
+                        <input type="text" id="street" class="checkout-full-field" autocomplete="address-line1" aria-label="Calle" enterkeyhint="next" placeholder="Calle" required oninput="onAddressInput(this)">
                         <div class="checkout-field-grid checkout-field-grid--two checkout-field-grid--street-extra">
-                            <input type="text" id="street-number" placeholder="Número" required oninput="resetShippingQuote(); validateInput(this)">
-                            <input type="text" id="apartment" autocomplete="address-line2" placeholder="Piso / depto" oninput="resetShippingQuote(); validateInput(this)">
+                            <input type="text" id="street-number" inputmode="numeric" enterkeyhint="next" aria-label="Número de la calle" placeholder="Número" required oninput="onAddressInput(this)">
+                            <input type="text" id="apartment" autocomplete="address-line2" enterkeyhint="next" aria-label="Piso o departamento (opcional)" placeholder="Piso / depto" oninput="onAddressInput(this)">
                         </div>
                         <div class="checkout-field-grid checkout-field-grid--location">
-                            <input type="text" id="zip" autocomplete="postal-code" placeholder="Código postal" required oninput="resetShippingQuote(); validateInput(this)">
-                            <input type="text" id="city" autocomplete="address-level2" placeholder="Ciudad" required oninput="resetShippingQuote(); validateInput(this)">
+                            <input type="text" id="zip" autocomplete="postal-code" inputmode="numeric" maxlength="8" enterkeyhint="next" aria-label="Código postal" placeholder="Código postal" required oninput="onAddressInput(this)">
+                            <input type="text" id="city" autocomplete="address-level2" enterkeyhint="done" aria-label="Ciudad o localidad" placeholder="Ciudad" required oninput="onAddressInput(this)">
                             <div class="checkout-select-wrap">
-                                <select id="province" autocomplete="address-level1" required onchange="resetShippingQuote(); validateInput(this)">
+                                <select id="province" autocomplete="address-level1" aria-label="Provincia" required onchange="onAddressInput(this)">
                                     <option value="" disabled selected>Provincia / Estado</option>
                                     <option>Buenos Aires</option>
                                     <option value="CABA">Ciudad Autónoma de Buenos Aires</option>
@@ -275,18 +247,48 @@ const modalData = {
                                 <div><i data-lucide="truck"></i><span>Envío a domicilio</span></div>
                                 <button type="button" onclick="calculateShipping(event)" id="btn-calc-shipping">Calcular envío</button>
                             </div>
-                            <div id="shipping-cost-display">Completá la dirección para calcular el envío.</div>
+                            <div id="shipping-cost-display" aria-live="polite">El envío se calcula solo cuando completás la dirección.</div>
+                        </div>
+                    </section>
+
+                    <section class="checkout-block checkout-payment-block">
+                        <h2>Pago</h2>
+                        <p class="checkout-security-copy"><i data-lucide="lock"></i> Todas las transacciones son seguras y están encriptadas.</p>
+                        <div class="checkout-payment-box" data-method="mp">
+                            <div class="checkout-payment-option">
+                                <span class="checkout-payment-radio" aria-hidden="true"></span>
+                                <strong class="checkout-mp-name">
+                                    <img src="assets/images/mercado-pago-logo.png" alt="Mercado Pago">
+                                </strong>
+                                <div class="checkout-card-brands" aria-label="Tarjetas aceptadas por Mercado Pago">
+                                    <span class="payment-brand payment-brand-visa" title="Visa">VISA</span>
+                                    <span class="payment-brand payment-brand-mastercard" title="Mastercard"><i></i><i></i></span>
+                                    <span class="payment-more-wrap">
+                                        <span class="payment-brand payment-brand-more" title="American Express, Cabal y Naranja">+3</span>
+                                        <div class="payment-more-popover" role="tooltip">
+                                            <span class="payment-brand payment-brand-amex">AMEX</span>
+                                            <span class="payment-brand payment-brand-cabal">cabal</span>
+                                            <span class="payment-brand payment-brand-naranja">naranja</span>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="checkout-payment-explainer checkout-payment-explainer-mp">
+                                <i data-lucide="shield-check"></i>
+                                <span>Se te redirigirá a Mercado Pago. Ahí podés pagar con tarjeta, dinero en cuenta o transferencia.</span>
+                            </div>
                         </div>
                     </section>
 
                     <div class="checkout-privacy-wrap">
                         <label class="checkout-checkbox-line">
-                            <input type="checkbox" id="privacy-policy" required>
+                            <input type="checkbox" id="privacy-policy" required onchange="clearFieldError(this)">
                             <span>He leído y acepto las <a href="legales.html" target="_blank" rel="noopener">Políticas de Privacidad</a>.</span>
                         </label>
                     </div>
 
                     <button type="submit" class="checkout-submit"><i data-lucide="lock"></i> Pagar ahora</button>
+                    <p class="checkout-submit-note">Al pagar vas a pasar a Mercado Pago para completar la compra de forma segura.</p>
                     <div class="checkout-protection-note"><i data-lucide="lock"></i><span>Tus datos personales están protegidos.</span></div>
                     <div class="checkout-footer-actions">
                         <a href="legales.html" target="_blank" rel="noopener">Política de privacidad</a>

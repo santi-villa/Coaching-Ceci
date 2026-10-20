@@ -9400,3 +9400,24 @@ body {
 }
 .consent-banner__btn--ghost { background: transparent; color: #4a382b; }
 .consent-banner__btn:focus-visible { outline: 3px solid #7dc8c4; outline-offset: 2px; }
+
+/* Checkout: errores por campo y textos de ayuda */
+.checkout-field-error {
+    margin: 0.35rem 0 0.1rem;
+    color: #b42318;
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+.checkout-field-hint {
+    margin: 0.1rem 0 0.7rem;
+    color: #69717b;
+    font-size: 0.78rem;
+    line-height: 1.45;
+}
+.checkout-submit-note {
+    margin: 0.6rem 0 0;
+    text-align: center;
+    color: #69717b;
+    font-size: 0.78rem;
+    line-height: 1.45;
+}

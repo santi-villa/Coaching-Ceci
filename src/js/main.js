@@ -992,6 +992,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const paymentStatus = urlParams.get('status');
     if (paymentStatus === 'approved') {
+        const orderRef = urlParams.get('external_reference') || '';
+        const orderEl = document.getElementById('success-order');
+        if (orderEl && /^MP-[A-Za-z0-9-]{4,40}$/.test(orderRef)) {
+            document.getElementById('success-order-number').textContent = orderRef;
+            orderEl.classList.remove('hidden');
+        }
+        if (typeof clearCartAfterPurchase === 'function') clearCartAfterPurchase();
         setTimeout(() => {
             showPage('success-view');
             history.replaceState(null, '', window.location.pathname);
@@ -1002,6 +1009,7 @@ window.addEventListener('DOMContentLoaded', () => {
             history.replaceState(null, '', window.location.pathname);
         }, 100);
     } else if (paymentStatus === 'pending') {
+        if (typeof clearCartAfterPurchase === 'function') clearCartAfterPurchase();
         setTimeout(() => {
             showToast('Tu pago quedó pendiente. Te avisamos cuando se acredite.', 'warning');
             history.replaceState(null, '', window.location.pathname);

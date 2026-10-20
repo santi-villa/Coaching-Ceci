@@ -31,7 +31,7 @@
 
     <script src="src/js/consent.js" defer></script>
 
-    <link rel="stylesheet" href="src/css/tailwind.css?v=55">
+    <link rel="stylesheet" href="src/css/tailwind.css?v=56">
 
     <script type="application/ld+json">
     {
@@ -679,13 +679,14 @@
                         </div>
                         <h1 class="font-serif text-4xl md:text-5xl font-bold text-brand-text mb-4">¡Gracias por tu
                             compra!</h1>
-                        <p class="text-xl text-brand-lilac font-medium mb-6">Tu pedido ha sido procesado con éxito.</p>
+                        <p class="text-xl text-brand-lilac font-medium mb-6">Recibimos tu pago.</p>
 
                         <div class="surface-muted rounded-xl p-6 text-left mb-8 max-w-sm mx-auto">
-                            <p class="text-brand-text/70 mb-2 font-medium">Estamos procesando tu orden.</p>
-                            <p class="text-brand-text/60 text-sm">Recibirás un correo de confirmación en breve. Por
-                                favor,
-                                revisa tu bandeja de entrada y la carpeta de Spam.</p>
+                            <p id="success-order" class="hidden text-brand-text/70 mb-2 font-medium">Número de pedido:
+                                <strong id="success-order-number" class="text-brand-text"></strong></p>
+                            <p class="text-brand-text/70 mb-2 font-medium">Estamos preparando tu pedido.</p>
+                            <p class="text-brand-text/60 text-sm">En unos minutos te llega un correo de confirmación con el
+                                seguimiento del envío. Si no lo ves, revisá la carpeta de Spam o promociones.</p>
                             <p class="text-brand-text/60 text-sm italic mt-3">Cualquier duda, escribinos en Instagram:
                                 <a href="https://instagram.com/ceciliarosso.coach" target="_blank"
                                     class="inline-flex items-center gap-1.5 text-brand-lilac hover:underline"><i data-lucide="instagram" class="w-3.5 h-3.5"></i> @ceciliarosso.coach</a></p>
@@ -900,8 +901,9 @@
         </div>
     </footer>
 
-    <script src="src/js/data.js?v=33" defer></script>
-    <script src="src/js/main.js?v=40" defer></script>
-    <script src="src/js/cart.js?v=20" defer></script>
+    <script src="src/js/data.js?v=35" defer></script>
+    <script src="src/js/main.js?v=41" defer></script>
+    <script src="src/js/delivery-dates.js?v=1" defer></script>
+    <script src="src/js/cart.js?v=23" defer></script>
 </body>
 </html>

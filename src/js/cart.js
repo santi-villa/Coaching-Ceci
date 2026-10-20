@@ -5,6 +5,22 @@ let quotedShippingCost = 0;
 let quotedShippingQuote = null;
 let quotedShippingAddressKey = '';
 let quotedShippingCartKey = '';
+let shippingQuoteTimer = null;
+let shippingQuoteRequestId = 0;
+const SHIPPING_AUTO_QUOTE_DELAY_MS = 900;
+const MISSING_FIELD_MESSAGES = {
+    'customer-email': 'Completá tu email.',
+    'customer-name': 'Completá tu nombre.',
+    'customer-lastname': 'Completá tu apellido.',
+    'customer-dni': 'Completá tu DNI.',
+    'customer-phone': 'Completá tu teléfono.',
+    'street': 'Completá la calle.',
+    'street-number': 'Completá el número.',
+    'zip': 'Completá el código postal.',
+    'city': 'Completá la localidad.',
+    'province': 'Elegí tu provincia.'
+};
+const POSTAL_CODE_REGEX = /^[A-Za-z]?(\d{4})[A-Za-z]{0,3}$/;
 
 const cartOverlay = document.getElementById('cart-overlay');
 const cartDrawer = document.getElementById('cart-drawer');
@@ -209,9 +225,9 @@ function updateItemQuantity(id, change) {
     }
 }
 
-function showCheckoutMessage(message, type = 'error') {
+function showCheckoutMessage(message, type = 'error', options = {}) {
     if (typeof showUserMessage === 'function') {
-        showUserMessage(message, type, { target: 'checkout-message' });
+        showUserMessage(message, type, { target: 'checkout-message', ...options });
         return;
     }
     showToast(message, type);
@@ -226,6 +242,40 @@ function clearCheckoutMessage() {
 function clearFieldError(field) {
     if (!field) return;
     field.classList.remove('border-red-400', 'bg-red-50/30', 'ring-2', 'ring-red-100');
+    field.removeAttribute('aria-invalid');
+    field.removeAttribute('aria-describedby');
+    if (field.id) document.querySelector(`[data-error-for="${field.id}"]`)?.remove();
+}
+
+function clearAllFieldErrors() {
+    document.querySelectorAll('#checkout-form [data-error-for]').forEach(error => error.remove());
+    document.querySelectorAll('#checkout-form [aria-invalid]').forEach(field => {
+        field.classList.remove('border-red-400', 'bg-red-50/30', 'ring-2', 'ring-red-100');
+        field.removeAttribute('aria-invalid');
+        field.removeAttribute('aria-describedby');
+    });
+}
+
+// Muestra el motivo debajo del campo (o de su fila, si comparte fila con otro).
+function showFieldError(field, message) {
+    if (!field) return;
+    markFieldError(field);
+    field.setAttribute('aria-invalid', 'true');
+    const anchor = field.closest('.checkout-field-grid, .checkout-input-icon-wrap, .checkout-privacy-wrap') || field;
+    let error = document.querySelector(`[data-error-for="${field.id}"]`);
+    if (!error) {
+        error = document.createElement('p');
+        error.className = 'checkout-field-error';
+        error.dataset.errorFor = field.id;
+        error.id = `error-${field.id}`;
+        error.setAttribute('role', 'alert');
+        // Dos campos de la misma fila comparten lugar: el segundo error va despues del primero.
+        let previous = anchor;
+        while (previous.nextElementSibling?.classList.contains('checkout-field-error')) previous = previous.nextElementSibling;
+        previous.after(error);
+    }
+    error.textContent = message;
+    field.setAttribute('aria-describedby', error.id);
 }
 
 function markFieldError(field) {
@@ -240,13 +290,18 @@ function markMissingFields(fieldIds) {
         const field = document.getElementById(id);
         if (!field) return;
         if (field.value.trim() === '') {
-            markFieldError(field);
+            showFieldError(field, MISSING_FIELD_MESSAGES[id] || 'Completá este dato.');
             if (!firstMissing) firstMissing = field;
         } else {
             clearFieldError(field);
         }
     });
-    if (firstMissing) firstMissing.focus({ preventScroll: true });
+    if (firstMissing) focusField(firstMissing);
+}
+
+function focusField(field) {
+    field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    field.focus({ preventScroll: true });
 }
 
 function highlightShippingCard() {
@@ -305,9 +360,24 @@ function selectCheckoutPayment(method) {
 
 window.selectCheckoutPayment = selectCheckoutPayment;
 
+// Acepta "1414" o el formato CPA ("C1414ABC") y se queda con los 4 numeros.
+function normalizePostalCode(value) {
+    const raw = String(value || '').trim();
+    const match = raw.match(POSTAL_CODE_REGEX);
+    return match ? match[1] : raw;
+}
+
+function isShippingAddressComplete(address = getShippingAddress()) {
+    return /^\d{4}$/.test(address.postalCode) &&
+        Boolean(address.province) &&
+        address.city.length >= 2 &&
+        address.street.length >= 2 &&
+        Boolean(address.number);
+}
+
 function getShippingAddress() {
     return {
-        postalCode: document.getElementById('zip')?.value.trim() || '',
+        postalCode: normalizePostalCode(document.getElementById('zip')?.value),
         province: document.getElementById('province')?.value.trim() || '',
         city: document.getElementById('city')?.value.trim() || '',
         street: document.getElementById('street')?.value.trim() || '',
@@ -523,12 +593,14 @@ function toggleShippingFields(show) {
 }
 
 function resetShippingQuote() {
+    clearTimeout(shippingQuoteTimer);
+    shippingQuoteRequestId += 1;
     quotedShippingCost = 0;
     quotedShippingQuote = null;
     quotedShippingAddressKey = '';
     quotedShippingCartKey = '';
     const display = document.getElementById('shipping-cost-display');
-    if (display) display.innerHTML = 'Completá la dirección para calcular el envío.';
+    if (display) display.innerHTML = 'El envío se calcula solo cuando completás la dirección.';
     const btn = document.getElementById('btn-calc-shipping');
     if (btn) {
         btn.innerHTML = 'Calcular envío';
@@ -538,8 +610,42 @@ function resetShippingQuote() {
     updateCheckoutSummary();
 }
 
-async function calculateShipping(e) {
-    e.preventDefault();
+// Cada cambio en la direccion invalida la cotizacion y, cuando queda completa, la pide sola.
+function onAddressInput(field) {
+    resetShippingQuote();
+    validateInput(field);
+    shippingQuoteTimer = setTimeout(() => {
+        if (cart.length && isShippingAddressComplete()) calculateShipping(null, { silent: true });
+    }, SHIPPING_AUTO_QUOTE_DELAY_MS);
+}
+
+function renderShippingQuote() {
+    const display = document.getElementById('shipping-cost-display');
+    if (!display || !quotedShippingQuote) return;
+
+    const deliveryTime = quotedShippingQuote.delivery_time;
+    let range = 'Plazo a confirmar por el transportista';
+    if (deliveryTime?.min_days && deliveryTime?.max_days) {
+        const arrival = window.DeliveryDates?.describeDeliveryRange(deliveryTime.min_days, deliveryTime.max_days);
+        range = `${deliveryTime.min_days} a ${deliveryTime.max_days} días hábiles${arrival ? ` · llega ${arrival}` : ''}`;
+    }
+    const carrier = quotedShippingQuote.carrier_name
+        ? `<div class="text-xs text-gray-500">Operado por ${escapeHtml(quotedShippingQuote.carrier_name)}</div>`
+        : '';
+    display.innerHTML = `
+        <div class="flex items-start justify-between gap-3">
+            <div>
+                <div class="font-semibold text-brand-text">Envío a domicilio</div>
+                <div class="text-xs text-gray-500">${escapeHtml(range)}</div>
+                ${carrier}
+            </div>
+            <div class="text-brand-lilac font-bold">${formatMoney(quotedShippingCost)}</div>
+        </div>
+    `;
+}
+
+async function calculateShipping(e, { silent = false } = {}) {
+    if (e) e.preventDefault();
     const address = getShippingAddress();
     const requiredShippingFields = [
         { id: 'zip', label: 'codigo postal' },
@@ -550,21 +656,30 @@ async function calculateShipping(e) {
     ];
     const missingShippingFields = getMissingRequiredFields(requiredShippingFields);
     if (missingShippingFields.length) {
+        if (silent) return;
         markMissingFields(missingShippingFields.map(field => field.id));
         showCheckoutMessage(`Completá estos datos para calcular el envío: ${missingShippingFields.map(field => field.label).join(', ')}.`, 'warning');
         highlightShippingCard();
         return;
     }
+    if (!/^\d{4}$/.test(address.postalCode)) {
+        if (silent) return;
+        showFieldError(document.getElementById('zip'), 'Ingresá tu código postal de 4 números (por ejemplo 1414).');
+        focusField(document.getElementById('zip'));
+        return;
+    }
     if (cart.length === 0) {
-        showCheckoutMessage('Agregá al menos un libro al carrito antes de calcular el envío.', 'warning');
+        if (!silent) showCheckoutMessage('Agregá al menos un libro al carrito antes de calcular el envío.', 'warning');
         return;
     }
 
     const btn = document.getElementById('btn-calc-shipping');
     const display = document.getElementById('shipping-cost-display');
+    const requestId = ++shippingQuoteRequestId;
 
     btn.innerHTML = '<i class="animate-spin w-4 h-4 rounded-full border-2 border-current border-t-transparent inline-block align-middle mr-1"></i> Calculando...';
     btn.disabled = true;
+    display.textContent = 'Calculando el envío…';
 
     try {
         clearCheckoutMessage();
@@ -574,96 +689,116 @@ async function calculateShipping(e) {
             body: JSON.stringify({ cart, address })
         });
 
-        let data = await response.json();
+        const data = await response.json();
+        // Si la direccion o el carrito cambiaron mientras tanto, esta respuesta ya no sirve.
+        if (requestId !== shippingQuoteRequestId) return;
 
-        if (response.ok) {
-            quotedShippingCost = data.cost || 0;
-            quotedShippingQuote = data.quote || null;
-            quotedShippingAddressKey = data.addressKey || buildAddressKey(address);
-            quotedShippingCartKey = data.cartKey || buildCartKey();
-            const deliveryTime = quotedShippingQuote?.delivery_time;
-            const range = deliveryTime?.min_days && deliveryTime?.max_days
-                ? `${deliveryTime.min_days} a ${deliveryTime.max_days} días hábiles`
-                : 'Plazo a confirmar por el transportista';
-            const carrier = quotedShippingQuote?.carrier_name
-                ? `<div class="text-xs text-gray-500">Operado por ${quotedShippingQuote.carrier_name}</div>`
-                : '';
-            display.innerHTML = `
-                <div class="flex items-start justify-between gap-3">
-                    <div>
-                        <div class="font-semibold text-brand-text">Envío a domicilio</div>
-                        <div class="text-xs text-gray-500">${range}</div>
-                        ${carrier}
-                    </div>
-                    <div class="text-brand-lilac font-bold">${formatMoney(quotedShippingCost)}</div>
-                </div>
-            `;
-            updateCheckoutSummary();
-            btn.innerHTML = 'Calculado';
-        } else {
-            throw new Error(data.error || 'Error cotizando');
-        }
+        if (!response.ok) throw new Error(data.error || 'Error cotizando');
+
+        quotedShippingCost = data.cost || 0;
+        quotedShippingQuote = data.quote || null;
+        quotedShippingAddressKey = data.addressKey || buildAddressKey(address);
+        quotedShippingCartKey = data.cartKey || buildCartKey();
+        renderShippingQuote();
+        updateCheckoutSummary();
+        btn.innerHTML = 'Calculado';
+        setTimeout(() => {
+            if (requestId === shippingQuoteRequestId && btn.innerHTML === 'Calculado') {
+                btn.innerHTML = 'Recalcular';
+                btn.disabled = false;
+            }
+        }, 1500);
     } catch (err) {
-        showCheckoutMessage(err.message || 'No se pudo calcular el envío. Revisá los datos de dirección e intentá nuevamente.', 'error');
+        if (requestId !== shippingQuoteRequestId) return;
+        showCheckoutMessage(
+            err.message || 'No se pudo calcular el envío. Revisá los datos de dirección e intentá nuevamente.',
+            'error',
+            { scroll: !silent }
+        );
         quotedShippingQuote = null;
         quotedShippingAddressKey = '';
         quotedShippingCartKey = '';
         display.innerHTML = 'No se pudo calcular el envío.';
         btn.innerHTML = 'Calcular envío';
+        btn.disabled = false;
         updateCheckoutSummary();
-    } finally {
-        setTimeout(() => { if (btn.innerHTML === 'Calculado') { btn.innerHTML = 'Recalcular'; btn.disabled = false; } }, 1500);
     }
+}
+
+// Devuelve los problemas del formulario, ordenados como aparecen en pantalla.
+function collectCheckoutErrors() {
+    const errors = [];
+    const get = id => document.getElementById(id);
+    const addError = (id, message) => {
+        const field = get(id);
+        if (field) errors.push({ field, message });
+    };
+
+    getMissingRequiredFields().forEach(field => addError(field.id, MISSING_FIELD_MESSAGES[field.id] || 'Completá este dato.'));
+    const hasError = id => errors.some(error => error.field.id === id);
+
+    const email = get('customer-email')?.value.trim() || '';
+    if (!hasError('customer-email') && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        addError('customer-email', 'Revisá el email: necesitamos una dirección válida para enviarte la confirmación.');
+    }
+
+    // Se aceptan espacios, guiones, paréntesis y "+": se limpian antes de validar.
+    const phone = (get('customer-phone')?.value || '').replace(/[\s\-().+]/g, '');
+    if (!hasError('customer-phone') && !/^[0-9]{10,13}$/.test(phone)) {
+        addError('customer-phone', 'Revisá el teléfono: con código de área, sin 0 ni 15 (por ejemplo 1155551234).');
+    }
+
+    const dni = (get('customer-dni')?.value || '').replace(/\D/g, '');
+    if (!hasError('customer-dni') && !/^\d{7,8}$/.test(dni)) {
+        addError('customer-dni', 'Revisá el DNI: 7 u 8 números, sin puntos.');
+    }
+
+    if (!hasError('zip') && !/^\d{4}$/.test(getShippingAddress().postalCode)) {
+        addError('zip', 'Ingresá tu código postal de 4 números (por ejemplo 1414).');
+    }
+
+    const privacy = get('privacy-policy');
+    if (privacy && !privacy.checked) {
+        addError('privacy-policy', 'Necesitamos que aceptes las políticas de privacidad para continuar.');
+    }
+
+    return errors.sort((a, b) =>
+        a.field.compareDocumentPosition(b.field) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1);
+}
+
+const SUBMIT_BUTTON_HTML = '<i data-lucide="lock"></i> Pagar ahora';
+
+function setCheckoutSubmitting(isSubmitting) {
+    const btn = document.querySelector('#checkout-form button[type="submit"]');
+    if (!btn) return;
+    if (isSubmitting) {
+        btn.innerHTML = 'Procesando... <i class="animate-spin w-4 h-4 rounded-full border-2 border-white border-t-transparent inline-block"></i>';
+    } else {
+        btn.innerHTML = SUBMIT_BUTTON_HTML;
+        if (typeof lucide !== 'undefined') lucide.createIcons({ root: btn });
+    }
+    btn.classList.toggle('opacity-75', isSubmitting);
+    btn.classList.toggle('cursor-not-allowed', isSubmitting);
+    btn.disabled = isSubmitting;
 }
 
 async function handleCheckout(e) {
     if (e) e.preventDefault();
 
-    const customerFirstName = document.getElementById('customer-name').value;
-    const customerLastName = document.getElementById('customer-lastname').value;
-    const customerName = `${customerFirstName} ${customerLastName}`.trim();
-    const customerPhone = document.getElementById('customer-phone').value;
-    const customerEmail = document.getElementById('customer-email').value;
-    const customerDni = document.getElementById('customer-dni').value;
+    clearCheckoutMessage();
+    clearAllFieldErrors();
+    const errors = collectCheckoutErrors();
+    if (errors.length) {
+        errors.forEach(({ field, message }) => showFieldError(field, message));
+        focusField(errors[0].field);
+        return;
+    }
+
+    const customerName = `${document.getElementById('customer-name').value} ${document.getElementById('customer-lastname').value}`.trim();
+    const customerPhone = document.getElementById('customer-phone').value.replace(/[\s\-().+]/g, '');
+    const customerEmail = document.getElementById('customer-email').value.trim();
+    const customerDni = document.getElementById('customer-dni').value.replace(/\D/g, '');
     const address = getShippingAddress();
-    
-    // Solo permitimos shipping y mp
-    const delivery = 'shipping';
-    const payment = 'mp';
-
-    const missingFields = getMissingRequiredFields();
-    if (missingFields.length) {
-        markMissingFields(missingFields.map(field => field.id));
-        showCheckoutMessage(`Nos falta completar: ${missingFields.map(field => field.label).join(', ')}.`, 'warning');
-        return;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(customerEmail.trim())) {
-        markFieldError(document.getElementById('customer-email'));
-        showCheckoutMessage('Revisá el email: necesitamos una dirección válida para enviarte la confirmación.', 'warning');
-        return;
-    }
-
-    const phoneRegex = /^[0-9]{10,13}$/;
-    if (!phoneRegex.test(customerPhone.replace(/\s/g, ""))) {
-        markFieldError(document.getElementById('customer-phone'));
-        showCheckoutMessage('Revisá el teléfono: usá solo números, con código de área, sin 0 ni 15.', 'warning');
-        return;
-    }
-
-    const dniDigits = String(customerDni || '').replace(/\D/g, '');
-    if (!/^\d{7,8}$/.test(dniDigits)) {
-        markFieldError(document.getElementById('customer-dni'));
-        showCheckoutMessage('Revisá el DNI: usá 7 u 8 números, sin puntos.', 'warning');
-        return;
-    }
-
-    const privacyCheck = document.getElementById('privacy-policy');
-    if (privacyCheck && !privacyCheck.checked) {
-        showCheckoutMessage('Para continuar necesitás aceptar las Políticas de Privacidad.', 'warning');
-        return;
-    }
 
     if (!quotedShippingQuote || quotedShippingCost <= 0) {
         showCheckoutMessage('Antes de pagar necesitamos calcular el envío a tu domicilio.', 'warning');
@@ -676,23 +811,16 @@ async function handleCheckout(e) {
         return;
     }
 
-    const btn = e.target.querySelector('button[type="submit"]');
-    const originalText = btn.innerHTML;
-
-    // Efecto de carga en el botón
-    btn.innerHTML = 'Procesando... <i class="animate-spin w-4 h-4 rounded-full border-2 border-white border-t-transparent inline-block"></i>';
-    btn.classList.add('opacity-75', 'cursor-not-allowed');
-    btn.disabled = true;
+    setCheckoutSubmitting(true);
 
     try {
-        clearCheckoutMessage();
         showMercadoPagoRedirect();
         const response = await fetch('/.netlify/functions/checkout', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 cart: cart,
-                delivery: delivery,
+                delivery: 'shipping',
                 shippingQuote: quotedShippingQuote,
                 addressKey: quotedShippingAddressKey,
                 cartKey: quotedShippingCartKey,
@@ -700,7 +828,7 @@ async function handleCheckout(e) {
                     name: customerName,
                     phone: customerPhone,
                     email: customerEmail,
-                    dni: dniDigits,
+                    dni: customerDni,
                     newsletter: Boolean(document.getElementById('checkout-newsletter')?.checked),
                     postalCode: address.postalCode,
                     province: address.province,
@@ -715,18 +843,44 @@ async function handleCheckout(e) {
 
         if (response.ok && data.init_point) {
             window.location.href = data.init_point;
-        } else {
-            throw new Error(data.error || "Error en Mercado Pago");
+            return;
         }
+
+        // El transportista cambió el precio desde que se mostró: se actualiza y la persona confirma de nuevo.
+        if (response.status === 409 && data.code === 'SHIPPING_PRICE_CHANGED') {
+            quotedShippingCost = data.shippingCost;
+            quotedShippingQuote = data.quote;
+            renderShippingQuote();
+            updateCheckoutSummary();
+            hideMercadoPagoRedirect();
+            setCheckoutSubmitting(false);
+            showCheckoutMessage(`${data.error} Nuevo costo de envío: ${formatMoney(data.shippingCost)}.`, 'warning');
+            return;
+        }
+
+        throw new Error(data.error || 'Error en Mercado Pago');
     } catch (error) {
-        console.error("Error al ejecutar fetch:", error);
+        console.error('Error al ejecutar fetch:', error);
         hideMercadoPagoRedirect();
-        btn.innerHTML = originalText;
-        btn.classList.remove('opacity-75', 'cursor-not-allowed');
-        btn.disabled = false;
+        setCheckoutSubmitting(false);
         showCheckoutMessage(error.message || 'Hubo un problema al conectar con Mercado Pago. Revisá tu conexión e intentá nuevamente.', 'error');
     }
 }
+
+// Al volver con "Atrás" desde Mercado Pago el navegador restaura la página tal cual estaba.
+window.addEventListener('pageshow', (event) => {
+    if (!event.persisted) return;
+    hideMercadoPagoRedirect();
+    setCheckoutSubmitting(false);
+});
+
+// Despues de pagar, el carrito no tiene que seguir mostrando el libro ya comprado.
+function clearCartAfterPurchase() {
+    cart = [];
+    persistCart();
+    updateCartUI();
+}
+window.clearCartAfterPurchase = clearCartAfterPurchase;
 
 function togglePaymentMethod(method) {
     // Función mantenida por compatibilidad pero vacía
