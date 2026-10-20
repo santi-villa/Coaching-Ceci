@@ -1,3 +1,4 @@
+const { randomUUID } = require('crypto');
 const { MercadoPagoConfig, Preference } = require('mercadopago');
 const shippingProviderService = require('./lib/shipping-provider-service');
 const {
@@ -102,7 +103,7 @@ exports.handler = async (event) => {
 
         const total = subtotal + shippingCost;
         const quoteSnapshot = backendQuote.quote;
-        const orderId = `MP-${Date.now()}`;
+        const orderId = `MP-${Date.now()}-${randomUUID().slice(0, 6)}`;
         const baseUrl = buildBaseUrl();
         const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN });
         const preference = new Preference(client);

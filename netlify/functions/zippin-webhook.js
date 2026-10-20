@@ -1,11 +1,24 @@
+const { verifySharedSecret, escapeHtml } = require('./lib/webhook-auth');
+
 exports.handler = async (event) => {
     if (event.httpMethod !== 'POST') {
         return { statusCode: 405, body: 'Method Not Allowed' };
     }
 
+    // Este endpoint manda mails a terceros: sin secreto configurado o con uno incorrecto, no hace nada.
+    const webhookSecret = (process.env.ZIPPIN_WEBHOOK_SECRET || '').trim();
+    if (!webhookSecret) {
+        console.error('ZIPPIN_WEBHOOK_SECRET no configurado: webhook deshabilitado.');
+        return { statusCode: 503, body: 'Webhook no configurado' };
+    }
+    if (!verifySharedSecret(event, webhookSecret)) {
+        console.warn('Webhook Zippin rechazado: secreto invalido.');
+        return { statusCode: 401, body: 'No autorizado' };
+    }
+
     try {
         const body = JSON.parse(event.body);
-        console.log("🚚 Webhook ZIPPIN Update:", JSON.stringify(body));
+        console.log("🚚 Webhook ZIPPIN Update recibido. Tracking:", body.tracking_code || body.shipment?.tracking_code || 'sin tracking');
 
         // El 'topic' de Zippin para seguimientos se llama "status" o viene implícito.
         // Asume un payload con `tracking_code`, `status` o `status_name`
@@ -36,23 +49,23 @@ exports.handler = async (event) => {
 
             // Solo enviamos correo si tenemos el email del cliente.
             // Si no lo tenemos, NO enviamos a la vendedora para evitar spamearla con cada movimiento del correo.
-            if (emailComprador && emailComprador !== "nodata@example.com") {
+            if (emailComprador && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailComprador)) {
                 const destinatarioObj = { email: emailComprador, name: "Cliente" };
 
                 const brevoPayload = {
                     sender: { name: "Actualización Logística", email: sellerEmail },
                     to: [destinatarioObj],
-                    subject: `Novedad de tu envío #${trackingCode} - [${estadoGral}]`,
+                    subject: `Novedad de tu envío #${String(trackingCode).slice(0, 40)} - [${String(estadoGral).slice(0, 60)}]`,
                     htmlContent: `
                         <div style="font-family: sans-serif; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 10px; padding: 20px;">
                             <h1 style="color: #b59ad6; text-align: center;">¡Tenemos novedades sobre el envío de tu libro!</h1>
                             <p style="text-align: center;">El correo nos acaba de informar un movimiento en tu paquete.</p>
                             
                             <div style="background-color: #fcfafc; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #b59ad6; text-align: center;">
-                                <h3 style="margin-top: 0; color: #3a2640; font-size: 24px;">ESTADO: ${estadoGral.toUpperCase()}</h3>
-                                <p style="font-size: 16px;"><strong>Tu código de seguimiento localizador:</strong> <br>${trackingCode}</p>
+                                <h3 style="margin-top: 0; color: #3a2640; font-size: 24px;">ESTADO: ${escapeHtml(estadoGral).toUpperCase()}</h3>
+                                <p style="font-size: 16px;"><strong>Tu código de seguimiento localizador:</strong> <br>${escapeHtml(trackingCode)}</p>
                                 <br>
-                                <a href="https://www.zipnova.com/rastreo?tracking=${trackingCode}" style="padding: 10px 20px; background-color: #3a2640; color: white; text-decoration: none; border-radius: 5px;">Rastrear en la web oficial</a>
+                                <a href="https://www.zipnova.com/rastreo?tracking=${encodeURIComponent(trackingCode)}" style="padding: 10px 20px; background-color: #3a2640; color: white; text-decoration: none; border-radius: 5px;">Rastrear en la web oficial</a>
                             </div>
                             <p style="text-align: center; margin-top: 20px; font-size: 14px; color: #999;">Esta es una notificación inteligente autogenerada.</p>
                         </div>

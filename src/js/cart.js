@@ -425,7 +425,7 @@ function updateCartUI() {
             const itemHTML = `
                 <div class="cart-item-row cart-item-editorial grid grid-cols-[6.25rem_1fr] gap-4 p-4 rounded-2xl relative">
                     <div class="cart-book-thumb w-24 h-32 flex items-center justify-center rounded-xl p-1.5 overflow-hidden shrink-0">
-                        <img src="${item.image}" class="w-full h-full object-contain drop-shadow-md" onerror="this.src='https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&auto=format&fit=crop'">
+                        <img src="${item.image}" class="w-full h-full object-contain drop-shadow-md" onerror="this.onerror=null;this.src='assets/images/libro-comunicar-portada.webp'">
                     </div>
                     <div class="min-w-0 pr-5 flex flex-col justify-between">
                         <div>

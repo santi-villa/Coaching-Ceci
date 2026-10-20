@@ -9266,3 +9266,99 @@ body {
         font-size: 1.65rem;
     }
 }
+
+/* ==========================================================================
+   Desktop layout (>= 961px). Mobile and tablet-portrait rules are untouched.
+   ========================================================================== */
+@media (min-width: 961px) {
+    /* One shared content width so nav, hero and sections line up. */
+    #main-nav > div { max-width: 76rem; }
+
+    .author-hero { padding-inline: 2.5rem; }
+
+    .author-hero__inner {
+        width: min(100%, 76rem);
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+        gap: clamp(2rem, 4vw, 4.5rem);
+    }
+
+    /* Left padding keeps the text clear of the decorative leaf in the background. */
+    .author-hero__copy { max-width: 38rem; padding-left: 3rem; }
+
+    /* Headline: looser tracking and wider measure so it reads in 3 lines, not 4. */
+    .author-hero h1 {
+        max-width: 14ch;
+        font-size: clamp(3.25rem, 4.6vw, 5rem);
+        letter-spacing: -0.025em;
+        line-height: 1.04;
+    }
+
+    .author-hero__books { height: clamp(30rem, 40vw, 38rem); }
+
+    /* Catalog: wider, covers larger, actions aligned with the text. */
+    .author-books-section .max-w-6xl { max-width: 72rem; }
+
+    .author-books-grid { align-items: stretch; }
+
+    .author-book-entry {
+        grid-template-columns: minmax(11rem, 0.9fr) minmax(0, 1.1fr);
+        align-items: center;
+        padding-inline: clamp(1.5rem, 3.5vw, 3.5rem);
+    }
+
+    .author-book-entry .collection-card-cover { height: clamp(20rem, 29vw, 27rem); }
+
+    .author-book-entry .collection-card-actions {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .author-book-entry .collection-card-blurb { max-width: 26rem; }
+
+    /* "Una mirada en común" and author card share the 72rem measure. */
+    .shared-view-shell { width: min(100%, 72rem); }
+    #autora > .max-w-6xl { max-width: 72rem; }
+
+    /* Hover / keyboard feedback that only makes sense with a pointer. */
+    .author-hero__secondary,
+    .author-book-entry .collection-card-details {
+        transition: background-color 200ms ease, border-color 200ms ease, transform 200ms ease;
+    }
+    .author-hero__secondary:hover {
+        background: rgba(252, 250, 246, 0.9);
+        border-color: rgba(123, 94, 70, 0.5);
+        transform: translateY(-1px);
+    }
+    .author-book-entry .collection-card-cover img { transition: transform 280ms ease; }
+    .author-book-entry .collection-card-cover:hover img { transform: translateY(-0.4rem); }
+    .author-book-entry .collection-card-details:hover { text-decoration: underline; text-underline-offset: 0.25em; }
+}
+
+/* Large monitors: scale up instead of floating in empty space. */
+@media (min-width: 1600px) {
+    #main-nav > div { max-width: 88rem; }
+    .author-hero__inner { width: min(100%, 88rem); }
+    .author-hero__copy { max-width: 42rem; }
+    .author-hero h1 { font-size: 5.5rem; }
+    .author-hero__lede { max-width: 34rem; font-size: 1.35rem; }
+    .author-hero__books { height: 42rem; }
+    .author-books-section .max-w-6xl,
+    #autora > .max-w-6xl,
+    .shared-view-shell { max-width: 80rem; }
+    .author-book-entry .collection-card-cover { height: 30rem; }
+}
+
+/* Product sheet: size the cover from the viewport height so it never spills over
+   the tabs / spec row on short laptop screens. */
+@media (min-width: 768px) {
+    #product-modal-card .book-container {
+        width: min(17.75rem, 78%, calc((100dvh - 24rem) * 0.62));
+    }
+}
+
+/* Checkout: #checkout-page-content is itself a .checkout-form grid, so the real
+   form injected inside it was trapped in the first column (right half blank). */
+#checkout-page-content > .checkout-form {
+    grid-column: 1 / -1;
+    min-width: 0;
+}

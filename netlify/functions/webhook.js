@@ -1,4 +1,5 @@
 const shippingProviderService = require('./lib/shipping-provider-service');
+const { verifyMercadoPagoSignature, escapeHtml } = require('./lib/webhook-auth');
 const { randomUUID } = require('crypto');
 const { getStore } = require('@netlify/blobs');
 const {
@@ -37,15 +38,6 @@ function metadataValue(metadata, key, fallback = '') {
     const value = metadata?.[key];
     if (value === undefined || value === null || value === '' || value === 'Vacio') return fallback;
     return value;
-}
-
-function escapeHtml(value = '') {
-    return String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
 }
 
 function formatMoney(value) {
@@ -574,6 +566,17 @@ exports.buildWhatsAppText = buildWhatsAppText;
 exports.handler = async (event) => {
     if (event.httpMethod !== 'POST') {
         return { statusCode: 405, body: 'Method Not Allowed' };
+    }
+
+    // Sin secreto configurado se rechaza todo: un webhook sin firma permitiria falsificar pagos.
+    const webhookSecret = (process.env.MP_WEBHOOK_SECRET || '').trim();
+    if (!webhookSecret) {
+        console.error('MP_WEBHOOK_SECRET no configurado: webhook deshabilitado.');
+        return { statusCode: 503, body: 'Webhook no configurado' };
+    }
+    if (!verifyMercadoPagoSignature(event, webhookSecret)) {
+        console.warn('Webhook MP rechazado: firma invalida.');
+        return { statusCode: 401, body: 'Firma invalida' };
     }
 
     try {
