@@ -1,4 +1,6 @@
 const shippingProviderService = require('./lib/shipping-provider-service');
+const { toErrorResponse } = require('./lib/errors');
+const { isRateLimited } = require('./lib/rate-limit');
 const {
     buildAddressKey,
     buildCartKey,
@@ -10,6 +12,10 @@ const {
 exports.handler = async (event) => {
     if (event.httpMethod !== 'POST') {
         return { statusCode: 405, body: 'Method Not Allowed' };
+    }
+
+    if (isRateLimited(event, { key: 'quote', max: 30 })) {
+        return { statusCode: 429, body: JSON.stringify({ error: 'Demasiados intentos. Espera unos minutos y volve a probar.' }) };
     }
 
     try {
@@ -47,11 +53,6 @@ exports.handler = async (event) => {
         };
     } catch (error) {
         console.error('Error quoting shipping:', error);
-        return {
-            statusCode: 502,
-            body: JSON.stringify({
-                error: error.message || 'No se pudo calcular el envio con Zipnova.'
-            })
-        };
+        return toErrorResponse(error);
     }
 };

@@ -1,3 +1,4 @@
+const { ValidationError } = require('./errors');
 const BOOK_LENGTH_CM = 25;
 const BOOK_WIDTH_CM = 15;
 const BOOK_HEIGHT_CM = 1;
@@ -24,7 +25,7 @@ function getCartQuantity(cartItems = []) {
 
 function normalizeCartItems(cartItems = []) {
     if (!Array.isArray(cartItems) || cartItems.length === 0) {
-        throw new Error('El carrito esta vacio.');
+        throw new ValidationError('El carrito esta vacio.');
     }
 
     const normalized = cartItems.map(item => {
@@ -32,10 +33,10 @@ function normalizeCartItems(cartItems = []) {
         const quantity = Math.max(0, Math.trunc(numberOrZero(item?.quantity)));
 
         if (!product) {
-            throw new Error('El carrito contiene un producto no disponible.');
+            throw new ValidationError('El carrito contiene un producto no disponible.');
         }
         if (quantity <= 0) {
-            throw new Error('El carrito contiene una cantidad invalida.');
+            throw new ValidationError('El carrito contiene una cantidad invalida.');
         }
 
         return {
@@ -60,7 +61,7 @@ function calculatePackageDimensions(cartItems = []) {
     const quantity = getCartQuantity(normalizeCartItems(cartItems));
 
     if (quantity <= 0) {
-        throw new Error('El carrito no tiene libros para enviar.');
+        throw new ValidationError('El carrito no tiene libros para enviar.');
     }
 
     return {
@@ -92,7 +93,7 @@ function normalizeAddress(address = {}) {
     if (!normalized.number) missing.push('numero');
 
     if (missing.length) {
-        throw new Error(`Faltan datos de direccion: ${missing.join(', ')}.`);
+        throw new ValidationError(`Faltan datos de direccion: ${missing.join(', ')}.`);
     }
 
     return normalized;
@@ -119,20 +120,20 @@ function buildCartKey(cartItems = []) {
 
 function validateShippingOption(option) {
     if (!option || typeof option !== 'object') {
-        throw new Error('No hay una opcion de envio valida.');
+        throw new ValidationError('No hay una opcion de envio valida.');
     }
 
     const cost = numberOrZero(option.shipping_cost || option.cost);
     if (cost <= 0) {
-        throw new Error('La opcion de envio no tiene costo valido.');
+        throw new ValidationError('La opcion de envio no tiene costo valido.');
     }
 
     if (!isHomeDeliveryOption(option)) {
-        throw new Error('La opcion seleccionada no es envio a domicilio.');
+        throw new ValidationError('La opcion seleccionada no es envio a domicilio.');
     }
 
     if (!isAllowedCarrierDropoffOption(option)) {
-        throw new Error('La opcion seleccionada no usa Correo Argentino, OCA o Andreani con despacho directo en transporte.');
+        throw new ValidationError('La opcion seleccionada no usa Correo Argentino, OCA o Andreani con despacho directo en transporte.');
     }
 
     return true;

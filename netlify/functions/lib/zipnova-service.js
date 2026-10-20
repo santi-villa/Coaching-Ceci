@@ -1,3 +1,4 @@
+const { ProviderError, ValidationError } = require('./errors');
 const {
     calculatePackageDimensions,
     isAllowedCarrierDropoffOption,
@@ -16,7 +17,7 @@ function getAuthHeader() {
     const apiSecret = (process.env.ZIPPIN_API_SECRET || process.env.ZIPNOVA_API_SECRET || '').replace(/["']/g, '').trim();
 
     if (!apiKey || !apiSecret) {
-        throw new Error('Faltan credenciales de Zipnova.');
+        throw new ProviderError('Faltan credenciales de Zipnova.');
     }
 
     return `Basic ${Buffer.from(`${apiKey}:${apiSecret}`).toString('base64')}`;
@@ -73,7 +74,7 @@ function selectCheapestHomeDelivery(results = []) {
         .sort((a, b) => a.shipping_cost - b.shipping_cost);
 
     if (!homeDeliveryRates.length) {
-        throw new Error('No hay opciones de envio a domicilio con Correo Argentino, OCA o Andreani para esa direccion.');
+        throw new ValidationError('No hay opciones de envio a domicilio con Correo Argentino, OCA o Andreani para esa direccion.');
     }
 
     return homeDeliveryRates[0];
@@ -116,7 +117,7 @@ async function quoteHomeDelivery({ cartItems, address, declaredValue }) {
 
     if (!response.ok) {
         const text = await response.text();
-        throw new Error(`Zipnova rechazo la cotizacion (${response.status}): ${text}`);
+        throw new ProviderError(`Zipnova rechazo la cotizacion (${response.status}): ${text}`);
     }
 
     const data = await response.json();
@@ -177,7 +178,7 @@ async function createShipment({ paymentId, customer, address, cartItems, declare
 
     if (!response.ok) {
         const text = await response.text();
-        throw new Error(`Zipnova rechazo la creacion del envio (${response.status}): ${text}`);
+        throw new ProviderError(`Zipnova rechazo la creacion del envio (${response.status}): ${text}`);
     }
 
     const data = await response.json();

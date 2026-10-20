@@ -1,6 +1,9 @@
 const { randomUUID } = require('crypto');
 const { MercadoPagoConfig, Preference } = require('mercadopago');
 const shippingProviderService = require('./lib/shipping-provider-service');
+const { ProviderError, ValidationError, toErrorResponse } = require('./lib/errors');
+const { validateCustomer } = require('./lib/order-validation');
+const { isRateLimited } = require('./lib/rate-limit');
 const {
     buildAddressKey,
     buildCartKey,
@@ -33,7 +36,7 @@ function assertSameShippingOption(frontQuote, backendQuote) {
         sameNullableNumber(frontQuote.tariff_id, backendQuote.tariff_id);
 
     if (!sameCore) {
-        throw new Error('La opcion de envio ya no coincide con la cotizacion vigente. Volve a calcular el envio.');
+        throw new ValidationError('La opcion de envio ya no coincide con la cotizacion vigente. Volve a calcular el envio.');
     }
 }
 
@@ -51,10 +54,14 @@ exports.handler = async (event) => {
         return { statusCode: 405, body: 'Metodo no permitido' };
     }
 
+    if (isRateLimited(event, { key: 'checkout', max: 15 })) {
+        return { statusCode: 429, body: JSON.stringify({ error: 'Demasiados intentos. Espera unos minutos y volve a probar.' }) };
+    }
+
     try {
         const { cart, customer, shippingQuote, addressKey, cartKey } = JSON.parse(event.body || '{}');
         const cartItems = normalizeCartItems(cart);
-        const customerData = customer || {};
+        const customerData = { ...(customer || {}), ...validateCustomer(customer || {}) };
         const address = normalizeAddress({
             postalCode: customerData.postalCode || customerData.zip,
             province: customerData.province,
@@ -82,7 +89,21 @@ exports.handler = async (event) => {
 
         const shippingCost = Math.round(numberOrZero(backendQuote.cost));
         if (shippingCost <= 0) {
-            throw new Error('Zipnova devolvio un envio sin costo valido.');
+            throw new ProviderError('Zipnova devolvio un envio sin costo valido.');
+        }
+
+        // Si el precio cambio desde que la persona vio la cotizacion, no se cobra otro monto sin avisar.
+        const quotedCost = Math.round(numberOrZero(shippingQuote.shipping_cost || shippingQuote.cost));
+        if (quotedCost !== shippingCost) {
+            return {
+                statusCode: 409,
+                body: JSON.stringify({
+                    code: 'SHIPPING_PRICE_CHANGED',
+                    error: 'El costo del envio se actualizo. Revisa el nuevo total y volve a confirmar.',
+                    shippingCost,
+                    quote: backendQuote.quote
+                })
+            };
         }
 
         const items = cartItems.map(item => ({
@@ -154,12 +175,9 @@ exports.handler = async (event) => {
             body: JSON.stringify({ init_point: result.init_point, shippingCost, subtotal, total })
         };
     } catch (error) {
-        console.error('Error detallado de Mercado Pago:', error);
-        return {
-            statusCode: 500,
-            body: JSON.stringify({
-                error: error.message || 'Error creando preferencia'
-            })
-        };
+        console.error('Error en checkout:', error);
+        return toErrorResponse(error, {
+            providerMessage: 'No pudimos preparar el pago en este momento. Intenta de nuevo en unos minutos.'
+        });
     }
 };

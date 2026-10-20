@@ -1,5 +1,6 @@
 const shippingProviderService = require('./lib/shipping-provider-service');
 const { verifyMercadoPagoSignature, escapeHtml } = require('./lib/webhook-auth');
+const { isValidDni, isValidEmail, isValidPhone } = require('./lib/order-validation');
 const { randomUUID } = require('crypto');
 const { getStore } = require('@netlify/blobs');
 const {
@@ -79,14 +80,6 @@ function getAddress(metadata) {
     };
 }
 
-function isValidEmail(value = '') {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || '').trim());
-}
-
-function isValidPhone(value = '') {
-    return /^[0-9]{10,13}$/.test(String(value || '').replace(/\s/g, ''));
-}
-
 function isPaidApprovedPayment(paymentData = {}) {
     if (paymentData.status !== 'approved') return false;
 
@@ -126,8 +119,8 @@ function validateOrderMetadata(metadata = {}, paymentData = {}) {
     if (!isValidPhone(customer.phone)) {
         throw new Error('metadata customer_phone invalido');
     }
-    if (!customer.dni || customer.dni === '0') {
-        throw new Error('metadata customer_dni ausente');
+    if (!isValidDni(customer.dni)) {
+        throw new Error('metadata customer_dni invalido');
     }
 
     normalizeAddress(address);
@@ -228,7 +221,7 @@ async function completePaymentProcessingLock(lock, data = {}) {
     }
 }
 
-function buildNotificationContext({ metadata, shippingRecord = {} }) {
+function buildNotificationContext({ metadata, shippingRecord = {}, zipnovaError = '' }) {
     const customer = getCustomer(metadata);
     const address = getAddress(metadata);
     const rawTrackingNumber = shippingRecord.tracking_number || 'En preparacion';
@@ -237,6 +230,7 @@ function buildNotificationContext({ metadata, shippingRecord = {} }) {
     return {
         customer,
         address,
+        zipnovaError,
         firstName: escapeHtml(customer.name.split(' ')[0] || customer.name || 'hola'),
         subtotal: formatMoney(metadataValue(metadata, 'subtotal', 0)),
         shippingCost: formatMoney(metadataValue(metadata, 'shipping_cost', 0)),
@@ -285,6 +279,7 @@ function buildSellerEmailHtml(context) {
                             <p style="margin:0;font-size:20px"><strong>Total:</strong> ${total}</p>
                         </div>
                         <p style="margin:0"><strong>Seguimiento:</strong> ${trackingText}</p>
+                        ${context.zipnovaError ? `<p style="margin:14px 0 0;padding:12px;border-radius:12px;background:#fff1f1;color:#a02020"><strong>No se pudo crear el env&iacute;o:</strong> ${escapeHtml(context.zipnovaError)}. Crealo a mano.</p>` : ''}
                     </div>
                 </div>
             </div>
@@ -353,14 +348,39 @@ CP ${address.postalCode}
 🧾 Pedido: ${orderId}`;
 }
 
-function buildNotificationPreviews({ metadata, shippingRecord = {} }) {
-    const context = buildNotificationContext({ metadata, shippingRecord });
+function buildNotificationPreviews({ metadata, shippingRecord = {}, zipnovaError = '' }) {
+    const context = buildNotificationContext({ metadata, shippingRecord, zipnovaError });
 
     return {
         sellerEmailHtml: buildSellerEmailHtml(context),
         customerEmailHtml: buildCustomerEmailHtml(context),
         whatsAppText: buildWhatsAppText({ metadata, shippingRecord })
     };
+}
+
+async function sendSellerAlert(subject, lines = []) {
+    const brevoKey = (process.env.BREVO_API_KEY || '').trim();
+    const sellerEmail = (process.env.SELLER_EMAIL || 'rossoceci@gmail.com').trim();
+    if (!brevoKey) {
+        console.warn(`Alerta sin enviar (falta BREVO_API_KEY): ${subject}`);
+        return;
+    }
+
+    const items = lines.map(line => `<li>${escapeHtml(line)}</li>`).join('');
+    await postJson('https://api.brevo.com/v3/smtp/email', {
+        sender: { name: 'Sistema Tienda', email: sellerEmail },
+        to: getSellerRecipients(sellerEmail),
+        subject: `ATENCION: ${subject}`,
+        htmlContent: `<div style="font-family:Arial,sans-serif;color:#3a2640"><h2>${escapeHtml(subject)}</h2><ul>${items}</ul></div>`
+    }, { 'Accept': 'application/json', 'api-key': brevoKey });
+}
+
+async function alertSafely(subject, lines) {
+    try {
+        await sendSellerAlert(subject, lines);
+    } catch (error) {
+        console.error('No se pudo enviar la alerta al vendedor:', error.message || error);
+    }
 }
 
 function getSellerRecipients(sellerEmail) {
@@ -398,7 +418,7 @@ async function postJson(url, payload, headers = {}) {
     return response;
 }
 
-async function sendBrevoEmails({ metadata, shippingRecord }) {
+async function sendBrevoEmails({ metadata, shippingRecord, zipnovaError = '' }) {
     const brevoKey = (process.env.BREVO_API_KEY || '').trim();
     const sellerEmail = (process.env.SELLER_EMAIL || 'rossoceci@gmail.com').trim();
     if (!brevoKey) {
@@ -407,7 +427,7 @@ async function sendBrevoEmails({ metadata, shippingRecord }) {
     }
 
     const customer = getCustomer(metadata);
-    const previews = buildNotificationPreviews({ metadata, shippingRecord });
+    const previews = buildNotificationPreviews({ metadata, shippingRecord, zipnovaError });
     const headers = {
         'Accept': 'application/json',
         'api-key': brevoKey
@@ -594,7 +614,8 @@ exports.handler = async (event) => {
             ...parsedBody
         };
 
-        const paymentId = getPaymentId(body);
+        // El id firmado (query) manda sobre el del body, que la firma no cubre.
+        const paymentId = event.queryStringParameters?.['data.id'] || getPaymentId(body);
         if (body?.topic === 'payment' && body?.type !== 'payment' && !body?.action?.startsWith('payment.')) {
             console.log(`Webhook Mercado Pago topic=payment ignorado para evitar doble procesamiento. Payment ID: ${paymentId || 'sin id'}`);
             return { statusCode: 200, body: 'Webhook payment legacy ignorado' };
@@ -625,6 +646,12 @@ exports.handler = async (event) => {
                 orderData = validateOrderMetadata(metadata, paymentData);
             } catch (error) {
                 console.warn(`Webhook aprobado ignorado: ${error.message || error}. Payment ID: ${paymentId}`);
+                await alertSafely('Pago aprobado que no se pudo procesar', [
+                    `Payment ID de Mercado Pago: ${paymentId}`,
+                    `Motivo: ${error.message || error}`,
+                    `Monto: ${paymentData.transaction_amount}`,
+                    'El pago esta cobrado pero no se creo el envio ni se avisó al cliente. Revisalo a mano en Mercado Pago.'
+                ]);
                 return { statusCode: 200, body: 'Orden aprobada ignorada por metadata invalida' };
             }
 
@@ -650,19 +677,26 @@ exports.handler = async (event) => {
                 console.error('No se pudo crear el envio en Zipnova:', zipnovaError);
             }
 
-            try {
-                await sendBrevoEmails({ metadata, shippingRecord: shipmentRecord });
-            } catch (error) {
-                console.error('Error enviando emails:', error.message || error);
-            }
+            const notifications = await Promise.allSettled([
+                sendBrevoEmails({ metadata, shippingRecord: shipmentRecord, zipnovaError }),
+                sendWhatsApp(metadata, shipmentRecord),
+                registerPaidOrderInSheets({ paymentId, paymentData, metadata, shipmentRecord, zipnovaError })
+            ]);
+            ['emails', 'WhatsApp', 'Google Sheets'].forEach((label, index) => {
+                if (notifications[index].status === 'rejected') {
+                    console.error(`Error en ${label}:`, notifications[index].reason?.message || notifications[index].reason);
+                }
+            });
 
-            try {
-                await sendWhatsApp(metadata, shipmentRecord);
-            } catch (error) {
-                console.error('Error enviando WhatsApp:', error.message || error);
+            if (zipnovaError) {
+                await alertSafely('No se pudo crear el envio de una venta', [
+                    `Pedido: ${metadataValue(metadata, 'order_id', '')}`,
+                    `Payment ID de Mercado Pago: ${paymentId}`,
+                    `Comprador: ${getCustomer(metadata).name} (${getCustomer(metadata).email})`,
+                    `Error de Zipnova: ${zipnovaError}`,
+                    'El cliente recibio el mail de compra con el seguimiento "en preparacion". Crea el envio a mano.'
+                ]);
             }
-
-            await registerPaidOrderInSheets({ paymentId, paymentData, metadata, shipmentRecord, zipnovaError });
 
             await completePaymentProcessingLock(processingLock, {
                 order_id: metadataValue(metadata, 'order_id', ''),
