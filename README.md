@@ -70,4 +70,5 @@ Configurar en `.env` o en Netlify segun corresponda:
 - `SELLER_EMAIL`: remitente y destinatario principal de las notificaciones de venta.
 - `SELLER_COPY_EMAIL`: destinatario adicional opcional, configurado fuera del repositorio.
 - `SELLER_COPY_NAME`: nombre opcional del destinatario adicional.
+- `CUSTOMER_EMAIL_BCC`: email opcional que recibe una copia oculta del mail "Recibimos tu pago" que se le manda al comprador.
 - Variables SMTP o de notificaciones si se usan en los webhooks.

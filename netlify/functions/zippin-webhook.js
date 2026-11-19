@@ -1,4 +1,33 @@
 const { verifySharedSecret, escapeHtml } = require('./lib/webhook-auth');
+const { button, infoCard, paragraph, renderEmail } = require('./lib/email-layout');
+
+// Mail al comprador cada vez que el correo informa un movimiento del paquete.
+function buildTrackingUpdateEmail({ trackingCode, status }) {
+    const statusText = String(status || 'Cambio de estado').trim();
+    const lower = statusText.toLowerCase();
+    const delivered = lower.includes('entregad') || lower.includes('delivered');
+    const trackingUrl = `https://www.zipnova.com/rastreo?tracking=${encodeURIComponent(trackingCode)}`;
+    const prettyStatus = escapeHtml(statusText.charAt(0).toUpperCase() + statusText.slice(1));
+
+    return renderEmail({
+        preheader: `Estado de tu envío: ${statusText}`,
+        eyebrow: 'Novedades de tu envío',
+        title: delivered ? '¡Tu libro llegó!' : 'Tu libro está en camino',
+        bodyHtml: [
+            paragraph(delivered
+                ? 'El correo nos avisa que tu paquete ya fue entregado. ¡Que disfrutes la lectura!'
+                : 'El correo nos acaba de informar un movimiento en tu paquete.'),
+            infoCard('', [
+                ['Estado', prettyStatus],
+                ['Código de seguimiento', escapeHtml(trackingCode)]
+            ], { tone: 'teal' }),
+            button(trackingUrl, delivered ? 'Ver detalle del envío' : 'Seguir mi envío'),
+            paragraph('Si tenés alguna duda con la entrega, respondé este mail y te ayudamos.', { muted: true, size: 14 })
+        ].join('')
+    });
+}
+
+exports.buildTrackingUpdateEmail = buildTrackingUpdateEmail;
 
 exports.handler = async (event) => {
     if (event.httpMethod !== 'POST') {
@@ -53,23 +82,10 @@ exports.handler = async (event) => {
                 const destinatarioObj = { email: emailComprador, name: "Cliente" };
 
                 const brevoPayload = {
-                    sender: { name: "Actualización Logística", email: sellerEmail },
+                    sender: { name: "Cecilia Rosso", email: sellerEmail },
                     to: [destinatarioObj],
-                    subject: `Novedad de tu envío #${String(trackingCode).slice(0, 40)} - [${String(estadoGral).slice(0, 60)}]`,
-                    htmlContent: `
-                        <div style="font-family: sans-serif; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 10px; padding: 20px;">
-                            <h1 style="color: #b59ad6; text-align: center;">¡Tenemos novedades sobre el envío de tu libro!</h1>
-                            <p style="text-align: center;">El correo nos acaba de informar un movimiento en tu paquete.</p>
-                            
-                            <div style="background-color: #fcfafc; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #b59ad6; text-align: center;">
-                                <h3 style="margin-top: 0; color: #3a2640; font-size: 24px;">ESTADO: ${escapeHtml(estadoGral).toUpperCase()}</h3>
-                                <p style="font-size: 16px;"><strong>Tu código de seguimiento localizador:</strong> <br>${escapeHtml(trackingCode)}</p>
-                                <br>
-                                <a href="https://www.zipnova.com/rastreo?tracking=${encodeURIComponent(trackingCode)}" style="padding: 10px 20px; background-color: #3a2640; color: white; text-decoration: none; border-radius: 5px;">Rastrear en la web oficial</a>
-                            </div>
-                            <p style="text-align: center; margin-top: 20px; font-size: 14px; color: #999;">Esta es una notificación inteligente autogenerada.</p>
-                        </div>
-                    `
+                    subject: `Novedades de tu envío: ${String(estadoGral).slice(0, 60)}`,
+                    htmlContent: buildTrackingUpdateEmail({ trackingCode: String(trackingCode), status: estadoGral })
                 };
 
                 await fetch("https://api.brevo.com/v3/smtp/email", {

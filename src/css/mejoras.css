@@ -1,0 +1,1281 @@
+/* ==========================================================================
+   Mejoras de interfaz (noviembre 2026)
+   Capa final: se carga despues de styles.css y mobile-library.css.
+   Todo lo nuevo de esta pasada esta aca para revisarlo o revertirlo junto.
+   Los colores base (--accent-dark, --text-muted) se ajustaron en styles.css.
+   ========================================================================== */
+
+/* --- 1. Tipografia y textos chicos ------------------------------------- */
+
+/* Eyebrows ("LOS LIBROS", "CONOCE A LA AUTORA"...): mas legibles y en turquesa profundo. */
+#home-view .author-hero__eyebrow,
+#home-view .product-kicker,
+#home-view .newsletter-copy .product-kicker {
+    color: var(--accent-dark) !important;
+    font-size: 0.78rem !important;
+    letter-spacing: 0.2em;
+}
+
+#home-view .author-role { color: var(--accent-dark) !important; }
+
+/* Playfair con peso 500 queda fino en titulos grandes: un punto mas de cuerpo. */
+#home-view h1,
+#home-view h2 { font-weight: 500; letter-spacing: -0.015em; }
+
+/* Bajada de "Los libros" */
+#home-view .author-books-heading > p { font-size: 1.05rem; }
+
+/* --- 2. Seccion "Los libros" ------------------------------------------- */
+
+#home-view .author-book-entry .collection-card-copy {
+    align-self: center;
+}
+
+#home-view .author-book-entry .collection-card-status {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+}
+
+#home-view .collection-card-status--available {
+    color: var(--accent-dark);
+    background: rgba(42, 122, 125, 0.1);
+}
+
+#home-view .author-book-entry .collection-card-blurb {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+}
+
+#home-view .author-book-entry .collection-card-kicker {
+    color: var(--accent-dark) !important;
+}
+
+/* Precio: el badge "Precio web" se leia apenas. */
+#home-view .collection-card-price .price-web-badge,
+.price-web-badge {
+    color: var(--accent-dark) !important;
+    background: rgba(42, 122, 125, 0.1) !important;
+    font-size: 0.7rem !important;
+    letter-spacing: 0.1em;
+}
+
+#home-view .collection-card-price > span { font-size: 0.8rem; }
+
+/* Acciones: "Comprar" como accion principal clara. */
+#home-view .author-book-entry .collection-card-actions .btn-primary-soft,
+#home-view .author-book-entry .collection-card-actions .btn-secondary-soft {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 3rem;
+    padding: 0.75rem 1.6rem;
+    font-size: 0.95rem;
+    font-weight: 650;
+}
+
+#home-view .author-book-entry .collection-card-actions svg {
+    width: 1.05rem;
+    height: 1.05rem;
+}
+
+#home-view .author-book-entry .collection-card-details {
+    color: var(--accent-dark);
+    font-size: 0.9rem;
+    font-weight: 650;
+    text-decoration: underline;
+    text-decoration-color: rgba(42, 122, 125, 0.35);
+    text-underline-offset: 0.3em;
+    transition: text-decoration-color 200ms ease;
+}
+
+#home-view .author-book-entry .collection-card-details:hover {
+    text-decoration-color: currentColor;
+}
+
+@media (min-width: 768px) {
+    /* Tapa arriba y texto abajo: con dos libros lado a lado, la tapa al costado
+       quedaba chica y el texto apretado en una columna angosta. */
+    #home-view .author-books-grid { align-items: stretch !important; }
+
+    #home-view .author-book-entry {
+        grid-template-columns: 1fr !important;
+        grid-template-rows: auto 1fr;
+        justify-items: center;
+        align-items: start !important;
+        gap: 2.25rem !important;
+        text-align: center;
+    }
+
+    #home-view .author-book-entry .collection-card-cover {
+        height: clamp(21rem, 30vw, 27rem) !important;
+    }
+
+    #home-view .author-book-entry .collection-card-copy {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        align-self: stretch;
+        width: 100%;
+        max-width: 27rem;
+        margin-inline: auto;
+    }
+
+    #home-view .author-book-entry .collection-card-status { align-self: center; }
+
+    #home-view .author-book-entry .collection-card-copy h3 {
+        font-size: clamp(1.75rem, 2.4vw, 2.2rem) !important;
+    }
+
+    #home-view .author-book-entry .collection-card-blurb { max-width: 24rem; margin-inline: auto; }
+
+    #home-view .author-book-entry .collection-card-price {
+        justify-content: center;
+    }
+
+    /* Botones alineados abajo en las dos columnas aunque el texto mida distinto. */
+    #home-view .author-book-entry .collection-card-actions {
+        width: 100%;
+        margin-top: auto !important;
+        padding-top: 1.25rem;
+        justify-content: center !important;
+        gap: 1.25rem;
+    }
+}
+
+/* Celular: se recupera el subtitulo de cada libro y se achican los huecos. */
+@media (max-width: 767px) {
+    #home-view .author-book-entry {
+        align-items: center;
+        padding-bottom: 0.5rem;
+    }
+
+    #home-view .author-book-entry + .author-book-entry {
+        margin-top: 1.75rem;
+        padding-top: 2rem;
+    }
+
+    #home-view .author-book-entry .collection-card-kicker {
+        display: block;
+        margin-top: 0.35rem !important;
+        font-size: 0.92rem;
+        line-height: 1.4;
+    }
+
+    #home-view .author-book-entry .collection-card-copy h3 {
+        font-size: 1.35rem !important;
+        -webkit-line-clamp: 3;
+    }
+
+    #home-view .author-book-entry .collection-card-status {
+        margin-bottom: 0.5rem;
+        padding: 0.28rem 0.6rem;
+        font-size: 0.68rem;
+    }
+
+    #home-view .author-book-entry .collection-card-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.35rem;
+        border-top: 0;
+    }
+
+    #home-view .author-book-entry .collection-card-actions .btn-primary-soft,
+    #home-view .author-book-entry .collection-card-actions .btn-secondary-soft {
+        width: 100%;
+        min-height: 2.9rem;
+        font-size: 0.92rem;
+    }
+
+    #home-view .author-book-entry .collection-card-details {
+        min-height: 2.5rem;
+        font-size: 0.88rem;
+    }
+
+    #home-view .author-books-heading > p { font-size: 0.98rem; }
+}
+
+/* --- 3. Preguntas frecuentes: mas livianas -------------------------- */
+
+#home-view .faq-editorial-item {
+    background: rgba(252, 250, 246, 0.72) !important;
+    border: 1px solid rgba(123, 94, 70, 0.14) !important;
+    box-shadow: none !important;
+    transition: background-color 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+}
+
+#home-view .faq-editorial-item:hover {
+    border-color: rgba(42, 122, 125, 0.28) !important;
+    background: rgba(252, 250, 246, 0.95) !important;
+}
+
+#home-view .faq-editorial-item:has(.faq-question[aria-expanded="true"]) {
+    background: #fff !important;
+    border-color: rgba(42, 122, 125, 0.32) !important;
+    box-shadow: 0 10px 28px rgba(74, 56, 43, 0.07) !important;
+}
+
+#home-view .faq-chevron { color: var(--accent-dark); }
+
+/* La respuesta aparece con un fundido suave mientras se despliega. */
+#home-view .faq-answer > * {
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 260ms ease 60ms, transform 260ms ease 60ms;
+}
+
+#home-view .faq-question[aria-expanded="true"] + .faq-answer > * {
+    opacity: 1;
+    transform: none;
+}
+
+#home-view .faq-answer p,
+#home-view .faq-answer li { font-size: 0.92rem; }
+
+/* --- 4. Newsletter: formulario centrado en la tarjeta --------------- */
+
+@media (min-width: 768px) {
+    #home-view .newsletter-panel { align-items: center !important; }
+    #home-view .newsletter-form { align-self: center !important; }
+}
+
+/* --- 5. Footer: textos legibles --------------------------------------- */
+
+.site-footer .footer-heading { font-size: 0.78rem !important; }
+.site-footer a,
+.site-footer li { font-size: 0.9rem; }
+.site-footer p { font-size: 0.9rem; }
+.site-footer .footer-bottom p,
+.site-footer [class*="copyright"] { font-size: 0.8rem; }
+
+.site-footer svg.lucide-instagram {
+    width: 1rem;
+    height: 1rem;
+    flex: 0 0 auto;
+    color: var(--accent-dark);
+}
+
+/* --- 6. Aviso de cookies: compacto en celular ------------------------ */
+
+.consent-banner__btn:focus-visible { outline-color: var(--accent-dark); }
+
+@media (max-width: 767px) {
+    .consent-banner {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        gap: 10px;
+        padding: 12px 14px;
+        font-size: 13px;
+        border-radius: 14px;
+    }
+
+    .consent-banner p { flex-basis: 100%; }
+    .consent-banner__actions { width: 100%; }
+    .consent-banner__btn { flex: 1; padding: 9px 12px; }
+}
+
+/* --- 7. Animaciones --------------------------------------------------- */
+
+/* Aparicion al hacer scroll (la clase .reveal la agrega animaciones.js,
+   asi que sin JavaScript todo se ve normalmente). */
+.reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+        opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+        transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal.is-visible {
+    opacity: 1;
+    transform: none;
+}
+
+/* Tapas: se levantan levemente, como un libro que se toma de la mesa. */
+@media (hover: hover) and (pointer: fine) {
+    #home-view .author-book-entry .collection-card-cover img {
+        transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1), filter 420ms ease !important;
+    }
+
+    #home-view .author-book-entry .collection-card-cover:hover img,
+    #home-view .author-book-entry .collection-card-cover:focus-visible img {
+        transform: translateY(-0.6rem) rotate(-0.6deg) !important;
+        filter: drop-shadow(0 1.8rem 1.4rem rgba(74, 56, 43, 0.24)) !important;
+    }
+
+    #home-view .shared-view-grid > * .shared-view-icon,
+    #home-view .shared-view-grid > * > span:first-child {
+        transition: transform 300ms ease;
+    }
+
+    .btn-primary-soft:active,
+    .btn-secondary-soft:active { transform: translateY(0) scale(0.98); }
+}
+
+/* Contador del carrito: pequeño "pop" cuando cambia. */
+@keyframes mejoras-badge-pop {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.35); }
+    100% { transform: scale(1); }
+}
+
+#cart-badge.is-bumping { animation: mejoras-badge-pop 420ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal,
+    .reveal.is-visible {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    #home-view .faq-answer > * { transition: none; }
+    #cart-badge.is-bumping { animation: none; }
+}
+
+/* --- 8. Ajustes por el cambio a Playfair Display -------------------------- */
+
+/* Playfair es mas ancha: el titulo del hero necesita un poco mas de medida
+   para no cortar "vincularnos mejor" en dos lineas. */
+@media (min-width: 1024px) {
+    #home-view .author-hero h1 {
+        max-width: 17ch !important;
+        font-size: clamp(3.1rem, 4.3vw, 4.7rem) !important;
+    }
+}
+
+/* Numeros "de linea" en precios (los de Playfair por defecto suben y bajan). */
+.collection-card-price,
+.product-modal-price,
+#cart-items,
+[class*="price"] strong {
+    font-variant-numeric: lining-nums tabular-nums;
+}
+
+/* --- 9. Celular: barra inferior del libro y titulo del hero ------------- */
+
+@media (max-width: 767px) {
+    #home-view .author-hero h1 {
+        font-size: clamp(2.4rem, 10.6vw, 3.2rem) !important;
+        max-width: 14ch !important;
+        line-height: 1.04 !important;
+    }
+
+    .mobile-book-bar [data-mobile-book-detail].btn-primary-soft,
+    .mobile-book-bar button.btn-primary-soft {
+        background: var(--accent-dark) !important;
+        color: #fff !important;
+        font-family: var(--font-sans) !important;
+        font-weight: 650 !important;
+        box-shadow: 0 10px 22px rgba(42, 122, 125, 0.25) !important;
+    }
+
+    .mobile-book-bar button.btn-primary-soft * { font-family: var(--font-sans) !important; }
+
+    #home-view .author-book-entry {
+        grid-template-columns: minmax(8.75rem, 0.9fr) minmax(0, 1.1fr) !important;
+        gap: 1.1rem !important;
+    }
+
+    .mobile-book-bar #mobile-book-price,
+    .mobile-book-bar #mobile-book-price strong {
+        font-family: var(--font-sans);
+        font-variant-numeric: lining-nums tabular-nums;
+    }
+
+    /* La tapa en la lista de libros, un poco mas grande. */
+    #home-view .author-book-entry .collection-card-cover {
+        width: 100% !important;
+        height: clamp(13.5rem, 52vw, 17rem) !important;
+        box-shadow: none !important;
+    }
+
+    #home-view .author-book-entry .collection-card-cover img {
+        width: auto !important;
+        max-width: 100%;
+        height: 100% !important;
+        object-fit: contain !important;
+    }
+
+    #home-view .author-book-entry .collection-card-status {
+        white-space: nowrap;
+        letter-spacing: 0.05em;
+    }
+}
+
+/* Ficha del libro: titulo con la serif de la marca y botones con buen contraste
+   (los degradados de styles.css arrancan ahora en un turquesa mas profundo). */
+#product-modal-card .product-detail-intro h1,
+#product-modal-card .product-detail-intro h2,
+#product-modal-card .product-detail-intro h3 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+}
+
+#product-modal-card .product-add-button { font-size: 0.95rem; font-weight: 650; }
+
+/* ==========================================================================
+   10. Responsive en todas las medidas
+   ========================================================================== */
+
+/* Pantallas grandes (monitores 2K/4K): todo el sitio usa rem, asi que
+   agrandar la base escala textos, espacios y header de forma pareja. */
+@media (min-width: 1600px) {
+    html { font-size: calc(16px + (100vw - 1600px) * 0.003); }
+}
+
+@media (min-width: 2400px) {
+    html { font-size: 19px; }
+}
+
+/* Textos chicos: nada por debajo de 12px. */
+#home-view .collection-card-price .price-web-badge,
+.price-web-badge { font-size: 0.75rem !important; }
+#home-view .author-book-entry .collection-card-status { font-size: 0.75rem !important; }
+#author-book-position { font-size: 0.75rem !important; }
+.site-footer span { font-size: max(0.75rem, 1em); }
+
+/* Celulares angostos (iPhone SE, Android chicos). */
+@media (max-width: 379px) {
+    #home-view .author-hero__eyebrow,
+    #home-view .product-kicker {
+        letter-spacing: 0.12em;
+        font-size: 0.75rem !important;
+    }
+
+    #home-view .author-hero__eyebrow::after,
+    #home-view .product-kicker::after { width: 1.75rem; }
+
+    #home-view .author-book-entry .collection-card-status {
+        white-space: normal;
+        line-height: 1.3;
+        border-radius: 0.75rem;
+        letter-spacing: 0.04em;
+    }
+
+    #home-view .author-book-entry {
+        grid-template-columns: minmax(7.5rem, 0.85fr) minmax(0, 1.15fr) !important;
+    }
+}
+
+/* Tablets (768-1023): el hero en dos columnas quedaba apretado, con el
+   titulo en 4 lineas y los botones apilados. Una columna centrada. */
+@media (min-width: 768px) and (max-width: 1023px) {
+    #home-view .author-hero { padding-top: 7.5rem; min-height: auto; }
+
+    #home-view .author-hero__inner {
+        grid-template-columns: 1fr !important;
+        justify-items: center;
+        gap: 2.5rem;
+        text-align: center;
+    }
+
+    #home-view .author-hero__copy {
+        max-width: 38rem;
+        margin-inline: auto;
+    }
+
+    #home-view .author-hero h1 {
+        max-width: 16ch !important;
+        margin-inline: auto !important;
+        font-size: clamp(3.2rem, 7.4vw, 4.4rem) !important;
+    }
+
+    #home-view .author-hero__lede,
+    #home-view .author-hero__signature { margin-inline: auto; }
+
+    #home-view .author-hero__actions,
+    #home-view .author-hero__trust { justify-content: center; }
+
+    #home-view .author-hero__actions { flex-direction: row !important; flex-wrap: wrap; }
+
+    #home-view .author-book-selector { width: min(100%, 36rem); }
+    #home-view .author-hero__books { height: clamp(22rem, 46vw, 27rem) !important; }
+}
+
+/* ==========================================================================
+   11. Header (la pildora)
+   ========================================================================== */
+
+#main-nav {
+    transition: transform 380ms cubic-bezier(0.22, 1, 0.36, 1), padding 300ms ease !important;
+}
+
+#main-nav > div {
+    min-height: 3.5rem;
+    padding: 0.4rem 0.5rem 0.4rem 1rem !important;
+    border: 1px solid rgba(123, 94, 70, 0.14);
+    border-radius: 999px;
+    box-shadow: 0 6px 24px rgba(74, 56, 43, 0.06);
+    transition: box-shadow 300ms ease, background-color 300ms ease, min-height 300ms ease;
+}
+
+#main-nav.nav-scrolled > div {
+    background: rgba(252, 250, 246, 0.9) !important;
+    box-shadow: 0 10px 34px rgba(74, 56, 43, 0.12);
+}
+
+/* Al bajar se esconde para dejar leer; al subir vuelve a aparecer. */
+#main-nav.nav-hidden { transform: translateY(calc(-100% - 2rem)); }
+
+/* Links: mas grandes, con un fondo suave al pasar y el de la seccion actual marcado. */
+#main-nav .nav-links {
+    gap: 0.15rem !important;
+    padding: 0.25rem !important;
+    border: 1px solid rgba(123, 94, 70, 0.1) !important;
+    border-radius: 999px !important;
+    background: rgba(245, 226, 206, 0.35) !important;
+}
+
+#main-nav .nav-links a {
+    padding: 0.55rem 1rem !important;
+    border-radius: 999px !important;
+    color: var(--text-main);
+    font-size: 0.875rem !important;
+    font-weight: 500;
+    letter-spacing: 0.005em;
+    transition: background-color 220ms ease, color 220ms ease !important;
+}
+
+#main-nav .nav-links a::after { display: none !important; }
+
+#main-nav .nav-links a:hover { background: rgba(252, 250, 246, 0.95) !important; opacity: 1 !important; }
+
+#main-nav .nav-links a[aria-current="true"] {
+    background: #fff !important;
+    color: var(--accent-dark);
+    box-shadow: 0 2px 10px rgba(74, 56, 43, 0.08);
+}
+
+#main-nav .nav-links a:focus-visible,
+#nav-actions button:focus-visible,
+#nav-brand:focus-visible {
+    outline: 2px solid var(--accent-dark);
+    outline-offset: 2px;
+}
+
+/* Carrito y menu: botones redondos iguales, con area de toque de 44px. */
+#nav-actions { gap: 0.4rem !important; }
+
+#nav-actions > button {
+    display: grid;
+    width: 2.75rem;
+    height: 2.75rem;
+    place-items: center;
+    border: 1px solid rgba(123, 94, 70, 0.14);
+    border-radius: 999px;
+    background: rgba(252, 250, 246, 0.85);
+    transition: background-color 200ms ease, border-color 200ms ease, transform 200ms ease;
+}
+
+#nav-actions > button:hover {
+    background: #fff;
+    border-color: rgba(42, 122, 125, 0.35);
+    opacity: 1 !important;
+}
+
+#nav-actions > button svg {
+    width: 1.3rem !important;
+    height: 1.3rem !important;
+    filter: none !important;
+}
+
+#cart-badge {
+    top: -0.3rem !important;
+    right: -0.3rem !important;
+    min-width: 1.25rem;
+    width: auto !important;
+    height: 1.25rem !important;
+    padding: 0 0.3rem;
+    border: 2px solid var(--white-warm);
+    font-size: 0.7rem !important;
+}
+
+#nav-brand .nav-brand-name { font-size: 1.4rem; letter-spacing: 0; }
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    #main-nav .nav-links a { padding: 0.5rem 0.75rem !important; font-size: 0.82rem !important; }
+    #nav-brand .nav-brand-name { font-size: 1.25rem; }
+}
+
+@media (max-width: 767px) {
+    #main-nav > div { min-height: 3.25rem; padding: 0.3rem 0.35rem 0.3rem 0.75rem !important; }
+    #nav-brand .nav-brand-name { font-size: 1.15rem; }
+    #nav-actions > button { width: 2.6rem; height: 2.6rem; }
+}
+
+/* Menu del celular: la seccion actual tambien se marca. */
+#mobile-menu .mobile-link[aria-current="true"] {
+    border-color: rgba(42, 122, 125, 0.35);
+    background: #fff;
+    color: var(--accent-dark);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #main-nav.nav-hidden { transform: none; }
+}
+
+/* El boton de menu es solo para celular (el display de arriba pisaba md:hidden). */
+@media (min-width: 768px) {
+    #nav-actions > #mobile-menu-btn { display: none !important; }
+}
+
+/* Menu del celular: accesos directos a Instagram y WhatsApp. */
+.mobile-menu-contact {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(123, 94, 70, 0.14);
+}
+
+.mobile-menu-contact a {
+    display: inline-flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    min-height: 2.75rem;
+    border: 1px solid rgba(42, 122, 125, 0.3);
+    border-radius: 999px;
+    color: var(--accent-dark);
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.mobile-menu-contact svg { width: 1.05rem; height: 1.05rem; }
+
+/* Celulares de menos de 400px: tapa arriba y texto abajo, igual que en desktop,
+   para que el titulo y los botones no queden en una columna de 150px. */
+@media (max-width: 399px) {
+    #home-view .author-book-entry {
+        grid-template-columns: 1fr !important;
+        justify-items: center;
+        text-align: center;
+        gap: 1.25rem !important;
+    }
+
+    #home-view .author-book-entry .collection-card-cover { height: 15rem !important; }
+
+    #home-view .author-book-entry .collection-card-copy {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    #home-view .author-book-entry .collection-card-status { align-self: center; white-space: nowrap; }
+    #home-view .author-book-entry .collection-card-price { justify-content: center; }
+}
+
+/* --- 12. Newsletter con regalo y aire debajo de "Resolvemos tus dudas" --- */
+
+/* Las preguntas quedaban pegadas a la tarjeta del newsletter. */
+#home-view .faq-section { padding-bottom: clamp(4rem, 8vw, 6.5rem) !important; }
+#home-view .newsletter-section { padding-top: 0 !important; padding-bottom: clamp(4rem, 8vw, 6.5rem) !important; }
+
+#home-view .newsletter-copy h2 { text-wrap: balance; }
+
+#home-view .newsletter-form button[type="submit"] { font-size: 0.95rem; font-weight: 650; }
+
+#home-view .newsletter-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    margin: 0.65rem 0 0;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+#home-view .newsletter-note svg { width: 0.95rem; height: 0.95rem; color: var(--accent-dark); }
+
+/* ==========================================================================
+   13. Carrusel de libros en celular: deslizar suave
+   ========================================================================== */
+
+@media (max-width: 767px) {
+    /* Sin "scroll-snap-stop: always" ni scroll suave por CSS: el ajuste al centro
+       queda en manos del navegador, que lo hace con la inercia natural del dedo.
+       Las flechas siguen animando porque usan scrollBy({ behavior: 'smooth' }). */
+    #home-view .author-hero__books {
+        scroll-behavior: auto !important;
+        scroll-snap-type: x mandatory;
+    }
+
+    #home-view .author-hero__book { scroll-snap-stop: normal !important; }
+
+    /* Mientras se desliza: la tapa crece y se aclara siguiendo al dedo. */
+    #home-view .author-hero__books.is-dragging .author-hero__book {
+        transition: none !important;
+        opacity: calc(0.48 + 0.52 * var(--focus, 0)) !important;
+        filter: saturate(calc(0.7 + 0.3 * var(--focus, 0))) !important;
+        transform: scale(calc(0.91 + 0.09 * var(--focus, 0))) !important;
+    }
+
+    #home-view .author-hero__books.is-dragging .author-hero__book img { transition: none !important; }
+
+    /* Lugar reservado para el nombre del libro: antes, al pasar de un libro a
+       otro cambiaba la altura y la pagina saltaba ~20px hacia abajo. */
+    #home-view .author-book-selector__status {
+        min-height: 3rem;
+        align-content: start;
+    }
+}
+
+@media (max-width: 379px) {
+    #home-view .author-book-selector__status { min-height: 4.4rem; }
+}
+
+/* Barra inferior del libro: flechita arriba al centro que invita a tocar
+   para ver mas info (toda la barra abre la ficha del libro). */
+.mobile-book-bar__hint { display: none; }
+
+@media (max-width: 767px) {
+    .mobile-book-bar { overflow: visible !important; }
+
+    .mobile-book-bar__hint {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        display: grid;
+        width: 2.4rem;
+        height: 1.35rem;
+        place-items: center;
+        border: 1px solid rgba(123, 94, 70, 0.16);
+        border-bottom: 0;
+        border-radius: 999px 999px 0 0;
+        color: var(--accent-dark);
+        background: inherit;
+        background-color: #fcfaf6;
+        box-shadow: 0 -4px 10px rgba(74, 56, 43, 0.06);
+        transform: translate(-50%, -100%);
+        pointer-events: none;
+    }
+
+    .mobile-book-bar__hint svg {
+        width: 1.05rem;
+        height: 1.05rem;
+        animation: mejoras-hint-bob 2.4s ease-in-out 1s 3;
+    }
+}
+
+@keyframes mejoras-hint-bob {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-3px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mobile-book-bar__hint svg { animation: none; }
+}
+
+/* Logo: version recortada (sin el aire transparente de arriba y abajo), un poco
+   mas grande y sin la sombra que lo empastaba en tamaño chico. */
+#main-nav .brand-logo {
+    width: auto !important;
+    height: 2.1rem !important;
+    filter: saturate(1.15) contrast(1.05) !important;
+}
+
+#nav-brand { gap: 0.6rem !important; }
+
+.footer-brand img { filter: saturate(1.1) !important; }
+
+@media (max-width: 767px) {
+    #main-nav .brand-logo { height: 1.85rem !important; }
+}
+
+/* ==========================================================================
+   14. Ficha del libro: todo el contenido en un solo scroll
+   Antes "Sobre este libro" tenia su propio scroll chiquito y la ficha tecnica
+   ocupaba lugar fijo. Ahora se scrollea la ficha entera; la ficha tecnica va
+   al final y la barra de compra queda siempre visible abajo.
+   ========================================================================== */
+
+#product-modal-card.product-modal-shell .product-editorial-card,
+#product-modal-card .product-editorial-card {
+    grid-template-rows: auto auto auto auto !important;
+    align-content: start;
+    overflow-x: hidden;
+    overflow-y: auto !important;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+}
+
+#product-modal-card .product-detail-panel {
+    max-height: none !important;
+    overflow: visible !important;
+    min-height: auto !important;
+}
+
+#product-modal-card .product-description-copy p { margin-bottom: 0.85rem; }
+#product-modal-card .product-description-copy { line-height: 1.65; }
+
+#product-modal-card .product-specifications {
+    border-top: 1px solid rgba(123, 94, 70, 0.14) !important;
+}
+
+/* Barra de compra pegada abajo, por encima del contenido que se scrollea. */
+#product-modal-card .product-purchase-card {
+    position: sticky !important;
+    bottom: 0;
+    z-index: 3;
+    border-top: 1px solid rgba(123, 94, 70, 0.14);
+    background: rgba(252, 250, 246, 0.96) !important;
+    backdrop-filter: blur(8px);
+}
+
+@media (min-width: 768px) {
+    /* Columna izquierda: pestañas + tapa, quietas mientras se lee la derecha. */
+    #product-modal-card .product-visual-editorial {
+        position: sticky;
+        top: 0;
+        display: flex !important;
+        flex-direction: column;
+        gap: 1rem;
+        grid-column: 1 !important;
+        grid-row: 1 / span 3 !important;
+        align-self: start;
+        padding: 1rem 0 1.5rem;
+    }
+
+    #product-modal-card .product-cover-tabs {
+        width: min(100%, 20rem);
+        margin-inline: auto;
+    }
+
+    #product-modal-card .book-display-stage {
+        min-height: 18rem;
+        align-self: stretch !important;
+    }
+
+    #product-modal-card .product-summary-copy {
+        grid-column: 2 !important;
+        grid-row: 1 !important;
+        padding-top: 1.5rem !important;
+    }
+
+    #product-modal-card .product-detail-panel {
+        grid-column: 2 !important;
+        grid-row: 2 !important;
+    }
+
+    #product-modal-card .product-specifications {
+        grid-column: 2 !important;
+        grid-row: 3 !important;
+        margin-bottom: 1.25rem !important;
+        padding: 1rem 1.4rem 0 0.2rem !important;
+    }
+
+    #product-modal-card .product-purchase-card {
+        grid-column: 1 / -1 !important;
+        grid-row: 4 !important;
+    }
+
+    #product-modal-card .product-meta-grid {
+        grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr)) !important;
+    }
+}
+
+@media (max-width: 767px) {
+    #product-modal-card .product-specifications {
+        grid-column: 1 / -1 !important;
+        grid-row: auto !important;
+        padding-bottom: 1rem !important;
+    }
+
+    #product-modal-card .product-purchase-card { grid-row: auto !important; }
+    #product-modal-card .product-detail-panel { grid-row: auto !important; }
+}
+
+#product-modal-card .product-description-copy p { color: var(--text-muted); }
+
+#product-modal-card .product-description-subheading {
+    margin: 1.4rem 0 0.7rem;
+    color: var(--text-main);
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
+#product-modal-card .product-description-list {
+    display: grid;
+    gap: 0.6rem;
+    margin: 0 0 1.1rem;
+    padding: 0;
+    list-style: none;
+}
+
+#product-modal-card .product-description-list li {
+    position: relative;
+    padding-left: 1.35rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+}
+
+#product-modal-card .product-description-list li::before {
+    content: "";
+    position: absolute;
+    top: 0.6em;
+    left: 0.15rem;
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: var(--accent-mid);
+}
+
+#product-modal-card .product-description-list strong { color: var(--text-main); font-weight: 600; }
+
+#product-modal-card .product-description-closing {
+    padding: 0.9rem 1rem;
+    border-left: 3px solid var(--accent-mid);
+    border-radius: 0 0.6rem 0.6rem 0;
+    background: rgba(213, 245, 242, 0.35);
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--text-main) !important;
+}
+
+#product-modal-card .product-meta-grid > div[hidden] { display: none !important; }
+
+#product-modal-card .product-description-list li { font-size: 0.92rem; }
+
+@media (min-width: 768px) {
+    /* La tapa entra completa en la columna fija aunque la pantalla sea baja. */
+    #product-modal-card .product-visual-editorial {
+        align-self: start !important;
+        height: auto !important;
+        min-height: 0 !important;
+        justify-content: flex-start !important;
+    }
+
+    #product-modal-card .book-display-stage {
+        flex: 0 0 auto;
+        min-height: 0 !important;
+        height: clamp(13rem, calc(100dvh - 24rem), 26rem) !important;
+    }
+}
+
+@media (max-width: 767px) {
+    #product-modal-card .product-editorial-card { scrollbar-gutter: auto; }
+
+    #product-modal-card .product-meta-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 0.5rem !important;
+    }
+
+    #product-modal-card .product-meta-grid > div { padding: 0.55rem 0.6rem !important; gap: 0.5rem !important; }
+}
+
+/* Libro "Proximamente": la ficha solo muestra la tapa generica, el texto y el aviso. */
+#product-modal-card.is-teaser-book .product-cover-tabs,
+#product-modal-card.is-teaser-book .product-specifications,
+#product-modal-card.is-teaser-book .product-modal-price { display: none !important; }
+#product-modal-card.is-teaser-book .product-subtitle { display: none !important; }
+#product-modal-card.is-teaser-book .product-editorial-card { grid-template-rows: auto auto auto 1fr !important; }
+#product-modal-card.is-teaser-book .product-purchase-card { align-self: end; }
+#product-modal-card.is-teaser-book .product-visual-editorial { padding-top: 2rem !important; }
+#product-modal-card.is-teaser-book .product-summary-copy { padding-top: 2.5rem !important; }
+
+/* ==========================================================================
+   15. Newsletter: regalo del cuadernillo (bloque vertical centrado)
+   ========================================================================== */
+
+#home-view .newsletter-panel--gift {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    width: min(100% - 2rem, 29rem) !important;
+    max-width: 29rem !important;
+    padding: clamp(1.75rem, 4vw, 2.5rem) clamp(1.25rem, 4vw, 2.25rem) !important;
+    text-align: center !important;
+}
+
+.newsletter-gift-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 0.95rem;
+    border-radius: 999px;
+    color: var(--accent-dark);
+    background: rgba(81, 171, 177, 0.14);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.newsletter-gift-pill svg { width: 1.05rem; height: 1.05rem; }
+
+/* Portada con una hoja detras, para que se lea como un cuadernillo. */
+.newsletter-gift-cover {
+    position: relative;
+    width: min(62%, 12.5rem);
+    margin: 1.6rem 0 1.5rem;
+}
+
+.newsletter-gift-cover::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 0.35rem;
+    background: #fff;
+    box-shadow: 0 6px 18px rgba(74, 56, 43, 0.1);
+    transform: translate(10px, 8px) rotate(3deg);
+}
+
+.newsletter-gift-cover img {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 0.35rem;
+    box-shadow: 0 16px 34px rgba(74, 56, 43, 0.18);
+    transform: rotate(-2deg);
+    transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.newsletter-gift-cover:hover img { transform: rotate(0) translateY(-4px); }
+
+.newsletter-gift-badge {
+    position: absolute;
+    top: 0.6rem;
+    right: -0.6rem;
+    padding: 0.25rem 0.55rem;
+    border-radius: 0.4rem;
+    color: #fff;
+    background: var(--accent-dark);
+    box-shadow: 0 6px 14px rgba(42, 122, 125, 0.3);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+}
+
+#home-view .newsletter-gift-title {
+    margin: 0 0 0.5rem;
+    color: var(--text-main);
+    font-family: var(--font-serif);
+    font-size: clamp(1.45rem, 3.4vw, 1.75rem);
+    font-weight: 700;
+    line-height: 1.2;
+    text-wrap: balance;
+}
+
+#home-view .newsletter-gift-text {
+    max-width: 23rem;
+    margin: 0 auto 1.35rem;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    line-height: 1.55;
+}
+
+#home-view .newsletter-panel--gift .newsletter-form { width: 100%; align-self: stretch !important; }
+
+.newsletter-input { position: relative; }
+
+.newsletter-input svg {
+    position: absolute;
+    top: 50%;
+    left: 1rem;
+    width: 1.1rem;
+    height: 1.1rem;
+    color: var(--text-muted);
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+#home-view .newsletter-input input[type="email"] { padding-left: 2.75rem !important; }
+
+#home-view .newsletter-panel--gift .newsletter-form button[type="submit"] {
+    border-radius: 999px;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+#home-view .newsletter-panel--gift .newsletter-note { margin-top: 0.35rem; font-size: 0.82rem; }
+#home-view .newsletter-panel--gift .newsletter-note svg { color: var(--accent-dark); }
+
+.newsletter-fineprint {
+    margin: 0.4rem auto 0;
+    max-width: 22rem;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    line-height: 1.5;
+    opacity: 0.85;
+}
+#home-view .newsletter-panel--gift { gap: 0 !important; }
+#home-view .newsletter-panel--gift .newsletter-gift-cover { margin: 1.75rem 0 2.25rem !important; }
+#home-view .newsletter-panel--gift .newsletter-gift-title { margin: 0 0 0.6rem !important; }
+#home-view .newsletter-panel--gift .newsletter-gift-text { margin: 0 auto 1.5rem !important; }
+
+/* ==========================================================================
+   16. Modal "Avisarme" / novedades: mismo estilo que el bloque del cuadernillo
+   ========================================================================== */
+
+#modal-card.is-subscribe-modal { max-width: 27rem !important; padding: 2rem 1.75rem 1.6rem !important; }
+#modal-card.is-subscribe-modal #modal-icon,
+#modal-card.is-subscribe-modal #modal-title { display: none !important; }
+
+#modal-card.is-subscribe-modal #modal-close-btn {
+    top: 0.9rem !important;
+    right: 0.9rem !important;
+    padding: 0.45rem !important;
+    border-radius: 999px !important;
+    box-shadow: none !important;
+}
+#modal-card.is-subscribe-modal #modal-close-btn svg { width: 1.2rem !important; height: 1.2rem !important; }
+
+.subscribe-modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.subscribe-modal__title {
+    margin: 1.25rem 0 0.6rem;
+    color: var(--text-main);
+    font-family: var(--font-serif);
+    font-size: clamp(1.5rem, 5vw, 1.8rem);
+    font-weight: 700;
+    line-height: 1.2;
+    text-wrap: balance;
+}
+
+.subscribe-modal__text {
+    max-width: 22rem;
+    margin: 0 auto 1.4rem;
+    color: var(--text-muted);
+    font-size: 0.93rem;
+    line-height: 1.55;
+}
+
+.subscribe-modal .newsletter-input { width: 100%; }
+
+.subscribe-modal .newsletter-input input {
+    width: 100%;
+    height: 3rem;
+    padding: 0 1rem 0 2.75rem;
+    border: 1px solid rgba(123, 94, 70, 0.22);
+    border-radius: 1rem;
+    background: var(--white-warm);
+    color: var(--text-main);
+    font-size: 16px;
+    transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.subscribe-modal .newsletter-input input:focus {
+    outline: none;
+    border-color: var(--accent-dark);
+    box-shadow: 0 0 0 3px rgba(42, 122, 125, 0.15);
+}
+
+.subscribe-modal__button {
+    display: inline-flex;
+    width: 100%;
+    min-height: 3rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.6rem;
+    border: 0;
+    border-radius: 999px;
+    color: #fff;
+    background: var(--accent-dark);
+    box-shadow: 0 12px 26px rgba(42, 122, 125, 0.22);
+    font-size: 1rem;
+    font-weight: 700;
+    transition: background-color 200ms ease, transform 200ms ease;
+}
+
+.subscribe-modal__button:hover { background: var(--accent-hover); }
+.subscribe-modal__button svg { width: 1.1rem; height: 1.1rem; transition: transform 200ms ease; }
+.subscribe-modal__button:hover svg { transform: translateX(3px); }
+.subscribe-modal__button.is-sending { opacity: 0.75; cursor: progress; }
+.subscribe-modal__button.is-done { background: rgba(42, 122, 125, 0.12); color: var(--accent-dark); box-shadow: none; cursor: default; }
+
+.subscribe-modal__trust,
+.subscribe-modal__info {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.45rem;
+    color: var(--text-muted);
+}
+
+.subscribe-modal__trust { margin: 0.75rem 0 0; font-size: 0.82rem; align-items: center; }
+.subscribe-modal__trust svg { width: 1rem; height: 1rem; color: var(--accent-dark); }
+
+.subscribe-modal__success {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: 100%;
+    margin-top: 0.9rem;
+    padding: 0.75rem 0.9rem;
+    border-radius: 0.9rem;
+    color: var(--text-main);
+    background: rgba(213, 245, 242, 0.55);
+    font-size: 0.88rem;
+    text-align: left;
+}
+
+.subscribe-modal__success.hidden { display: none; }
+.subscribe-modal__success svg { flex: 0 0 auto; width: 1.25rem; height: 1.25rem; color: var(--accent-dark); }
+
+.subscribe-modal__divider {
+    width: 100%;
+    margin: 1.25rem 0 1rem;
+    border: 0;
+    border-top: 1px solid rgba(123, 94, 70, 0.14);
+}
+
+.subscribe-modal__info { font-size: 0.78rem; line-height: 1.5; text-align: left; }
+.subscribe-modal__info svg { flex: 0 0 auto; width: 1rem; height: 1rem; margin-top: 0.1rem; color: var(--accent-dark); }
+
+.subscribe-modal .field-error,
+.subscribe-modal input.is-invalid { border-color: #c0634f !important; }
+#modal-card.is-subscribe-modal > .overflow-y-auto { margin: 0 -0.75rem; padding: 0 0.75rem 0.5rem !important; }
+.subscribe-modal__button { box-shadow: 0 8px 18px rgba(42, 122, 125, 0.2); }
+@media (max-width: 420px) {
+    #modal-card.is-subscribe-modal { padding-top: 3rem !important; }
+}
+.newsletter-gift-pill { white-space: nowrap; }
+@media (max-width: 374px) {
+    .newsletter-gift-pill { font-size: 0.7rem; letter-spacing: 0.06em; padding: 0.4rem 0.75rem; }
+    #modal-card.is-subscribe-modal { padding-left: 1.25rem !important; padding-right: 1.25rem !important; }
+}
+
+/* ==========================================================================
+   17. Legales: indice de secciones
+   ========================================================================== */
+.legal-index {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0 0 2.5rem;
+}
+
+.legal-index a {
+    padding: 0.5rem 1rem;
+    border: 1px solid rgba(42, 122, 125, 0.3);
+    border-radius: 999px;
+    color: var(--accent-dark);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 200ms ease;
+}
+
+.legal-index a:hover { background: rgba(42, 122, 125, 0.08); }
+
+#privacidad, #terminos { scroll-margin-top: 2rem; }
+#terminos { margin-top: 3.5rem; }

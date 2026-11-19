@@ -354,6 +354,9 @@ function renderProductModal(book = getSelectedBook()) {
     }
     if (quantityRow) quantityRow.classList.toggle('hidden', !book.available);
     if (purchaseCard) purchaseCard.classList.toggle('is-upcoming', !book.available);
+    // Libro "Proximamente": sin contratapa ni ficha tecnica para no adelantar nada.
+    document.getElementById('product-modal-card')?.classList.toggle('is-teaser-book', Boolean(book.teaser));
+    if (book.teaser) switchProductCover('front');
     if (bookContainer) bookContainer.classList.toggle('is-upcoming-book', !book.available);
     if (action) {
         action.innerHTML = book.available
@@ -543,11 +546,45 @@ function syncBookSelectionFromScroll() {
     }
 }
 
+// Deslizar el carrusel (celular): mientras el dedo se mueve, la escala y la opacidad
+// de cada tapa siguen al scroll de forma continua (--focus de 0 a 1), sin clases que
+// disparen animaciones. El libro se elige recien cuando el scroll se detiene, asi el
+// texto y la barra de abajo no cambian a mitad del gesto.
+let heroBookSettleScrollTimer = null;
+
+function updateHeroBookFocus() {
+    bookSelectorScrollFrame = null;
+    const selectorRect = heroBookCarousel.getBoundingClientRect();
+    const selectorCenter = selectorRect.left + selectorRect.width / 2;
+    heroBookCards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const distance = Math.abs(rect.left + rect.width / 2 - selectorCenter) / (rect.width || 1);
+        const focus = Math.max(0, Math.min(1, 1 - distance));
+        card.style.setProperty('--focus', focus.toFixed(3));
+    });
+}
+
+function settleHeroBookScroll() {
+    window.clearTimeout(heroBookSettleScrollTimer);
+    heroBookSettleScrollTimer = null;
+    heroBookCarousel.classList.remove('is-dragging');
+    syncBookSelectionFromScroll();
+}
+
 heroBookCarousel?.addEventListener('scroll', () => {
     markCarouselSwiped();
-    if (!window.matchMedia('(max-width: 767px)').matches || bookSelectorScrollFrame !== null) return;
-    bookSelectorScrollFrame = window.requestAnimationFrame(syncBookSelectionFromScroll);
+    if (!window.matchMedia('(max-width: 767px)').matches) return;
+    heroBookCarousel.classList.add('is-dragging');
+    if (bookSelectorScrollFrame === null) {
+        bookSelectorScrollFrame = window.requestAnimationFrame(updateHeroBookFocus);
+    }
+    window.clearTimeout(heroBookSettleScrollTimer);
+    heroBookSettleScrollTimer = window.setTimeout(settleHeroBookScroll, 160);
 }, { passive: true });
+
+heroBookCarousel?.addEventListener('scrollend', () => {
+    if (heroBookCarousel.classList.contains('is-dragging')) settleHeroBookScroll();
+});
 
 function handleProductPrimaryAction() {
     const book = getSelectedBook();
@@ -643,14 +680,14 @@ function getMessageStyle(type = 'success') {
     if (type === 'warning') {
         return {
             icon: 'info',
-            iconClass: 'text-brand-lilac',
+            iconClass: 'text-brand-teal',
             classes: ['bg-brand-pink/95', 'border', 'border-brand-lilac/30', 'text-brand-text']
         };
     }
 
     return {
         icon: 'check-circle',
-        iconClass: 'text-brand-lilac',
+        iconClass: 'text-brand-teal',
         classes: ['bg-brand-cream/95', 'border', 'border-brand-lilac/20', 'text-brand-text']
     };
 }
@@ -728,7 +765,7 @@ function openModal(type) {
             title: selectedBook.previewTitle,
             icon: 'book-open',
             content: `${selectedBook.previewHtml}
-                <button onclick="closeModal(true); setTimeout(() => { openProductModal(); setTimeout(openBookDetails, 300); }, 300);" class="mt-4 w-full bg-brand-lilac text-white py-3 rounded-xl font-medium hover:bg-opacity-90 transition shadow-sm flex items-center justify-center gap-2">
+                <button onclick="closeModal(true); setTimeout(() => { openProductModal(); setTimeout(openBookDetails, 300); }, 300);" class="mt-4 w-full bg-brand-teal text-white py-3 rounded-xl font-medium hover:bg-opacity-90 transition shadow-sm flex items-center justify-center gap-2">
                     Ver detalles del libro
                 </button>`
         }
@@ -742,6 +779,9 @@ function openModal(type) {
 
     modalCard.classList.remove('max-w-lg', 'max-w-xl', 'max-w-2xl', 'is-checkout-modal');
     modalCard.classList.add('max-w-lg');
+    modalCard.classList.toggle('is-subscribe-modal', data.layout === 'subscribe');
+    if (data.layout === 'subscribe') modal.setAttribute('aria-labelledby', 'subscribe-modal-title');
+    else modal.removeAttribute('aria-labelledby');
 
     goToLayer(`#${type}`);
 
@@ -848,7 +888,7 @@ function _closeModal() {
         if (subsBtn) {
             subsBtn.disabled = false;
             subsBtn.innerHTML = 'Suscribirse <i data-lucide="send" class="w-4 h-4"></i>';
-            subsBtn.className = 'w-full bg-brand-lilac text-brand-cream py-3.5 rounded-xl font-medium hover:bg-opacity-90 transition shadow-lg flex items-center justify-center gap-2';
+            subsBtn.className = 'w-full bg-brand-teal text-brand-cream py-3.5 rounded-xl font-medium hover:bg-opacity-90 transition shadow-lg flex items-center justify-center gap-2';
         }
 
         lucide.createIcons();
@@ -1128,7 +1168,7 @@ function handleInlineSubscribeSubmit(event) {
 
     window.setTimeout(() => {
         button.textContent = '¡Gracias!';
-        if (message) message.textContent = 'Revisá tu correo para confirmar la suscripción.';
+        if (message) message.textContent = '¡Listo! Revisá tu correo para confirmar la suscripción y recibir el cuadernillo.';
         form.reset();
     }, 1200);
 }

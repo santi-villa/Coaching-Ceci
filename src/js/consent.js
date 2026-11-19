@@ -26,7 +26,7 @@
         banner.setAttribute('role', 'region');
         banner.setAttribute('aria-label', 'Aviso de cookies');
         banner.innerHTML = `
-            <p>Usamos una herramienta de analítica (Microsoft Clarity) para entender cómo se usa el sitio y mejorarlo. Solo se activa si aceptás. <a href="legales.html">Más información</a></p>
+            <p>Usamos Microsoft Clarity para entender cómo se usa el sitio, solo si aceptás. <a href="legales.html">Más información</a></p>
             <div class="consent-banner__actions">
                 <button type="button" data-consent="rejected" class="consent-banner__btn consent-banner__btn--ghost">Rechazar</button>
                 <button type="button" data-consent="accepted" class="consent-banner__btn">Aceptar</button>

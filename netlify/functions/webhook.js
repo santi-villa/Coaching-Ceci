@@ -1,5 +1,6 @@
 const shippingProviderService = require('./lib/shipping-provider-service');
 const { verifyMercadoPagoSignature, escapeHtml } = require('./lib/webhook-auth');
+const { button, infoCard, notice, paragraph, renderEmail } = require('./lib/email-layout');
 const { isValidDni, isValidEmail, isValidPhone } = require('./lib/order-validation');
 const { randomUUID } = require('crypto');
 const { getStore } = require('@netlify/blobs');
@@ -241,82 +242,101 @@ function buildNotificationContext({ metadata, shippingRecord = {}, zipnovaError 
         trackingNumber: escapeHtml(rawTrackingNumber),
         trackingUrl,
         trackingText: escapeHtml(trackingUrl || rawTrackingNumber),
-        addressLine: escapeHtml(`${address.street} ${address.number}${address.apartment ? ` ${address.apartment}` : ''}, ${address.city}, ${address.province} (CP ${address.postalCode})`)
+        addressLine: escapeHtml(`${address.street} ${address.number}${address.apartment ? ` ${address.apartment}` : ''}, ${address.city}, ${address.province} (CP ${address.postalCode})`),
+        quantity: parseJsonMetadata(metadata, 'cart_snapshot', [])
+            .reduce((sum, item) => sum + Math.max(0, Math.trunc(numberOrZero(item?.quantity))), 0) || 1
     };
+}
+
+const BOOK_TITLE = 'Comunicar para vivir más livianos';
+
+// Los celulares de Argentina se escriben en WhatsApp como 54 9 + area + numero.
+function whatsAppNumber(phone = '') {
+    const digits = String(phone).replace(/\D/g, '');
+    return digits.startsWith('54') ? digits : `549${digits}`;
+}
+
+function bookLine(quantity) {
+    return quantity > 1 ? `${quantity} × <em>${BOOK_TITLE}</em>` : `<em>${BOOK_TITLE}</em>`;
 }
 
 function buildTrackingHtml(context) {
     if (context.trackingUrl) {
-        return `<a href="${escapeHtml(context.trackingUrl)}" style="display:inline-block;background:#3a2640;color:#ffffff;text-decoration:none;padding:13px 20px;border-radius:999px;font-weight:700;margin-top:10px">Ver seguimiento</a>`;
+        return button(context.trackingUrl, 'Seguir mi envío');
     }
 
-    return `<p style="margin:10px 0 0;color:#6f6174;font-size:14px;line-height:1.5">Estamos preparando el env&iacute;o. Te vamos a avisar cuando el seguimiento est&eacute; disponible.</p>`;
+    return paragraph('Estamos preparando el envío. Te vamos a avisar por mail cuando el seguimiento esté disponible.', { muted: true, size: 14 });
 }
 
 function buildSellerEmailHtml(context) {
-    const { customer, orderId, addressLine, subtotal, shippingCost, total, trackingText } = context;
+    const { customer, orderId, addressLine, subtotal, shippingCost, total, rawTrackingNumber, zipnovaError, quantity } = context;
+    const shipmentOk = !zipnovaError;
 
-    return `
-            <div style="margin:0;padding:28px 14px;background:#fcfafc;font-family:Arial,Helvetica,sans-serif;color:#3a2640">
-                <div style="max-width:640px;margin:0 auto;background:#ffffff;border:1px solid #eadff0;border-radius:24px;overflow:hidden;box-shadow:0 12px 32px rgba(58,38,64,.10)">
-                    <div style="background:linear-gradient(135deg,#8fcfed 0%,#d7b5dc 46%,#f1b6c7 100%);padding:28px 30px;color:#ffffff">
-                        <p style="margin:0 0 8px;font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:800">Cecilia Rosso</p>
-                        <h1 style="margin:0;font-family:Georgia,serif;font-size:34px;line-height:1.1">Nueva venta aprobada</h1>
-                    </div>
-                    <div style="padding:28px 30px">
-                        <p style="margin:0 0 18px;font-size:16px;line-height:1.6">Se acredit&oacute; una compra del libro y ya se intent&oacute; generar el env&iacute;o.</p>
-                        <div style="background:#fcfafc;border:1px solid #eadff0;border-radius:18px;padding:18px;margin-bottom:18px">
-                            <p style="margin:0 0 8px"><strong>Pedido:</strong> ${orderId}</p>
-                            <p style="margin:0 0 8px"><strong>Comprador:</strong> ${escapeHtml(customer.name)}</p>
-                            <p style="margin:0 0 8px"><strong>Email:</strong> ${escapeHtml(customer.email)}</p>
-                            <p style="margin:0 0 8px"><strong>Tel&eacute;fono:</strong> ${escapeHtml(customer.phone)}</p>
-                            <p style="margin:0 0 8px"><strong>DNI:</strong> ${escapeHtml(customer.dni)}</p>
-                            <p style="margin:0"><strong>Direcci&oacute;n:</strong> ${addressLine}</p>
-                        </div>
-                        <div style="background:#fff7fa;border:1px solid #f2d4df;border-radius:18px;padding:18px;margin-bottom:18px">
-                            <p style="margin:0 0 8px"><strong>Subtotal:</strong> ${subtotal}</p>
-                            <p style="margin:0 0 8px"><strong>Env&iacute;o:</strong> ${shippingCost}</p>
-                            <p style="margin:0;font-size:20px"><strong>Total:</strong> ${total}</p>
-                        </div>
-                        <p style="margin:0"><strong>Seguimiento:</strong> ${trackingText}</p>
-                        ${context.zipnovaError ? `<p style="margin:14px 0 0;padding:12px;border-radius:12px;background:#fff1f1;color:#a02020"><strong>No se pudo crear el env&iacute;o:</strong> ${escapeHtml(context.zipnovaError)}. Crealo a mano.</p>` : ''}
-                    </div>
-                </div>
-            </div>
-        `;
+    const body = [
+        paragraph(shipmentOk
+            ? 'Se acreditó un pago en Mercado Pago y el envío ya quedó creado en Zipnova.'
+            : 'Se acreditó un pago en Mercado Pago, pero <strong>no se pudo crear el envío en Zipnova</strong>. Hay que crearlo a mano.'),
+        zipnovaError ? notice(`<strong>Error de Zipnova:</strong> ${escapeHtml(zipnovaError)}`, { tone: 'warn' }) : '',
+        infoCard('Pedido', [
+            ['Número', orderId],
+            ['Libro', bookLine(quantity)],
+            ['Subtotal', subtotal],
+            ['Envío', shippingCost],
+            ['Total cobrado', `<span style="font-size:18px">${total}</span>`]
+        ], { tone: 'teal' }),
+        infoCard('Comprador', [
+            ['Nombre', escapeHtml(customer.name)],
+            ['Email', `<a href="mailto:${escapeHtml(customer.email)}" style="color:#2A7A7D">${escapeHtml(customer.email)}</a>`],
+            ['Teléfono', `<a href="https://wa.me/${whatsAppNumber(customer.phone)}" style="color:#2A7A7D">${escapeHtml(customer.phone)}</a>`],
+            ['DNI', escapeHtml(customer.dni)]
+        ]),
+        infoCard('Envío', [
+            ['Dirección', addressLine],
+            ['Seguimiento', !shipmentOk || rawTrackingNumber === 'En preparacion'
+                ? 'Todavía sin código'
+                : context.trackingUrl
+                    ? `<a href="${escapeHtml(context.trackingUrl)}" style="color:#2A7A7D">${escapeHtml(rawTrackingNumber)}</a>`
+                    : escapeHtml(rawTrackingNumber)]
+        ]),
+        notice(shipmentOk
+            ? '<strong>Próximo paso:</strong> imprimí la etiqueta desde Zipnova, armá el paquete y llevalo a la sucursal del correo.'
+            : '<strong>Próximo paso:</strong> creá el envío a mano en Zipnova con los datos de arriba, imprimí la etiqueta y llevá el paquete al correo.')
+    ].join('');
+
+    return renderEmail({
+        preheader: `${customer.name} compró ${quantity > 1 ? `${quantity} libros` : 'el libro'} · ${total}`,
+        eyebrow: 'Nueva venta',
+        title: shipmentOk ? '¡Se vendió un libro!' : 'Nueva venta: falta crear el envío',
+        bodyHtml: body,
+        signature: false,
+        align: 'left'
+    });
 }
 
 function buildCustomerEmailHtml(context) {
-    const { firstName, orderId, total, addressLine, trackingNumber } = context;
-    const trackingHtml = buildTrackingHtml(context);
+    const { firstName, orderId, total, addressLine, trackingNumber, quantity } = context;
 
-    return `
-                <div style="margin:0;padding:28px 14px;background:#fcfafc;font-family:Arial,Helvetica,sans-serif;color:#3a2640">
-                    <div style="max-width:640px;margin:0 auto;background:#ffffff;border:1px solid #eadff0;border-radius:24px;overflow:hidden;box-shadow:0 12px 32px rgba(58,38,64,.10)">
-                        <div style="background:linear-gradient(135deg,#8fcfed 0%,#d7b5dc 46%,#f1b6c7 100%);padding:34px 30px;color:#ffffff;text-align:center">
-                            <p style="margin:0 0 10px;font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:800">Cecilia Rosso</p>
-                            <h1 style="margin:0;font-family:Georgia,serif;font-size:36px;line-height:1.1">Gracias por tu compra</h1>
-                        </div>
-                        <div style="padding:30px">
-                            <p style="margin:0 0 16px;font-size:18px;line-height:1.6">Hola ${firstName}, recibimos tu pago y tu ejemplar de <strong>Comunicar para vivir m&aacute;s livianos</strong> ya qued&oacute; registrado.</p>
-                            <div style="background:#fcfafc;border:1px solid #eadff0;border-radius:18px;padding:20px;margin:22px 0">
-                                <p style="margin:0 0 8px;color:#8b7194;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:1px">Pedido</p>
-                                <p style="margin:0 0 8px"><strong>N&uacute;mero:</strong> ${orderId}</p>
-                                <p style="margin:0 0 8px"><strong>Total abonado:</strong> ${total}</p>
-                                <p style="margin:0"><strong>Direcci&oacute;n de entrega:</strong> ${addressLine}</p>
-                            </div>
-                            <div style="background:#fff7fa;border:1px solid #f2d4df;border-radius:18px;padding:20px;margin:22px 0">
-                                <p style="margin:0 0 8px;color:#8b7194;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:1px">Seguimiento</p>
-                                <p style="margin:0;font-size:17px"><strong>C&oacute;digo:</strong> ${trackingNumber}</p>
-                                ${trackingHtml}
-                            </div>
-                            <p style="margin:0 0 10px;font-size:15px;line-height:1.6;color:#6f6174">El env&iacute;o se realiza a domicilio. Si el correo todav&iacute;a no muestra movimientos, espera unas horas hasta que se actualice el sistema log&iacute;stico.</p>
-                            <p style="margin:0;font-size:15px;line-height:1.6;color:#6f6174">Ante cualquier duda, responde este correo y te ayudamos con el pedido.</p>
-                            <p style="margin:26px 0 0;font-family:Georgia,serif;font-size:24px;color:#e8a9c0;font-style:italic">Con cari&ntilde;o, Ceci</p>
-                        </div>
-                    </div>
-                </div>
-            `;
+    const body = [
+        paragraph(`Hola ${firstName}, recibimos tu pago. ${quantity > 1 ? 'Tus ejemplares' : 'Tu ejemplar'} de <strong>${BOOK_TITLE}</strong> ya ${quantity > 1 ? 'están reservados' : 'está reservado'} y lo estamos preparando para enviártelo.`),
+        infoCard('Tu pedido', [
+            ['Número', orderId],
+            ['Libro', bookLine(quantity)],
+            ['Total abonado', total],
+            ['Envío a', addressLine]
+        ]),
+        infoCard('Seguimiento', [
+            ['Código', trackingNumber]
+        ], { tone: 'teal' }),
+        buildTrackingHtml(context),
+        paragraph('El correo puede tardar unas horas en mostrar los primeros movimientos. Si tenés cualquier duda, respondé este mail y te ayudamos.', { muted: true, size: 14 })
+    ].join('');
+
+    return renderEmail({
+        preheader: 'Recibimos tu pago. Te contamos cómo seguir tu envío.',
+        eyebrow: 'Pedido confirmado',
+        title: '¡Gracias por tu compra!',
+        bodyHtml: body
+    });
 }
 
 function buildWhatsAppText({ metadata, shippingRecord = {} }) {
@@ -366,12 +386,20 @@ async function sendSellerAlert(subject, lines = []) {
         return;
     }
 
-    const items = lines.map(line => `<li>${escapeHtml(line)}</li>`).join('');
+    const items = lines.map(line => `<li style="margin:0 0 8px">${escapeHtml(line)}</li>`).join('');
+    const htmlContent = renderEmail({
+        preheader: subject,
+        eyebrow: 'Atención',
+        title: escapeHtml(subject),
+        bodyHtml: notice(`<ul style="margin:0;padding-left:18px">${items}</ul>`, { tone: 'warn' }),
+        signature: false,
+        align: 'left'
+    });
     await postJson('https://api.brevo.com/v3/smtp/email', {
-        sender: { name: 'Sistema Tienda', email: sellerEmail },
+        sender: { name: 'Tienda Cecilia Rosso', email: sellerEmail },
         to: getSellerRecipients(sellerEmail),
         subject: `ATENCION: ${subject}`,
-        htmlContent: `<div style="font-family:Arial,sans-serif;color:#3a2640"><h2>${escapeHtml(subject)}</h2><ul>${items}</ul></div>`
+        htmlContent
     }, { 'Accept': 'application/json', 'api-key': brevoKey });
 }
 
@@ -434,19 +462,25 @@ async function sendBrevoEmails({ metadata, shippingRecord, zipnovaError = '' }) 
     };
 
     await postJson('https://api.brevo.com/v3/smtp/email', {
-        sender: { name: 'Sistema Tienda', email: sellerEmail },
+        sender: { name: 'Tienda Cecilia Rosso', email: sellerEmail },
         to: getSellerRecipients(sellerEmail),
-        subject: 'Nueva venta aprobada - Libro',
+        subject: zipnovaError ? 'Nueva venta: falta crear el envío' : 'Nueva venta aprobada',
         htmlContent: previews.sellerEmailHtml
     }, headers);
 
     if (customer.email && customer.email !== 'nodata@example.com') {
-        await postJson('https://api.brevo.com/v3/smtp/email', {
-            sender: { name: 'Cecilia Karina Rosso', email: sellerEmail },
+        const customerEmailPayload = {
+            sender: { name: 'Cecilia Rosso', email: sellerEmail },
             to: [{ email: customer.email, name: customer.name }],
-            subject: 'Recibimos tu pago',
+            subject: '¡Gracias por tu compra! Recibimos tu pago',
             htmlContent: previews.customerEmailHtml
-        }, headers);
+        };
+        // Copia oculta opcional del mail del comprador, para controlar que salga bien.
+        const customerBcc = (process.env.CUSTOMER_EMAIL_BCC || '').trim();
+        if (customerBcc && customerBcc.toLowerCase() !== String(customer.email).trim().toLowerCase()) {
+            customerEmailPayload.bcc = [{ email: customerBcc }];
+        }
+        await postJson('https://api.brevo.com/v3/smtp/email', customerEmailPayload, headers);
     }
 }
 

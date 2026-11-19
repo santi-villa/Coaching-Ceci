@@ -12,7 +12,7 @@
 
     <!-- Meta Tags / SEO para WhatsApp y Redes Sociales -->
     <meta name="description"
-        content="Conocé los libros de Cecilia Karina Rosso: Comunicar para vivir más livianos y Propósito, un viaje hacia el sentido de la vida.">
+        content="Conocé los libros de Cecilia Karina Rosso: Comunicar para vivir más livianos, y un nuevo libro que llega próximamente.">
     <meta property="og:title" content="Cecilia Karina Rosso | Libros y crecimiento personal">
     <meta property="og:description"
         content="Palabras para vivir y vincularnos mejor. Descubrí los libros de Cecilia Karina Rosso y elegí por dónde empezar.">
@@ -31,7 +31,7 @@
 
     <script src="src/js/consent.js" defer></script>
 
-    <link rel="stylesheet" href="src/css/tailwind.css?v=56">
+    <link rel="stylesheet" href="src/css/tailwind.css?v=61">
 
     <script type="application/ld+json">
     {
@@ -57,21 +57,6 @@
     }
     </script>
 
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Book",
-        "name": "Propósito",
-        "alternateName": "Un viaje profundo hacia el sentido de la vida",
-        "author": {
-            "@type": "Person",
-            "name": "Cecilia Karina Rosso"
-        },
-        "description": "Una invitación a mirar hacia adentro, descubrir una brújula propia y acercarnos a aquello que da sentido a nuestra vida.",
-        "numberOfPages": "168",
-        "inLanguage": "es"
-    }
-    </script>
 
     <script type="application/ld+json">
     {
@@ -107,8 +92,8 @@
     <nav id="main-nav" class="fixed w-full z-30 px-3 sm:px-6 py-4 text-brand-text transition-all duration-300">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <a href="#los-libros" id="nav-brand" onclick="showPage('home-view');"
-                class="font-serif text-lg sm:text-2xl font-bold tracking-wide drop-shadow-md cursor-pointer hover:opacity-80 transition flex items-center gap-3 shrink-0">
-                <img src="assets/images/iconoweb.webp?v=4" alt="" aria-hidden="true" decoding="async"
+                class="font-serif text-lg sm:text-2xl font-bold tracking-wide cursor-pointer hover:opacity-80 transition flex items-center gap-3 shrink-0">
+                <img src="assets/images/iconoweb-recortado.webp?v=1" alt="" aria-hidden="true" decoding="async" width="480" height="401"
                     class="brand-logo w-9 h-9 sm:w-11 sm:h-11 object-contain shrink-0">
                 <span class="nav-brand-name">Cecilia <span id="brand-surname"
                         class="font-light italic text-brand-pink">Rosso</span></span>
@@ -123,14 +108,14 @@
                 <button onclick="toggleCart()" aria-label="Abrir carrito de compras"
                     class="hover:opacity-80 transition relative cursor-pointer group">
                     <i data-lucide="shopping-cart"
-                        class="w-6 h-6 md:w-7 md:h-7 drop-shadow-md group-hover:scale-110 transition-transform"></i>
+                        class="w-6 h-6 transition-transform"></i>
                     <span id="cart-badge"
-                        class="absolute -top-2 -right-2 bg-brand-lilac text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-sm hidden">0</span>
+                        class="absolute -top-2 -right-2 bg-brand-teal text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-sm hidden">0</span>
                 </button>
 
                 <button id="mobile-menu-btn" class="md:hidden hover:opacity-80 transition z-50 relative"
                     aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menú de navegación">
-                    <i data-lucide="menu" class="w-8 h-8 drop-shadow-md"></i>
+                    <i data-lucide="menu" class="w-6 h-6"></i>
                 </button>
             </div>
         </div>
@@ -150,10 +135,14 @@
                     <i data-lucide="chevron-right" class="w-4 h-4"></i>
                 </a>
                 <a href="#preguntas-frecuentes" onclick="showPage('home-view')" class="mobile-link">
-                    <span><i data-lucide="circle-help" class="w-5 h-5"></i> FAQ</span>
+                    <span><i data-lucide="circle-help" class="w-5 h-5"></i> Preguntas frecuentes</span>
                     <i data-lucide="chevron-right" class="w-4 h-4"></i>
                 </a>
             </nav>
+            <div class="mobile-menu-contact">
+                <a href="https://instagram.com/ceciliarosso.coach" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg> Instagram</a>
+                <a href="https://wa.me/5491123189132" target="_blank" rel="noopener"><i data-lucide="message-circle"></i> WhatsApp</a>
+            </div>
         </div>
     </div>
 
@@ -165,9 +154,7 @@
         <div class="cart-drawer-header px-6 py-5 border-b border-brand-lilac/20">
             <div class="flex justify-between items-start gap-4">
                 <div>
-                    <span class="text-[10px] font-bold uppercase tracking-[0.28em] text-brand-lilac">Resumen de
-                        compra</span>
-                    <h2 class="font-serif text-3xl font-bold text-brand-text leading-tight mt-1">Tu carrito</h2>
+                    <h2 class="font-serif text-3xl font-bold text-brand-text leading-tight">Tu carrito</h2>
                     <p class="text-sm text-brand-text/60 mt-1">Revisá el pedido antes de iniciar el pago.</p>
                 </div>
                 <span class="cart-icon-badge w-12 h-12 rounded-2xl flex items-center justify-center shrink-0">
@@ -181,10 +168,6 @@
         </div>
 
         <div id="cart-items" class="flex-grow px-6 py-5 overflow-y-auto no-scrollbar space-y-4">
-            <div class="cart-step-label hidden cart-filled-only">
-                <span>Pedido</span>
-                <strong>Libro físico</strong>
-            </div>
             <div id="empty-cart-msg"
                 class="h-full flex flex-col items-center justify-center text-center text-brand-text/65">
                 <span class="cart-empty-mark w-20 h-20 rounded-[1.75rem] flex items-center justify-center mb-5">
@@ -228,7 +211,7 @@
             </button>
             <div class="overflow-y-auto no-scrollbar pr-2 flex-grow">
                 <div id="modal-icon"
-                    class="w-16 h-16 rounded-full bg-brand-lilac/20 flex items-center justify-center text-brand-lilac mb-6">
+                    class="w-16 h-16 rounded-full bg-brand-lilac/20 flex items-center justify-center text-brand-teal mb-6">
                 </div>
                 <h3 id="modal-title" class="font-serif text-3xl font-bold mb-4 text-brand-text">Título</h3>
                 <div id="modal-content" class="text-brand-text/70 leading-relaxed space-y-4"></div>
@@ -238,7 +221,6 @@
 
     <dialog id="author-dialog" aria-labelledby="author-dialog-title">
         <button type="button" class="author-dialog-close" onclick="document.getElementById('author-dialog').close()" aria-label="Cerrar biografía">Cerrar ×</button>
-        <span class="product-kicker">Conocé a la autora</span>
         <h2 id="author-dialog-title">Cecilia Karina Rosso</h2>
         <div id="author-dialog-content" class="author-bio"></div>
     </dialog>
@@ -248,9 +230,8 @@
             <header id="los-libros" class="author-hero">
                 <div class="author-hero__inner">
                     <div class="author-hero__copy">
-                        <span class="author-hero__eyebrow">Libros de Cecilia Rosso</span>
                         <h1>Palabras para vivir y vincularnos mejor</h1>
-                        <p class="author-hero__lede">Dos libros independientes: uno para comunicarnos mejor, otro para encontrar el sentido de nuestra vida.</p>
+                        <p class="author-hero__lede">Un libro para comunicarnos mejor y vivir más livianos, y un nuevo título que ya está en camino.</p>
                         <p class="author-hero__signature">Lecturas que acompañan, alivian y abren nuevas conversaciones.</p>
                         <div class="author-hero__actions">
                             <a href="#coleccion" class="btn-primary-soft">Conocer los libros <i data-lucide="arrow-down"></i></a>
@@ -274,9 +255,9 @@
                         </button>
                         <button type="button" class="author-hero__book author-hero__book--purpose"
                             data-hero-book-id="proximo_libro" role="tab" aria-selected="false"
-                            aria-label="Seleccionar Propósito">
-                            <img src="assets/images/libro-proposito-portada.webp?v=2"
-                                alt="Portada provisional del libro Propósito, de Cecilia Karina Rosso" decoding="async">
+                            aria-label="Seleccionar el próximo libro">
+                            <img src="assets/images/libro-proximamente.webp?v=1"
+                                alt="Próximo libro de Cecilia Karina Rosso, todavía sin presentar" decoding="async">
                         </button>
                         </div>
                         <button type="button" class="author-hero__peek author-hero__peek--prev" data-book-prev hidden aria-label="Ver el libro anterior">
@@ -293,7 +274,6 @@
                         <div class="author-book-selector__controls">
                             <div class="author-book-selector__dots" role="tablist" aria-label="Libros disponibles"></div>
                             <p id="author-book-selector-status" class="author-book-selector__status" aria-live="polite">
-                                <span id="author-book-position">Libro 1 de 2</span>
                                 <strong id="author-book-selected-title">Comunicar para vivir más livianos</strong>
                                 <span id="author-book-selected-subtitle" hidden></span>
                             </p>
@@ -309,9 +289,8 @@
                 <div class="absolute inset-0 bg-brand-cream/45 mix-blend-overlay"></div>
                 <div class="relative max-w-6xl mx-auto px-6 z-10">
                     <div class="author-books-heading">
-                        <span class="product-kicker">Los libros</span>
                         <h2 class="font-serif">Elegí tu próxima lectura</h2>
-                        <p>Cada título propone su propio recorrido. Vos elegís por dónde empezar.</p>
+                        <p>Ediciones en papel, con envío a todo el país.</p>
                     </div>
 
                     <div class="author-books-grid">
@@ -321,6 +300,7 @@
                                 <img src="assets/images/libro-comunicar-portada.webp" alt="Fotografía de la portada de Comunicar para vivir más livianos" loading="lazy" decoding="async">
                             </button>
                             <div class="collection-card-copy">
+                                <span class="collection-card-status collection-card-status--available"><i data-lucide="check"></i> Disponible</span>
                                 <h3 class="font-serif text-2xl font-bold text-brand-text" onclick="openProductModal('libro_vol1')">Comunicar para vivir más livianos</h3>
                                 <p class="collection-card-kicker">Decir lo que nos pasa con claridad y respeto.</p>
                                 <p class="collection-card-blurb">Una invitación a transformar la manera en que nos expresamos y nos vinculamos cotidianamente.</p>
@@ -339,17 +319,16 @@
 
                         <article class="author-book-entry">
                             <button type="button" class="collection-card-cover" onclick="openProductModal('proximo_libro')"
-                                aria-label="Ver Propósito">
-                                <img src="assets/images/libro-proposito-portada.webp?v=2" alt="Portada provisional del libro Propósito, de Cecilia Karina Rosso" loading="lazy" decoding="async">
+                                aria-label="Ver el próximo libro">
+                                <img src="assets/images/libro-proximamente.webp?v=1" alt="Próximo libro de Cecilia Karina Rosso, todavía sin presentar" loading="lazy" decoding="async">
                             </button>
                             <div class="collection-card-copy">
-                                <span class="collection-card-status collection-card-status--upcoming"><i data-lucide="clock-3"></i> Próximo lanzamiento</span>
-                                <h3 class="font-serif text-2xl font-bold text-brand-text" onclick="openProductModal('proximo_libro')">Propósito</h3>
-                                <p class="collection-card-kicker">Un viaje profundo hacia el sentido de la vida</p>
-                                <p class="collection-card-blurb">Una invitación a mirar hacia adentro, descubrir una brújula propia y acercarnos a aquello que da sentido a nuestra vida.</p>
+                                <span class="collection-card-status collection-card-status--upcoming"><i data-lucide="clock-3"></i> Próximamente</span>
+                                <h3 class="font-serif text-2xl font-bold text-brand-text" onclick="openProductModal('proximo_libro')">Un nuevo libro</h3>
+                                <p class="collection-card-kicker">En camino</p>
+                                <p class="collection-card-blurb">Cecilia está escribiendo su próximo libro. Dejanos tu correo y te avisamos apenas esté disponible.</p>
                                 <div class="collection-card-actions">
                                     <button type="button" onclick="openModal('subscribe')" class="btn-secondary-soft"><i data-lucide="bell"></i> Avisarme</button>
-                                    <button type="button" onclick="openProductModal('proximo_libro')" class="collection-card-details">Ver detalles</button>
                                 </div>
                             </div>
                         </article>
@@ -360,9 +339,8 @@
             <section id="libro" class="shared-view-section section-flow">
                 <div class="shared-view-shell">
                     <div class="shared-view-heading">
-                        <span class="product-kicker">Una mirada en común</span>
                         <h2 class="font-serif">Comunicar y encontrar sentido</h2>
-                        <p>Los libros son independientes, pero comparten una misma intención: ayudarnos a vivir con más presencia, claridad y propósito.</p>
+                        <p>Una misma intención atraviesa la escritura de Cecilia: ayudarnos a vivir con más presencia, claridad y sentido.</p>
                     </div>
                     <div class="shared-view-grid">
                         <article class="shared-view-item">
@@ -375,12 +353,12 @@
                         <article class="shared-view-item">
                             <span class="shared-view-icon shared-view-icon--lilac"><i data-lucide="compass"></i></span>
                             <div>
-                                <h3 class="font-serif">Propósito</h3>
-                                <p>Mirar hacia adentro, descubrir una brújula propia y acercarnos a aquello que da sentido a nuestra vida.</p>
+                                <h3 class="font-serif">Encontrar sentido</h3>
+                                <p>Mirar hacia adentro, escucharnos y acercarnos a aquello que le da sentido a nuestra vida.</p>
                             </div>
                         </article>
                     </div>
-                    <p class="shared-view-closing">Cada libro propone su propio recorrido.<br>Vos elegís por dónde empezar.</p>
+                    <p class="shared-view-closing">Y muy pronto, un nuevo libro<br>para seguir el recorrido.</p>
                 </div>
             </section>
 
@@ -390,7 +368,7 @@
                 class="author-section py-24 section-flow overflow-hidden">
                 <div class="max-w-6xl mx-auto grid md:grid-cols-[0.86fr_1.14fr] items-start gap-14 lg:gap-20">
                     <div class="author-portrait-wrap relative">
-                        <div class="author-mark absolute top-0 left-1/2 text-brand-lilac">
+                        <div class="author-mark absolute top-0 left-1/2 text-brand-teal">
                             <img src="assets/images/iconoweb.webp?v=4" alt="Logo Cecilia Rosso" loading="lazy" decoding="async"
                                 class="w-14 h-14 md:w-16 md:h-16 object-contain">
                         </div>
@@ -406,7 +384,6 @@
                     <div class="author-copy relative">
                         <div class="relative z-10">
                             <div class="author-heading">
-                                <span class="product-kicker">Conocé a la autora</span>
                                 <h2 class="author-title">Cecilia Karina Rosso</h2>
                                 <p class="author-role">Coach del Ser / Propósito de Vida</p>
                             </div>
@@ -450,7 +427,6 @@
             <section id="preguntas-frecuentes" class="faq-section section-flow relative overflow-hidden w-full" aria-labelledby="faq-title">
                 <div class="faq-shell relative z-10">
                     <div class="faq-heading">
-                        <span class="product-kicker">Preguntas frecuentes</span>
                         <h2 id="faq-title" class="font-serif">Resolvemos tus dudas</h2>
                     </div>
                     <div class="faq-editorial-list">
@@ -461,7 +437,7 @@
                                 <i data-lucide="chevron-down" class="faq-chevron transition-transform duration-300" aria-hidden="true"></i>
                             </button>
                             <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300" style="max-height: 0px;">
-                                <p><cite>Comunicar para vivir más livianos</cite> está disponible en <strong>formato físico (tapa blanda)</strong>. <cite>Propósito</cite> se encuentra en preparación y anunciaremos su lanzamiento próximamente.</p>
+                                <p><cite>Comunicar para vivir más livianos</cite> está disponible en <strong>formato físico (tapa blanda)</strong>. Además, Cecilia está preparando un nuevo libro: anunciaremos su lanzamiento próximamente.</p>
                             </div>
                         </div>
                         <div class="faq-editorial-item">
@@ -498,28 +474,38 @@
                 </div>
             </section>
             <section id="newsletter" class="newsletter-section section-flow" aria-labelledby="newsletter-title">
-                    <div class="newsletter-panel">
-                        <div class="newsletter-copy">
-                            <span class="newsletter-emblem" aria-hidden="true"><i data-lucide="mail"></i></span>
-                            <span class="product-kicker">Newsletter</span>
-                            <h2 id="newsletter-title" class="font-serif">Novedades e inspiración en tu correo</h2>
-                            <p>Recibí lanzamientos, reflexiones y palabras que acompañan, sin ruido ni promociones vacías.</p>
-                        </div>
+                    <div class="newsletter-panel newsletter-panel--gift">
+                        <span class="newsletter-gift-pill"><i data-lucide="gift" aria-hidden="true"></i> Regalo 100% gratis</span>
+                        <figure class="newsletter-gift-cover">
+                            <!-- Portada del cuadernillo: reemplazar este archivo por la portada real (misma proporción A4). -->
+                            <img src="assets/images/cuadernillo-portada.webp?v=1" alt="Portada del cuadernillo Búsqueda de propósito y del sentido de vida" width="840" height="1188" loading="lazy" decoding="async">
+                            <span class="newsletter-gift-badge" aria-hidden="true">PDF</span>
+                        </figure>
+                        <h2 id="newsletter-title" class="newsletter-gift-title">Búsqueda de propósito y del sentido de vida</h2>
+                        <p class="newsletter-gift-text">Descubrí nuestro cuadernillo de ejercicios y reflexiones para encontrar sentido a tu vida.</p>
                         <iframe name="newsletter_iframe" id="newsletter_iframe" class="hidden" title="Confirmación de suscripción"></iframe>
                         <form class="newsletter-form"
                             action="https://c4dbfde8.sibforms.com/serve/MUIFAFucGxlLSVVMIyWGX25m6RxpThHoNAjjAN4gTElQ2c-Dnp8MvJFxBORy6b3jC3bIEckj3y3YW0MWybSKcpROinDoqtvtG5ouMRk69_ar2o7VrH_IczOx-FpHkjniFVuzm8grGU-14n3LzBlZdF5XUvGJXkzFQJ5je-MBjDMxE2S7IF7xjHNWFPgslhlJRih4zqJBRiwk74SBAg=="
                             method="POST" target="newsletter_iframe" onsubmit="handleInlineSubscribeSubmit(event)" novalidate>
                             <label for="newsletter-email" class="sr-only">Tu correo electrónico</label>
-                            <input type="email" id="newsletter-email" name="EMAIL" autocomplete="email"
-                                placeholder="Tu correo electrónico" required>
+                            <div class="newsletter-input">
+                                <i data-lucide="mail" aria-hidden="true"></i>
+                                <input type="email" id="newsletter-email" name="EMAIL" autocomplete="email"
+                                    placeholder="Tu correo electrónico" required>
+                            </div>
                             <input type="text" name="email_address_check" value="" class="hidden" tabindex="-1" aria-hidden="true">
                             <input type="hidden" name="locale" value="es">
-                            <button type="submit" id="newsletter-submit">Suscribirme</button>
+                            <button type="submit" id="newsletter-submit">Recibir PDF gratis</button>
+                            <p class="newsletter-note"><i data-lucide="circle-check" aria-hidden="true"></i> Gratis · Por email · Sin compromiso</p>
                             <p id="newsletter-message" class="newsletter-message" role="status" aria-live="polite"></p>
+                            <p class="newsletter-fineprint">Al suscribirte también vas a recibir novedades sobre próximos libros, lanzamientos y reflexiones de Cecilia Rosso. Podés darte de baja cuando quieras.</p>
                         </form>
                     </div>
             </section>
             <aside class="mobile-book-bar" aria-label="Libro seleccionado">
+                <span class="mobile-book-bar__hint" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"></path></svg>
+                </span>
                 <button type="button" class="mobile-book-bar__details" data-mobile-book-open
                     aria-label="Ver detalles de Comunicar para vivir más livianos">
                     <img id="mobile-book-image" class="mobile-book-bar__image"
@@ -548,7 +534,6 @@
                     <div class="product-modal-heading">
                         <span class="product-modal-emblem" aria-hidden="true"><i data-lucide="book-open"></i></span>
                         <div>
-                            <span>Ficha</span>
                             <strong id="product-header-title">Comunicar para vivir más livianos</strong>
                         </div>
                     </div>
@@ -582,7 +567,6 @@
                         </div>
                         <div class="product-summary-copy">
                             <div class="product-detail-intro">
-                                <p id="product-kicker" class="product-kicker">Libro físico</p>
                                 <h1 id="product-title">Comunicar para vivir más livianos</h1>
                                 <p id="product-subtitle" class="product-subtitle" hidden></p>
                                 <p id="product-author" class="product-author">Por Cecilia Karina Rosso</p>
@@ -624,6 +608,27 @@
                                     <span class="product-spec-copy">
                                         <span>Tamaño</span>
                                         <strong id="product-size">15x21 cm</strong>
+                                    </span>
+                                </div>
+                                <div hidden>
+                                    <span class="product-spec-icon" aria-hidden="true"><i data-lucide="book-open-check"></i></span>
+                                    <span class="product-spec-copy">
+                                        <span>Encuadernación</span>
+                                        <strong id="product-binding"></strong>
+                                    </span>
+                                </div>
+                                <div hidden>
+                                    <span class="product-spec-icon" aria-hidden="true"><i data-lucide="layers"></i></span>
+                                    <span class="product-spec-copy">
+                                        <span>Papel</span>
+                                        <strong id="product-paper"></strong>
+                                    </span>
+                                </div>
+                                <div hidden>
+                                    <span class="product-spec-icon" aria-hidden="true"><i data-lucide="languages"></i></span>
+                                    <span class="product-spec-copy">
+                                        <span>Idioma</span>
+                                        <strong id="product-language"></strong>
                                     </span>
                                 </div>
                             </div>
@@ -675,11 +680,11 @@
                     <div class="relative z-10">
                         <div
                             class="w-24 h-24 bg-brand-lilac/15 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <i data-lucide="check-circle" class="w-12 h-12 text-brand-lilac"></i>
+                            <i data-lucide="check-circle" class="w-12 h-12 text-brand-teal"></i>
                         </div>
                         <h1 class="font-serif text-4xl md:text-5xl font-bold text-brand-text mb-4">¡Gracias por tu
                             compra!</h1>
-                        <p class="text-xl text-brand-lilac font-medium mb-6">Recibimos tu pago.</p>
+                        <p class="text-xl text-brand-teal font-medium mb-6">Recibimos tu pago.</p>
 
                         <div class="surface-muted rounded-xl p-6 text-left mb-8 max-w-sm mx-auto">
                             <p id="success-order" class="hidden text-brand-text/70 mb-2 font-medium">Número de pedido:
@@ -689,7 +694,7 @@
                                 seguimiento del envío. Si no lo ves, revisá la carpeta de Spam o promociones.</p>
                             <p class="text-brand-text/60 text-sm italic mt-3">Cualquier duda, escribinos en Instagram:
                                 <a href="https://instagram.com/ceciliarosso.coach" target="_blank"
-                                    class="inline-flex items-center gap-1.5 text-brand-lilac hover:underline"><i data-lucide="instagram" class="w-3.5 h-3.5"></i> @ceciliarosso.coach</a></p>
+                                    class="inline-flex items-center gap-1.5 text-brand-teal hover:underline"><svg class="lucide lucide-instagram w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg> @ceciliarosso.coach</a></p>
                         </div>
 
                         <button onclick="showPage('home-view')"
@@ -715,13 +720,13 @@
 
                         <h1 class="font-serif text-4xl md:text-5xl font-bold text-brand-text mb-4">Políticas y
                             Privacidad</h1>
-                        <p class="text-brand-lilac font-medium mb-10 pb-6 border-b border-brand-lilac/20">Última
+                        <p class="text-brand-teal font-medium mb-10 pb-6 border-b border-brand-lilac/20">Última
                             actualización: Abril 2026</p>
 
                         <div class="space-y-10 text-brand-text/70 font-sans leading-relaxed">
                             <section>
                                 <h2 class="font-serif text-3xl font-bold text-brand-text mb-6 flex items-center gap-3">
-                                    <i data-lucide="shield-check" class="w-8 h-8 text-brand-lilac"></i> Política de
+                                    <i data-lucide="shield-check" class="w-8 h-8 text-brand-teal"></i> Política de
                                     Privacidad
                                 </h2>
 
@@ -743,7 +748,7 @@
                                 </ul>
                                 <div
                                     class="bg-brand-lilac/10 p-4 rounded-xl border border-brand-lilac/20 text-brand-text/90 shadow-sm">
-                                    <strong class="flex items-center gap-2 text-brand-lilac mb-1"><i data-lucide="lock"
+                                    <strong class="flex items-center gap-2 text-brand-teal mb-1"><i data-lucide="lock"
                                             class="w-4 h-4"></i> Trato seguro</strong>
                                     No recolectamos datos sensibles ni bancarios. Todos los pagos con tarjetas son
                                     procesados directamente y con máxima seguridad por Mercado Pago.
@@ -775,7 +780,7 @@
 
                             <section>
                                 <h2 class="font-serif text-3xl font-bold text-brand-text mb-6 flex items-center gap-3">
-                                    <i data-lucide="file-text" class="w-8 h-8 text-brand-lilac"></i> Términos y
+                                    <i data-lucide="file-text" class="w-8 h-8 text-brand-teal"></i> Términos y
                                     Condiciones
                                 </h2>
 
@@ -833,7 +838,6 @@
                 <div class="mp-redirect-mark mx-auto mb-7">
                     <i data-lucide="credit-card" class="w-9 h-9"></i>
                 </div>
-                <p class="uppercase tracking-[0.26em] text-xs font-bold text-white/70 mb-3">Pago seguro</p>
                 <h2 class="font-serif text-4xl sm:text-5xl font-bold leading-tight mb-4">Redirigiendo a Mercado Pago</h2>
                 <p class="text-white/78 leading-relaxed mb-7">Estamos preparando tu compra. No cierres esta ventana ni vuelvas atrás.</p>
                 <div class="mp-redirect-bar" aria-hidden="true"><span></span></div>
@@ -846,10 +850,10 @@
         <div class="footer-main relative z-10">
             <div class="footer-intro">
                 <a href="#" onclick="showPage('home-view')" class="footer-brand font-serif" aria-label="Volver al inicio">
-                    <img src="assets/images/iconoweb.webp?v=4" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                    <img src="assets/images/iconoweb-recortado.webp?v=1" alt="" aria-hidden="true" loading="lazy" decoding="async" width="480" height="401">
                     <span>Cecilia <em>Rosso</em></span>
                 </a>
-                <p>Libros para comunicarnos mejor y encontrar el sentido de nuestra vida. (Edición Servicop)</p>
+                <p>Libros para comunicarnos mejor y encontrar el sentido de nuestra vida.</p>
             </div>
             <nav class="footer-column footer-navigation" aria-label="Secciones del sitio">
                 <h4 class="footer-heading">Secciones</h4>
@@ -881,7 +885,7 @@
                     </li>
                     <li>
                         <a href="https://instagram.com/ceciliarosso.coach" target="_blank" rel="noopener">
-                            <i data-lucide="instagram" aria-hidden="true"></i>
+                            <svg class="lucide lucide-instagram" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg>
                             @ceciliarosso.coach
                         </a>
                     </li>
@@ -901,9 +905,10 @@
         </div>
     </footer>
 
-    <script src="src/js/data.js?v=35" defer></script>
-    <script src="src/js/main.js?v=41" defer></script>
+    <script src="src/js/data.js?v=38" defer></script>
+    <script src="src/js/main.js?v=44" defer></script>
     <script src="src/js/delivery-dates.js?v=1" defer></script>
-    <script src="src/js/cart.js?v=23" defer></script>
+    <script src="src/js/cart.js?v=24" defer></script>
+    <script src="src/js/animaciones.js?v=2" defer></script>
 </body>
 </html>

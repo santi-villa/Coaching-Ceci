@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <script src="src/js/vendor/lucide-1.17.0.js"></script>
     <script src="src/js/consent.js" defer></script>
-    <link rel="stylesheet" href="src/css/tailwind.css?v=13">
+    <link rel="stylesheet" href="src/css/tailwind.css?v=60">
 </head>
 <body class="text-brand-text font-sans antialiased min-h-screen">
     <a href="#legales-main" class="skip-link">Saltar al contenido principal</a>
@@ -24,17 +24,21 @@
         <article class="max-w-4xl mx-auto bg-card-soft rounded-3xl shadow-xl border border-brand-lilac/20 p-7 md:p-12 relative overflow-hidden">
             <div class="absolute inset-0 bg-brand-cream/70 mix-blend-overlay pointer-events-none"></div>
             <div class="relative z-10">
-                <a href="index.html" class="inline-flex items-center gap-2 text-brand-text/70 hover:text-brand-text transition mb-8 font-medium bg-brand-cream border border-brand-lilac/20 px-5 py-2.5 rounded-xl shadow-sm">
+                <a href="index.html" class="inline-flex items-center gap-2 text-brand-text/85 hover:text-brand-text transition mb-8 font-medium bg-brand-cream border border-brand-lilac/20 px-5 py-2.5 rounded-xl shadow-sm">
                     <i data-lucide="arrow-left" class="w-5 h-5"></i> Volver al inicio
                 </a>
 
-                <p class="uppercase tracking-[0.24em] text-xs font-bold text-brand-lilac mb-3">Información legal</p>
+                <p class="uppercase tracking-[0.24em] text-xs font-bold text-brand-teal mb-3">Información legal</p>
                 <h1 class="font-serif text-4xl md:text-5xl font-bold mb-4">Política de Privacidad y Términos</h1>
-                <p class="text-brand-lilac font-medium mb-10 pb-6 border-b border-brand-lilac/20">Última actualización: Abril 2026</p>
+                <p class="text-brand-teal font-medium mb-10 pb-6 border-b border-brand-lilac/20">Última actualización: Abril 2026</p>
 
-                <section class="space-y-5 text-brand-text/70 leading-relaxed">
+                <nav class="legal-index" aria-label="En esta página">
+                    <a href="#privacidad">Política de privacidad</a>
+                    <a href="#terminos">Términos y condiciones</a>
+                </nav>
+                <section id="privacidad" class="space-y-5 text-brand-text/85 leading-relaxed">
                     <h2 class="font-serif text-3xl font-bold text-brand-text flex items-center gap-3">
-                        <i data-lucide="shield-check" class="w-8 h-8 text-brand-lilac"></i> Política de Privacidad
+                        <i data-lucide="shield-check" class="w-8 h-8 text-brand-teal"></i> Política de Privacidad
                     </h2>
                     <h3 class="text-xl font-bold text-brand-text">1. Responsable del tratamiento de datos</h3>
                     <p><strong>Cecilia Karina Rosso</strong><br>Email: rossoceci@gmail.com<br>WhatsApp: +54 9 11 2318-9132<br>Sitio web: https://ceciliarosso.netlify.app/</p>
@@ -89,9 +93,9 @@
 
                 <div class="h-px bg-brand-lilac/20 my-10"></div>
 
-                <section class="space-y-5 text-brand-text/70 leading-relaxed">
+                <section id="terminos" class="space-y-5 text-brand-text/85 leading-relaxed">
                     <h2 class="font-serif text-3xl font-bold text-brand-text flex items-center gap-3">
-                        <i data-lucide="file-text" class="w-8 h-8 text-brand-lilac"></i> Términos y Condiciones
+                        <i data-lucide="file-text" class="w-8 h-8 text-brand-teal"></i> Términos y Condiciones
                     </h2>
                     <h3 class="text-xl font-bold text-brand-text">1. Objeto</h3>
                     <p>Este sitio exhibe y comercializa libros físicos de Cecilia Karina Rosso. Las características de cada obra (formato, páginas y precio) se muestran en su ficha y en el checkout.</p>
@@ -110,7 +114,7 @@
                     </ul>
 
                     <h3 class="text-xl font-bold text-brand-text">4. Proceso de compra</h3>
-                    <p>Al hacer clic en "Pagar ahora", declarás que los datos son verídicos. El pedido se confirma cuando Mercado Pago acredita el pago.</p>
+                    <p>Al hacer clic en "Ir a Mercado Pago", declarás que los datos son verídicos. El pedido se confirma cuando Mercado Pago acredita el pago.</p>
 
                     <h3 class="text-xl font-bold text-brand-text">5. Política de reembolsos y devoluciones</h3>
                     <ul class="list-disc pl-6 space-y-1">

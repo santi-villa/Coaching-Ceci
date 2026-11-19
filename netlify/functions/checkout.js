@@ -40,8 +40,11 @@ function assertSameShippingOption(frontQuote, backendQuote) {
     }
 }
 
+// En produccion usa la URL principal. En un deploy de rama (por ejemplo "prueba") usa la URL
+// de esa rama, asi la vuelta de Mercado Pago y el aviso del pago llegan al mismo codigo que se esta probando.
 function buildBaseUrl() {
-    let baseUrl = process.env.URL || 'https://ceciliarosso.netlify.app';
+    const isProduction = (process.env.CONTEXT || 'production') === 'production';
+    let baseUrl = (isProduction ? process.env.URL : (process.env.DEPLOY_PRIME_URL || process.env.URL)) || 'https://ceciliarosso.netlify.app';
     if (baseUrl.includes('localhost') || baseUrl.includes('127.0.0.1')) {
         baseUrl = 'https://ceciliarosso.netlify.app';
     }

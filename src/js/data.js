@@ -51,6 +51,21 @@ const bookCatalog = [
         heroDescription: 'Una invitación a observar cómo nos comunicamos en la vida real. Descubrí formas más claras y humanas de decir, escuchar y convivir para tener "conversaciones posibles".',
         productKicker: 'Libro físico',
         productDescription: 'Una invitación a observar cómo nos comunicamos en la vida real y a encontrar formas más claras, humanas y posibles de decir, escuchar y convivir.',
+        // Texto de la contratapa del libro + lo que se encuentra adentro (mismo contenido de bookContent y highlights).
+        productDescriptionHtml: `
+            <p>Todos nos comunicamos. Desde que nos despertamos hasta que nos dormimos, estamos en contacto con otros: hablamos, escribimos, respondemos, escuchamos, callamos.</p>
+            <p>Sin embargo, muchas veces sentimos que no nos entienden, o que nosotros no entendemos a los demás. Que hablamos mucho, pero que conectamos poco o que no conectamos. Que el vínculo se desgasta, aunque las palabras sigan ahí.</p>
+            <p>Este libro no pretende ser un manual o una guía técnica. Es una invitación a observar cómo nos comunicamos en la vida real, con nuestra pareja, con nuestros hijos, con amigos, en el trabajo. A reconocer los errores más comunes que todos cometemos y a descubrir formas más claras y humanas de decir, escuchar y convivir.</p>
+            <p>El objetivo es que puedas lograr <em>"conversaciones posibles"</em>: que al final de una charla te hayas sentido escuchado y comprendido, y que del otro lado también haya habido escucha y empatía.</p>
+            <h3 class="product-description-subheading">Qué vas a encontrar</h3>
+            <ul class="product-description-list">
+                <li><strong>Conversaciones posibles:</strong> claves para desenredar malentendidos sin agresividad.</li>
+                <li><strong>La pausa y la escucha activa:</strong> ejercicios para dialogar con presencia.</li>
+                <li><strong>Callar para cuidar:</strong> la sabiduría del silencio compasivo y el límite saludable.</li>
+                <li><strong>Reflexiones guiadas:</strong> preguntas para mirar tus vínculos con otros ojos.</li>
+            </ul>
+            <p class="product-description-closing">Si alguna vez sentiste que no te escuchan, que no sabés cómo decir algo sin lastimar, o que callás por miedo a perder un vínculo, este libro es para vos.</p>
+        `,
         meta: {
             label: 'Formato',
             value: 'Tapa blanda',
@@ -78,45 +93,31 @@ const bookCatalog = [
         aboutHtml: bookContent.back
     },
     {
+        // Proximo libro sin revelar: se muestra como "Proximamente", sin titulo ni tapa real.
         id: 'proximo_libro',
-        title: 'Propósito',
-        subtitle: 'Un viaje profundo hacia el sentido de la vida',
-        image: 'assets/images/libro-proposito-portada.webp?v=2',
-        backImage: 'assets/images/libro-proposito-contraportada.webp?v=2',
-        imageAlt: 'Portada provisional del libro Propósito, de Cecilia Karina Rosso',
-        backImageAlt: 'Contratapa provisional del libro Propósito, de Cecilia Karina Rosso',
+        teaser: true,
+        title: 'Un nuevo libro',
+        subtitle: 'Próximamente',
+        image: 'assets/images/libro-proximamente.webp?v=1',
+        imageAlt: 'Próximo libro de Cecilia Karina Rosso, todavía sin presentar',
         available: false,
-        statusLabel: 'Próximo lanzamiento',
-        heroEyebrow: 'Próximo lanzamiento',
-        heroTitleHtml: '<span class="hero-title-line">Propósito</span><span class="hero-title-line hero-title-line--secondary">Un viaje profundo hacia el sentido de la vida</span>',
-        heroKicker: 'Un viaje profundo hacia el sentido de la vida',
-        heroDescription: 'Una invitación a mirar hacia adentro, descubrir una brújula propia y acercarnos a aquello que da sentido a nuestra vida.',
-        productKicker: 'Próximo lanzamiento',
-        productDescription: 'Una invitación a mirar hacia adentro, descubrir una brújula propia y acercarnos a aquello que da sentido a nuestra vida.',
+        statusLabel: 'Próximamente',
+        heroEyebrow: 'Próximamente',
+        heroTitleHtml: '<span class="hero-title-line">Un nuevo libro</span><span class="hero-title-line hero-title-line--secondary">Próximamente</span>',
+        heroKicker: 'Próximamente',
+        heroDescription: 'Cecilia está escribiendo su próximo libro. Muy pronto vas a poder conocerlo.',
+        productKicker: 'Próximamente',
+        productDescription: 'Cecilia está escribiendo su próximo libro.',
         productDescriptionHtml: `
-            <p>Todos queremos encontrar nuestro propósito, pero no siempre sabemos dónde buscarlo. Muchas veces aprendimos a perseguir metas, éxitos y reconocimiento afuera, mientras dejamos en segundo plano aquello que verdaderamente nos hace bien, nos apasiona y da sentido a nuestra vida.</p>
-            <p><cite>Propósito</cite> es una invitación a mirar hacia adentro y descubrir una brújula propia. A través de sus páginas, Cecilia Karina Rosso acompaña un recorrido de preguntas y reflexión para reconocer qué te mueve, qué lugar querés ocupar en el mundo y qué puede hacer que cada mañana tenga un para qué.</p>
+            <p>Cecilia está trabajando en un nuevo libro, que va a llegar muy pronto.</p>
+            <p>Dejanos tu correo y te avisamos apenas esté disponible, antes que a nadie.</p>
         `,
-        meta: {
-            label: 'Editorial',
-            value: 'Servicop',
-            pages: '168',
-            size: '15 × 21 cm'
-        },
-        backCopy: 'Una invitación a mirar hacia adentro y descubrir una brújula propia.',
-        previewTitle: 'Primer vistazo',
-        previewHtml: `
-            <p class="mb-3">Todos queremos encontrar nuestro propósito, pero no siempre sabemos dónde buscarlo. Muchas veces aprendimos a perseguir metas, éxitos y reconocimiento afuera, mientras dejamos en segundo plano aquello que verdaderamente nos hace bien, nos apasiona y da sentido a nuestra vida.</p>
-            <p class="mb-3"><cite>Propósito</cite> es una invitación a mirar hacia adentro y descubrir una brújula propia.</p>
-        `,
-        aboutTitle: 'Sobre este libro',
-        aboutHtml: `
-            <p class="text-base leading-relaxed text-brand-text/70 mb-4">Todos queremos encontrar nuestro propósito, pero no siempre sabemos dónde buscarlo. Muchas veces aprendimos a perseguir metas, éxitos y reconocimiento afuera, mientras dejamos en segundo plano aquello que verdaderamente nos hace bien, nos apasiona y da sentido a nuestra vida.</p>
-            <p class="text-base leading-relaxed text-brand-text/70 mb-4"><cite>Propósito</cite> es una invitación a mirar hacia adentro y descubrir una brújula propia. A través de sus páginas, Cecilia Karina Rosso acompaña un recorrido de preguntas y reflexión para reconocer qué te mueve, qué lugar querés ocupar en el mundo y qué puede hacer que cada mañana tenga un para qué.</p>
-            <div class="mt-6 pt-4 border-t border-brand-lilac/15">
-                <p class="text-sm text-brand-text/60">Editorial Servicop</p>
-            </div>
-        `
+        meta: {},
+        backCopy: 'Un nuevo libro de Cecilia Karina Rosso. Próximamente.',
+        previewTitle: 'Próximamente',
+        previewHtml: '<p class="mb-3">Cecilia está escribiendo su próximo libro.</p>',
+        aboutTitle: 'Próximamente',
+        aboutHtml: '<p class="text-base leading-relaxed text-brand-text/70 mb-4">Cecilia está escribiendo su próximo libro. Muy pronto vas a poder conocerlo.</p>'
     }
 ];
 
@@ -330,46 +331,36 @@ const modalData = {
             <p class="mb-3 italic">"Todos nos comunicamos. Desde que nos despertamos hasta que nos dormimos, estamos en contacto con otros: hablamos, escribimos, respondemos, escuchamos, callamos."</p>
             <p class="mb-3">Sin embargo, muchas veces sentimos que no nos entienden, o que nosotros no entendemos a los demás. Que hablamos mucho, pero que conectamos poco o que no conectamos.</p>
             <p class="mb-3">Que el vínculo se desgasta, aunque las palabras sigan ahí...</p>
-            <button onclick="closeModal(true); setTimeout(() => { openProductModal(); setTimeout(openBookDetails, 300); }, 300);" class="mt-4 w-full bg-brand-lilac text-white py-3 rounded-xl font-medium hover:bg-opacity-90 transition shadow-sm flex items-center justify-center gap-2">Ver detalles del libro</button>
+            <button onclick="closeModal(true); setTimeout(() => { openProductModal(); setTimeout(openBookDetails, 300); }, 300);" class="mt-4 w-full bg-brand-teal text-white py-3 rounded-xl font-medium hover:bg-opacity-90 transition shadow-sm flex items-center justify-center gap-2">Ver detalles del libro</button>
         `
     },
 
     subscribe: {
-        title: "Novedades",
+        title: "Novedades de Cecilia Rosso",
         icon: "mail",
+        // Mismo estilo que el bloque del cuadernillo: el titulo y el icono van dentro del contenido.
+        layout: 'subscribe',
         content: `
-            <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
-            
-            <form action="https://c4dbfde8.sibforms.com/serve/MUIFAFucGxlLSVVMIyWGX25m6RxpThHoNAjjAN4gTElQ2c-Dnp8MvJFxBORy6b3jC3bIEckj3y3YW0MWybSKcpROinDoqtvtG5ouMRk69_ar2o7VrH_IczOx-FpHkjniFVuzm8grGU-14n3LzBlZdF5XUvGJXkzFQJ5je-MBjDMxE2S7IF7xjHNWFPgslhlJRih4zqJBRiwk74SBAg==" method="POST" target="hidden_iframe" onsubmit="handleSubscribeSubmit(event)" novalidate>
-                <p class="mb-5 text-brand-text/70 text-sm md:text-base">Déjanos tu email para enterarte cuando el próximo libro esté disponible y recibir novedades exclusivas.</p>
-                <div class="bg-brand-lilac/10 border border-brand-lilac/20 p-3 rounded-lg flex items-start gap-3 mb-5">
-                    <i data-lucide="alert-circle" class="w-5 h-5 text-brand-lilac flex-shrink-0 mt-0.5"></i>
-                    <p class="text-xs text-brand-text/80">Importante: Es muy probable que tu confirmación llegue a la <strong>bandeja de Spam o Correo no deseado</strong>. ¡No olvides revisarla!</p>
+            <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" title="Confirmación de suscripción"></iframe>
+            <form class="subscribe-modal" action="https://c4dbfde8.sibforms.com/serve/MUIFAFucGxlLSVVMIyWGX25m6RxpThHoNAjjAN4gTElQ2c-Dnp8MvJFxBORy6b3jC3bIEckj3y3YW0MWybSKcpROinDoqtvtG5ouMRk69_ar2o7VrH_IczOx-FpHkjniFVuzm8grGU-14n3LzBlZdF5XUvGJXkzFQJ5je-MBjDMxE2S7IF7xjHNWFPgslhlJRih4zqJBRiwk74SBAg==" method="POST" target="hidden_iframe" onsubmit="handleSubscribeSubmit(event)" novalidate>
+                <span class="newsletter-gift-pill"><i data-lucide="mail" aria-hidden="true"></i> Novedades de Cecilia Rosso</span>
+                <h3 id="subscribe-modal-title" class="subscribe-modal__title">Sé el primero en descubrir lo que viene</h3>
+                <p class="subscribe-modal__text">Enterate antes que nadie de nuestros próximos libros, lanzamientos y reflexiones especiales.</p>
+                <label for="EMAIL" class="sr-only">Tu correo electrónico</label>
+                <div class="newsletter-input">
+                    <i data-lucide="mail" aria-hidden="true"></i>
+                    <input type="email" id="EMAIL" name="EMAIL" autocomplete="email" placeholder="Tu correo electrónico" required oninput="clearFieldError(this)">
                 </div>
-                
-                <div class="space-y-4">
-                    <input type="email" id="EMAIL" name="EMAIL" placeholder="Tu correo electrónico" required class="w-full px-4 py-3 bg-brand-cream border border-brand-lilac/15 rounded-xl focus:outline-none focus:border-brand-lilac focus:ring-1 focus:ring-brand-lilac transition" oninput="clearFieldError(this)">
-                    
-                    <input type="text" name="email_address_check" value="" class="hidden">
-                    <input type="hidden" name="locale" value="es">
-                    
-                    <button type="submit" id="subs-btn" class="w-full bg-brand-lilac text-brand-cream py-3.5 rounded-xl font-medium hover:bg-opacity-90 transition shadow-lg flex items-center justify-center gap-2">
-                        Suscribirse <i data-lucide="send" class="w-4 h-4"></i>
-                    </button>
+                <input type="text" name="email_address_check" value="" class="hidden" tabindex="-1" aria-hidden="true">
+                <input type="hidden" name="locale" value="es">
+                <button type="submit" id="subs-btn" class="subscribe-modal__button">Quiero recibir novedades <i data-lucide="arrow-right" aria-hidden="true"></i></button>
+                <p class="subscribe-modal__trust"><i data-lucide="shield-check" aria-hidden="true"></i> Sin spam · Cancelá cuando quieras</p>
+                <div id="subs-msg" class="subscribe-modal__success hidden" role="status" aria-live="polite">
+                    <i data-lucide="mail-check" aria-hidden="true"></i>
+                    <p><strong>¡Casi listo!</strong> Te enviamos un correo para confirmar tu suscripción.</p>
                 </div>
-                
-                <div id="subs-msg" class="mt-4 hidden bg-brand-lilac/10 p-4 rounded-xl border border-brand-lilac/20 transition-all">
-                    <div class="flex flex-col items-center gap-2 text-center">
-                        <p class="text-sm text-brand-lilac font-bold flex items-center justify-center gap-2">
-                            <i data-lucide="mail-check" class="w-5 h-5"></i> ¡Casi listo!
-                        </p>
-                        <p class="text-sm text-brand-text/80 font-medium leading-relaxed">
-                            Te enviamos un correo. Por favor, <strong class="text-brand-text">revisa tu bandeja de entrada (o Spam)</strong> para confirmar tu suscripción.
-                        </p>
-                    </div>
-                </div>
-                
-                <p class="text-xs text-brand-text/50 mt-4 text-center">Tus datos están protegidos. No enviamos spam.</p>
+                <hr class="subscribe-modal__divider">
+                <p class="subscribe-modal__info"><i data-lucide="info" aria-hidden="true"></i> <span>Te enviaremos un correo para confirmar tu suscripción. Si no lo encontrás, revisá Spam o Correo no deseado.</span></p>
             </form>
         `
     }

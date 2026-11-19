@@ -3,6 +3,7 @@
 @theme {
     --color-brand-lilac: #7DC8C4;
     --color-brand-pink: #7DC8C4;
+    --color-brand-teal: #246B70;
     --color-brand-peach: #DDBEA1;
     --color-brand-text: #4A382B;
     --color-brand-light: #F8ECE0;
@@ -10,11 +11,14 @@
     --color-brand-sky: #D5F5F2;
     --color-brand-ink: #4A382B;
     --color-brand-cream: #FCFAF6;
-    --font-family-sans: "Inter", "sans-serif";
-    --font-family-serif: "Playfair Display", "serif";
+    /* Tailwind v4 usa --font-sans / --font-serif: con el nombre anterior
+       (--font-family-*) Inter y Playfair se descargaban pero no se usaban. */
+    --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-serif: "Playfair Display", Georgia, "Times New Roman", serif;
     --background-image-brand-gradient: linear-gradient(135deg, #8CD5D0 0%, #D5F5F2 48%, #EED8C0 100%);
     --background-image-book-cover-gradient: linear-gradient(180deg, #8CD5D0 0%, #D5F5F2 42%, #EED8C0 100%);
 }
 
 @import "./styles.css";
 @import "./mobile-library.css";
+@import "./mejoras.css";

@@ -499,8 +499,7 @@ function updateCartUI() {
                     </div>
                     <div class="min-w-0 pr-5 flex flex-col justify-between">
                         <div>
-                            <span class="text-[10px] uppercase tracking-[0.18em] font-bold text-brand-lilac">${item.volume || 'Libro'}</span>
-                            <h4 class="font-serif font-bold text-brand-text text-lg leading-tight mt-1">${item.title}</h4>
+                            <h4 class="font-serif font-bold text-brand-text text-lg leading-tight">${item.title}</h4>
                             <p class="text-brand-text/55 text-xs mt-1">${item.format || 'Libro físico'}${item.pages ? ` · ${item.pages} páginas` : ''}</p>
                             ${typeof getBookById === 'function' && getBookById(item.id)?.listPrice > item.price
                                 ? '<p class="price-web-note">Precio exclusivo web</p>'
@@ -639,7 +638,7 @@ function renderShippingQuote() {
                 <div class="text-xs text-gray-500">${escapeHtml(range)}</div>
                 ${carrier}
             </div>
-            <div class="text-brand-lilac font-bold">${formatMoney(quotedShippingCost)}</div>
+            <div class="text-brand-teal font-bold">${formatMoney(quotedShippingCost)}</div>
         </div>
     `;
 }
@@ -903,12 +902,13 @@ function handleSubscribeSubmit(e) {
     const btn = document.getElementById('subs-btn');
     const msg = document.getElementById('subs-msg');
 
-    btn.innerHTML = 'Enviando... <i class="animate-spin w-4 h-4 rounded-full border-2 border-white border-t-transparent inline-block"></i>';
-    btn.classList.add('opacity-75', 'cursor-not-allowed');
+    btn.innerHTML = 'Enviando… <i class="animate-spin w-4 h-4 rounded-full border-2 border-white border-t-transparent inline-block"></i>';
+    btn.classList.add('is-sending');
 
     setTimeout(() => {
-        btn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i> Listo';
-        btn.className = 'w-full bg-brand-green/20 text-brand-green py-3.5 rounded-xl font-bold cursor-not-allowed flex items-center justify-center gap-2 border border-brand-green/30';
+        btn.innerHTML = '<i data-lucide="check"></i> ¡Listo!';
+        btn.classList.remove('is-sending');
+        btn.classList.add('is-done');
         btn.disabled = true;
 
         msg.classList.remove('hidden');
