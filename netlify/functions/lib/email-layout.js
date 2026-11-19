@@ -21,7 +21,7 @@ const SANS = "Helvetica, Arial, sans-serif";
 function siteUrl() {
     const isProduction = (process.env.CONTEXT || 'production') === 'production';
     let url = String((isProduction ? process.env.URL : (process.env.DEPLOY_PRIME_URL || process.env.URL)) || '').trim();
-    if (!url || url.includes('localhost') || url.includes('127.0.0.1')) url = 'https://ceciliarosso.com';
+    if (!url || url.includes('localhost') || url.includes('127.0.0.1')) url = 'https://ceciliarosso.netlify.app';
     if (!url.startsWith('http')) url = `https://${url}`;
     return url.replace(/\/+$/, '');
 }
@@ -109,7 +109,7 @@ function renderEmail({ preheader = '', eyebrow = '', title = '', bodyHtml = '', 
         </td></tr>
         <tr><td align="center" style="padding:20px 10px 0;font-family:${SANS};font-size:12px;line-height:1.6;color:${COLORS.muted}">
             ${footerHtml ? `${footerHtml}<br>` : ''}
-            Cecilia Karina Rosso · <a href="${base}" style="color:${COLORS.teal};text-decoration:none">ceciliarosso.com</a> · <a href="https://instagram.com/ceciliarosso.coach" style="color:${COLORS.teal};text-decoration:none">@ceciliarosso.coach</a>
+            Cecilia Karina Rosso · <a href="${base}" style="color:${COLORS.teal};text-decoration:none">${base.replace(/^https?:\/\//, '')}</a> · <a href="https://instagram.com/ceciliarosso.coach" style="color:${COLORS.teal};text-decoration:none">@ceciliarosso.coach</a>
         </td></tr>
     </table>
 </td></tr>

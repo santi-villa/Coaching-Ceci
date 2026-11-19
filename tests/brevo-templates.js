@@ -31,7 +31,7 @@ const bienvenida = renderEmail({
         button('LINK_AL_PDF', 'Descargar el PDF'),
         paragraph('Además, vas a recibir novedades sobre próximos libros, lanzamientos y reflexiones de Cecilia. Sin spam: solo cuando haya algo que valga la pena contarte.', { muted: true, size: 14, align: 'center' })
     ].join(''),
-    footerHtml: 'Recibís este mail porque te suscribiste en ceciliarosso.com. <a href="{{ unsubscribe }}" style="color:#2A7A7D">Darte de baja</a>'
+    footerHtml: 'Recibís este mail porque te suscribiste en ceciliarosso.netlify.app. <a href="{{ unsubscribe }}" style="color:#2A7A7D">Darte de baja</a>'
 });
 
 fs.mkdirSync(docsDir, { recursive: true });
